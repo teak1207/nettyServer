@@ -1,1 +1,9 @@
+server:
+    host: 127.0.0.1
+    port: 9999
+    netty:
+        bossCount : 1
+        workerCount : 10
+        keep-alive : true
+        backlog : 100
 
