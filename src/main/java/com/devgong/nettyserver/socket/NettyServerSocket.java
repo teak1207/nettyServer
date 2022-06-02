@@ -12,10 +12,15 @@ import java.net.InetSocketAddress;
 
 
 @Slf4j
-@RequiredArgsConstructor
+@RequiredArgsConstructor  //final or @NonNull 인 필드 값만 파라미터로 받는 생성자 만듦
 @Component
 public class NettyServerSocket {
 
+    /*
+    * 네티 서버를 실행하는 클래스입니다.
+    * ApplicationStartupTask 클래스에서 스프링부트 서비스를 시작할 떄
+    * 보았던 클래스의 start() 메소드를 실행하도록 설정.
+    */
     private final ServerBootstrap serverBootstrap;
     private final InetSocketAddress tcpPort;
     private Channel serverChannel;

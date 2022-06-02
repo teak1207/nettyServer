@@ -5,5 +5,5 @@ server:
         bossCount : 1
         workerCount : 10
         keep-alive : true
-        backlog : 100
+        backlog : 512
 
