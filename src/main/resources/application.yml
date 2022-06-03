@@ -7,3 +7,13 @@ server:
         keep-alive : true
         backlog : 512
 
+spring:
+  datasource:
+      url: jdbc:mysql://localhost:3306
+      username: root
+      password: scsol92595
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+      show-sql: true
+      hibernate:
+          ddl-auto: update

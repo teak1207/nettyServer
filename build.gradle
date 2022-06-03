@@ -22,15 +22,19 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation group: 'io.netty', name: 'netty-all', version: '4.1.42.Final'
-
-
-
+    // 2022-06-01
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    // 2022-06-02
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // 2022-06-03
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {
