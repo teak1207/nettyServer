@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TestHandler extends ChannelInboundHandlerAdapter {
     private int DATA_LENGTH = 2048;
+    /*
+    현재는 클라이언트에서 정해진 길이 2048byte를 하나의 패킷으로 읽어오고 있음 */
     private ByteBuf buff;
 
     // 핸들러가 생성될 때 호출되는 메소드
@@ -42,6 +44,7 @@ public class TestHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
+        System.out.println(ctx);
         buff.writeBytes(mBuf);  // 클라이언트에서 보내는 데이터가 축적됨
         mBuf.release();
 

@@ -34,7 +34,7 @@ public class NettyConfiguration {
     private int workerCount;
     @Value("${server.netty.keep-alive}") // ex) true
     private boolean keepAlive;
-    @Value("${server.netty.backlog}") // ex) 100
+    @Value("${server.netty.backlog}") // ex) 512대의 접속을 허용
     private int backlog;
 
     @Bean
@@ -47,13 +47,12 @@ public class NettyConfiguration {
                 .handler(new LoggingHandler(LogLevel.DEBUG))
                 // ChannelInitializer: 새로운 Channel을 구성할 때 사용되는 특별한 handler. 주로 ChannelPipeline으로 구성
                 .childHandler(nettyChannelInitializer);
-
+        b.option(ChannelOption.SO_BACKLOG, backlog); // 동시에 512개의 클라이언트 요청을 받아들이겠다는 의미.
         //ServerBootstarp에 다양한 Option 추가 가능
         //SO_BACKLOG: 동시에 수용 가능한 최대 incoming connections 개수  --> leakMaster의 커넥팅 개수는?--> 4096개로 잡혀있음.
         //SO_KEEPALIVE : 기본적으로 SO_KEEPALIVE 옵션은 서버측 소켓에 설정되어 상대방 시스템의 고장이나 정전, 네트워크 연결이 끊기는 등 통신이 불가능한 상황을 탐지해줌.
         // 일정시간동안 해당 소켓을통해 어떤 자료도 송수신되지 않을 시, 커널에서 상대방의 상태를 확인하는 패킷을 전송. 상대방이 정상이면 ACK 전송
         // TCP_NODELAY 등 옵션 제공
-        b.option(ChannelOption.SO_BACKLOG, backlog); // 동시에 512개의 클라이언트 요총을 받아들이겠다는 의미.
         return b;
     }
 
