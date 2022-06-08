@@ -10,15 +10,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.Charset;
+
 
 @Slf4j
 @Component
-@ChannelHandler.Sharable
+@ChannelHandler.Sharable //#1 @Sharable 어노테이션은 여러채널에서 핸들러를 공유 할 수 있음을 나타냄.
 @RequiredArgsConstructor
 public class TestHandler extends ChannelInboundHandlerAdapter {
-    private int DATA_LENGTH = 2048;
+    private int DATA_LENGTH = 100;
     /*
-    현재는 클라이언트에서 정해진 길이 2048byte를 하나의 패킷으로 읽어오고 있음 */
+    현재는 클라이언트에서 정해진 길이 2048byte를 하나의 패킷으로 읽어오고 있음
+
+    종류
+    Inbound Handler	 입력 데이터(in bound)에 대한 변경 상태를 감시하고 처리하는 역할을 하는 핸들러
+    Outbound Handler 출력 데이터(out bound)에 대한 동작을 가로채 처리하는 역할을 하는 핸들러
+    */
     private ByteBuf buff;
 
     // 핸들러가 생성될 때 호출되는 메소드
@@ -36,17 +43,23 @@ public class TestHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        // 채널이 활성화 됐을 때 호출됨. 데이터를 받거나 보낼 수 있는 상태를 의미함.
         String remoteAddress = ctx.channel().remoteAddress().toString();
         log.info("Remote Address: " + remoteAddress);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        // 클라이언트 -> 서버, 날린 데이터를 받아야하는부분
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        /* 클라이언트 -> 서버, 날린 데이터를 받아야하는부분, Inbound buffer에서 읽을 값이 있을 경우 호출 #2
+           메세지가 들어올때마다 호출되는 메소드
+        */
         ByteBuf mBuf = (ByteBuf) msg;
-//        System.out.println(ctx);
-//        System.out.println(mBuf);
         buff.writeBytes(mBuf);  // 클라이언트에서 보내는 데이터가 축적됨
+        String readMsg = (buff.toString(Charset.defaultCharset()));  // Bytebuf 객체 buff를 String으로 형변환한 값.
+
+        System.out.println("Server received : " + msg);
+        System.out.println("Server received : " + mBuf);
+        System.out.println(readMsg);
 
         mBuf.release();
 
