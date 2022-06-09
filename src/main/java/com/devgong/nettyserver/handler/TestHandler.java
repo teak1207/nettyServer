@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
+import java.util.Base64;
 
 
 @Slf4j
@@ -55,11 +56,35 @@ public class TestHandler extends ChannelInboundHandlerAdapter {
         */
         ByteBuf mBuf = (ByteBuf) msg;
         buff.writeBytes(mBuf);  // 클라이언트에서 보내는 데이터가 축적됨
-        String readMsg = (buff.toString(Charset.defaultCharset()));  // Bytebuf 객체 buff를 String으로 형변환한 값.
+        String readMsg = (buff.toString(Charset.defaultCharset()));  // Bytebuf 객체 buff를 String으로 형변환한 값. ---> 이렇게 하면 안됨!!!
+        // 클라이언트에서  append 한거를 하나하나 배열에 집어넣으면 되는데ㅐ..
 
-        System.out.println("Server received : " + msg);
-        System.out.println("Server received : " + mBuf);
+        //System.out.println((char) (buff.getByte(0)) + "***********");
+        //System.out.println(buff.isReadable());
+        // 읽을 수 있는 바이트가 하나 이상이면 true를 반환
+
+        byte[] bytes = readMsg.getBytes();  //  [r],[e],[c],[o]...
+        // String decoded = Base64.getEncoder().encodeToString(bytes);
+
+        // String decoded = new String(bytes);
+
+
+//        System.out.println("Server received : " + msg);
+//        System.out.println("Server received : " + mBuf);
         System.out.println(readMsg);
+//        System.out.println(buff.readChar());
+//        System.out.println(buff.readInt());
+
+
+//        System.out.println("-----------------");
+//        System.out.println(Base64.getEncoder().encodeToString(bytes));
+//        System.out.println("-----------------");
+//        System.out.println(Base64.getDecoder().decode(decoded));
+
+        /*for (int i = 0; i < bytes.length; i++) {
+            System.out.print(bytes[i] + " ");
+            System.out.println();
+        }*/
 
         mBuf.release();
 
