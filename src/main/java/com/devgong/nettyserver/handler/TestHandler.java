@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
-import java.util.Base64;
 
 
 @Slf4j
@@ -64,22 +63,31 @@ public class TestHandler extends ChannelInboundHandlerAdapter {
         // 읽을 수 있는 바이트가 하나 이상이면 true를 반환
 
         byte[] bytes = readMsg.getBytes();  //  [r],[e],[c],[o]...
-        // String decoded = Base64.getEncoder().encodeToString(bytes);
 
-        // String decoded = new String(bytes);
-
-
-//        System.out.println("Server received : " + msg);
-//        System.out.println("Server received : " + mBuf);
-        System.out.println(readMsg);
-//        System.out.println(buff.readChar());
-//        System.out.println(buff.readInt());
+        System.out.println("-----------------");
+        System.out.println("preinstall");
+        System.out.println("-----------------");
 
 
-//        System.out.println("-----------------");
-//        System.out.println(Base64.getEncoder().encodeToString(bytes));
-//        System.out.println("-----------------");
-//        System.out.println(Base64.getDecoder().decode(decoded));
+        char flag = readMsg.charAt(0);// A , flag
+        String serialNumber = readMsg.substring(1, 25);
+        String dateTime = readMsg.substring(25, 40);
+        String paraLen = readMsg.substring(40, 44); // 00ff
+        String modemNumber = readMsg.substring(44, 59);
+        String debugMsg = readMsg.substring(59, 61);
+        String chksum = readMsg.substring(61, 65);
+
+//        System.out.println(readMsg.charAt(0));
+//        System.out.println("serialNumber" + serialNumber.length());
+//        System.out.println("datetime" + dateTime.length());
+//        System.out.println("para" + paraLen.length());
+//        System.out.println("modem" + modemNumber.length());
+//        System.out.println("debug" + debugMsg.length());
+        System.out.println("-----------------");
+        System.out.println(flag + " " + serialNumber + " " + dateTime + " " + paraLen + " " + modemNumber + " " + debugMsg + " " + chksum);
+
+        System.out.println(readMsg.substring(0, 65));
+
 
         /*for (int i = 0; i < bytes.length; i++) {
             System.out.print(bytes[i] + " ");
