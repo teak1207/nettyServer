@@ -1,5 +1,7 @@
 package com.devgong.nettyserver.handler;
 
+import com.devgong.nettyserver.domain.PreInstallModel;
+import com.devgong.nettyserver.repository.PreInstallRepository;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -8,16 +10,18 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 
 @Slf4j
 @Component
 @ChannelHandler.Sharable //#1 @Sharable 어노테이션은 여러채널에서 핸들러를 공유 할 수 있음을 나타냄.
 @RequiredArgsConstructor
-public class TestHandler extends ChannelInboundHandlerAdapter {
+public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private int DATA_LENGTH = 100;
     /*
     현재는 클라이언트에서 정해진 길이 2048byte를 하나의 패킷으로 읽어오고 있음
@@ -27,7 +31,13 @@ public class TestHandler extends ChannelInboundHandlerAdapter {
     Outbound Handler 출력 데이터(out bound)에 대한 동작을 가로채 처리하는 역할을 하는 핸들러
     */
     private ByteBuf buff;
+    private PreInstallModel preInstallModel = new PreInstallModel();
 
+    @Autowired
+    private PreInstallRepository preInstallRepository;
+
+    /*@Autowired
+    private PreInstallRepository preInstallRepository;*/
     // 핸들러가 생성될 때 호출되는 메소드
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
@@ -77,27 +87,53 @@ public class TestHandler extends ChannelInboundHandlerAdapter {
         String debugMsg = readMsg.substring(59, 61);
         String chksum = readMsg.substring(61, 65);
 
-//        System.out.println(readMsg.charAt(0));
-//        System.out.println("serialNumber" + serialNumber.length());
-//        System.out.println("datetime" + dateTime.length());
-//        System.out.println("para" + paraLen.length());
-//        System.out.println("modem" + modemNumber.length());
-//        System.out.println("debug" + debugMsg.length());
         System.out.println("-----------------");
-        System.out.println(flag + " " + serialNumber + " " + dateTime + " " + paraLen + " " + modemNumber + " " + debugMsg + " " + chksum);
+        System.out.println( flag +" "+
+                            serialNumber+" "+
+                            dateTime+" "+
+                            paraLen + " "+
+                            modemNumber+" "+
+                            debugMsg + " " +
+                            chksum);
+        System.out.println("-----------------");
+        int decimal = Integer.parseInt(chksum,16);
+        System.out.println("decimal : " + decimal);
 
+        System.out.println("-----------------");
         System.out.println(readMsg.substring(0, 65));
+        System.out.println(flag);
+
+        System.out.println("-------MODEL Check------");
 
 
-        /*for (int i = 0; i < bytes.length; i++) {
-            System.out.print(bytes[i] + " ");
-            System.out.println();
-        }*/
+        preInstallModel.setFlag(flag);
+        preInstallModel.setSerialNumber(serialNumber);
+        preInstallModel.setDateTime(dateTime);
+        preInstallModel.setParaLen(paraLen);
+        preInstallModel.setModemNumber(modemNumber);
+        preInstallModel.setDebugMsg(debugMsg);
+        preInstallModel.setChksum(chksum);
+
+
+        System.out.println(preInstallModel.toString());
+
+        System.out.println("-----------------");
+        preInstallRepository.save(preInstallModel);
+
+
+        /*
+        List<PreInstallModel> preInstallModelList = preInstallRepository.findAll();
+        for(PreInstallModel i : preInstallModelList) {
+            log.info("[FindAll]: ");
+            System.out.println(" ");
+        };
+*/
 
         mBuf.release();
-
         final ChannelFuture f = ctx.writeAndFlush(buff);
         f.addListener(ChannelFutureListener.CLOSE);
+
+
     }
 
     @Override

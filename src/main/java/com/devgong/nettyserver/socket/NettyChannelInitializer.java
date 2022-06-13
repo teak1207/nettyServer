@@ -1,6 +1,6 @@
 package com.devgong.nettyserver.socket;
 
-import com.devgong.nettyserver.handler.TestHandler;
+import com.devgong.nettyserver.handler.NettyServerHandler;
 import com.devgong.nettyserver.decoder.TestDecoder;
 
 import io.netty.channel.ChannelInitializer;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NettyChannelInitializer extends   ChannelInitializer<SocketChannel> {
 
-    private final TestHandler testHandler;
+    private final NettyServerHandler testHandler;
 
     // 클라이언트 소켓 채널이 생성될 때 호출
     @Override
