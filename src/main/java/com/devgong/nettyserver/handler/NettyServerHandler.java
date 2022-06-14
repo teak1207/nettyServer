@@ -108,26 +108,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //        preInstallRepository.save(preInstallModel);
 
 //        PreInstallModel preInstallModel1 = preInstallRepository.findPreInstallModelByFlagAndChksum(flag, chksum);
-      /*  if (preInstallModel1.isEmpty() == true) {
-            //DB에서 원하는 값을 가져올 경우, 클라이언트에게 pre-install 값 전송
-
-
-        } else {
-            //DB에서 원하는 값을 못 가져올 경우, NAK ( 9 )를 리턴해줌
-
-            return "9";
-        }*/
 
         System.out.println("*****-----------------");
 
-        /*List<PreInstallModel> preInstallModelList = preInstallRepository.findAll();
-
-        for (PreInstallModel model : preInstallModelList) {
-            System.out.println(model.toString());
-        }*/
-
-        preInstallService.findData(preInstallModel);
-
+        if (preInstallService.findData(preInstallModel) == null) {
+            char nak = '9';
+            System.out.println(nak);
+        }
 
 
         mBuf.release();
