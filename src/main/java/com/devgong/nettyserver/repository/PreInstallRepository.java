@@ -5,5 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PreInstallRepository extends JpaRepository<PreInstallModel,Integer> {
+public interface PreInstallRepository extends JpaRepository<PreInstallModel, Integer> {
+
+    PreInstallModel findPreInstallModelByFlagAndChksum(char flag, String chksum);
+
 }

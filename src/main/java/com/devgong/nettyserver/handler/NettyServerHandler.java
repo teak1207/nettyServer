@@ -2,6 +2,7 @@ package com.devgong.nettyserver.handler;
 
 import com.devgong.nettyserver.domain.PreInstallModel;
 import com.devgong.nettyserver.repository.PreInstallRepository;
+import com.devgong.nettyserver.service.PreInstallService;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -32,7 +33,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     */
     private ByteBuf buff;
     private PreInstallModel preInstallModel = new PreInstallModel();
-
+    private final PreInstallService preInstallService;
     @Autowired
     private PreInstallRepository preInstallRepository;
 
@@ -88,24 +89,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String chksum = readMsg.substring(61, 65);
 
         System.out.println("-----------------");
-        System.out.println( flag +" "+
-                            serialNumber+" "+
-                            dateTime+" "+
-                            paraLen + " "+
-                            modemNumber+" "+
-                            debugMsg + " " +
-                            chksum);
-        System.out.println("-----------------");
-        int decimal = Integer.parseInt(chksum,16);
-        System.out.println("decimal : " + decimal);
-
+        System.out.println(flag + " " + serialNumber + " " + dateTime + " " + paraLen + " " + modemNumber + " " + debugMsg + " " + chksum);
         System.out.println("-----------------");
         System.out.println(readMsg.substring(0, 65));
         System.out.println(flag);
-
         System.out.println("-------MODEL Check------");
-
-
         preInstallModel.setFlag(flag);
         preInstallModel.setSerialNumber(serialNumber);
         preInstallModel.setDateTime(dateTime);
@@ -114,20 +102,33 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         preInstallModel.setDebugMsg(debugMsg);
         preInstallModel.setChksum(chksum);
 
-
-        System.out.println(preInstallModel.toString());
-
         System.out.println("-----------------");
-        preInstallRepository.save(preInstallModel);
+
+        preInstallService.findData(preInstallModel);
+//        preInstallRepository.save(preInstallModel);
+
+//        PreInstallModel preInstallModel1 = preInstallRepository.findPreInstallModelByFlagAndChksum(flag, chksum);
+      /*  if (preInstallModel1.isEmpty() == true) {
+            //DB에서 원하는 값을 가져올 경우, 클라이언트에게 pre-install 값 전송
 
 
-        /*
-        List<PreInstallModel> preInstallModelList = preInstallRepository.findAll();
-        for(PreInstallModel i : preInstallModelList) {
-            log.info("[FindAll]: ");
-            System.out.println(" ");
-        };
-*/
+        } else {
+            //DB에서 원하는 값을 못 가져올 경우, NAK ( 9 )를 리턴해줌
+
+            return "9";
+        }*/
+
+        System.out.println("*****-----------------");
+
+        /*List<PreInstallModel> preInstallModelList = preInstallRepository.findAll();
+
+        for (PreInstallModel model : preInstallModelList) {
+            System.out.println(model.toString());
+        }*/
+
+        preInstallService.findData(preInstallModel);
+
+
 
         mBuf.release();
         final ChannelFuture f = ctx.writeAndFlush(buff);
