@@ -16,7 +16,6 @@ public class PreInstallModel {
     @Column(name = "cid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
-
     @Column(name = "MODEMNUM")
     private String modemNumber;
 
@@ -25,16 +24,12 @@ public class PreInstallModel {
 
     @Column(name = "SERIALNUM")
     private String serialNumber;
-
     @Column(name = "SIGNALTIME")
     private String dateTime;
-
     @Column(name = "PARALEN")
     private String paraLen;
-
     @Column(name = "DEBUGMSG")
     private String debugMsg;
-
     @Column(name = "CHKSUM")
     private String chksum;
 

@@ -12,24 +12,22 @@ import java.util.Optional;
 @Service
 public class PreInstallService {
 
-    /*
-     * pre-install 에 대한 로직을 구현하는 부분
-     */
-
     private final PreInstallRepository preInstallRepository;
 
     public PreInstallModel findData(PreInstallModel model) {
 
-        PreInstallModel deviceInfos; // find 한 data를 담을 Model
+        PreInstallModel preInstallDeviceInfos; // find 한 data를 담을 Model
 
-        if (Objects.equals(model.getChksum(), "bbbb")) {
-            //DB에서 원하는 값을 가져올 경우, 클라이언트에게 pre-install 값 전송
-            deviceInfos = preInstallRepository.findPreInstallModelByFlagAndChksum(model.getFlag(), model.getChksum());
+        // 만약 ChkSum의 값이 length 60이라면 Pass 아니면 NAK
 
-            System.out.println(deviceInfos);
-
-            return deviceInfos;
+        if (Objects.equals(model.getChksum(), "AAAA")) {
+            //DB에서 원하는 값이 있는지 체크하는 부분
+            preInstallDeviceInfos = preInstallRepository.findPreInstallModelByModemNumber(model.getModemNumber());
+            System.out.println(preInstallDeviceInfos);
+            System.out.println(preInstallDeviceInfos.toString());
+            return preInstallDeviceInfos;
         }
         return null;
+
     }
 }

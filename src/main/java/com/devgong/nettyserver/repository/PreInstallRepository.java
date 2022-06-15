@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PreInstallRepository extends JpaRepository<PreInstallModel, Integer> {
 
-    PreInstallModel findPreInstallModelByFlagAndChksum(char flag, String chksum);
 
+    PreInstallModel findPreInstallModelByModemNumber(String modemNum);
 }

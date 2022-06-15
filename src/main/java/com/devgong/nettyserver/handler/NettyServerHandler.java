@@ -87,13 +87,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String modemNumber = readMsg.substring(44, 59);
         String debugMsg = readMsg.substring(59, 61);
         String chksum = readMsg.substring(61, 65);
+        String data = serialNumber + dateTime + paraLen + modemNumber + debugMsg;
+
 
         System.out.println("-----------------");
         System.out.println(flag + " " + serialNumber + " " + dateTime + " " + paraLen + " " + modemNumber + " " + debugMsg + " " + chksum);
         System.out.println("-----------------");
         System.out.println(readMsg.substring(0, 65));
-        System.out.println(flag);
-        System.out.println("-------MODEL Check------");
+
         preInstallModel.setFlag(flag);
         preInstallModel.setSerialNumber(serialNumber);
         preInstallModel.setDateTime(dateTime);
@@ -102,20 +103,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         preInstallModel.setDebugMsg(debugMsg);
         preInstallModel.setChksum(chksum);
 
-        System.out.println("-----------------");
-
-        preInstallService.findData(preInstallModel);
 //        preInstallRepository.save(preInstallModel);
+        System.out.println("********************");
+        System.out.println(data.length());
+        System.out.println("********************");
 
-//        PreInstallModel preInstallModel1 = preInstallRepository.findPreInstallModelByFlagAndChksum(flag, chksum);
+        PreInstallModel test =  preInstallService.findData(preInstallModel);
 
-        System.out.println("*****-----------------");
+        if (test != null) {
 
-        if (preInstallService.findData(preInstallModel) == null) {
+            System.out.println(test);
+        } else {
             char nak = '9';
             System.out.println(nak);
         }
-
 
         mBuf.release();
         final ChannelFuture f = ctx.writeAndFlush(buff);
