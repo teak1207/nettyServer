@@ -10,5 +10,6 @@ public interface NetworkSetRepository extends JpaRepository<NetworkSetModel, Int
 
 //    NetworkSetModel findNetworkSetModelBySidAndPname(String asid,String pname);
 
-    NetworkSetModel findBySidAndPname(String sid,String pname);
+//    NetworkSetModel findBySidAndPname(String sid,String pname);
+    NetworkSetModel findByPname(String pname);
 }

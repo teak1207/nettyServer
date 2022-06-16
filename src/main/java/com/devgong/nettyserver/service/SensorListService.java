@@ -47,7 +47,8 @@ public class SensorListService {
             System.out.println("Aproject--> "+sensorListInfo.getAproject());
 
 
-            networkSetInfo = networkSetRepository.findBySidAndPname(sensorListInfo.getAsid(), sensorListInfo.getAproject());
+//            networkSetInfo = networkSetRepository.findBySidAndPname(sensorListInfo.getAsid(), sensorListInfo.getAproject());
+            networkSetInfo = networkSetRepository.findByPname( sensorListInfo.getAproject());
             deviceSetInfo = deviceSetRepository.findBySn(sensorListInfo.getSsn());
 
             System.out.println("test(network)-->" + networkSetInfo);
