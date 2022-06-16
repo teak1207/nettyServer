@@ -1,35 +1,34 @@
 package com.devgong.nettyserver.domain;
 
+import lombok.*;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
 @ToString
 @Table(name = "sensor_list_all")
-public class PreInstallSettingModel {
-
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class SensorListModel {
 
     @Id
-    @Column(name = "CID")
+    @Column(name = "cid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
     @Column(name = "REGDATE")
     private String regdate;
+
     @Column(name = "SSN")
     private String ssn;
+
     @Column(name = "ASID")
     private String asid;
+
     @Column(name = "APROJECT")
     private String aproject;
     @Column(name = "MPHONE")
     private String mphone;
+
 
 }

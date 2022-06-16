@@ -1,21 +1,17 @@
 package com.devgong.nettyserver.handler;
 
-import com.devgong.nettyserver.domain.PreInstallModel;
-import com.devgong.nettyserver.repository.PreInstallRepository;
-import com.devgong.nettyserver.service.PreInstallService;
+import com.devgong.nettyserver.domain.PreInstallCheckModel;
+import com.devgong.nettyserver.domain.SensorListModel;
+import com.devgong.nettyserver.repository.SensorListRepository;
+import com.devgong.nettyserver.service.SensorListService;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
-import java.util.List;
 
 
 @Slf4j
@@ -32,13 +28,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     Outbound Handler 출력 데이터(out bound)에 대한 동작을 가로채 처리하는 역할을 하는 핸들러
     */
     private ByteBuf buff;
-    private PreInstallModel preInstallModel = new PreInstallModel();
-    private final PreInstallService preInstallService;
-    @Autowired
-    private PreInstallRepository preInstallRepository;
+    private SensorListModel sensorListModel = new SensorListModel();
+    private PreInstallCheckModel preInstallCheckModel = new PreInstallCheckModel();
+    private final SensorListService sensorListService;
 
-    /*@Autowired
-    private PreInstallRepository preInstallRepository;*/
+    //  넘어오는 데이터를 체크하기 위한 model
+
+    @Autowired
+    private SensorListRepository sensorListRepository;
+
     // 핸들러가 생성될 때 호출되는 메소드
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
@@ -86,37 +84,33 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String paraLen = readMsg.substring(40, 44); // 00ff
         String modemNumber = readMsg.substring(44, 59);
         String debugMsg = readMsg.substring(59, 61);
-        String chksum = readMsg.substring(61, 65);
-        String data = serialNumber + dateTime + paraLen + modemNumber + debugMsg;
+        String chksum = readMsg.substring(61, 63);
+        String totalData = flag + serialNumber + dateTime + paraLen + modemNumber + debugMsg;
 
 
         System.out.println("-----------------");
-        System.out.println(flag + " " + serialNumber + " " + dateTime + " " + paraLen + " " + modemNumber + " " + debugMsg + " " + chksum);
-        System.out.println("-----------------");
-        System.out.println(readMsg.substring(0, 65));
+        System.out.println("**"+readMsg.substring(0, 60));
+        System.out.println("**"+totalData);
+        System.out.println("**"+totalData.length());
 
-        preInstallModel.setFlag(flag);
-        preInstallModel.setSerialNumber(serialNumber);
-        preInstallModel.setDateTime(dateTime);
-        preInstallModel.setParaLen(paraLen);
-        preInstallModel.setModemNumber(modemNumber);
-        preInstallModel.setDebugMsg(debugMsg);
-        preInstallModel.setChksum(chksum);
+        preInstallCheckModel.setFlag(flag);
+        preInstallCheckModel.setSerialNumber(serialNumber);
+        preInstallCheckModel.setDateTime(dateTime);
+        preInstallCheckModel.setParaLen(paraLen);
+        preInstallCheckModel.setModemNumber(modemNumber);
+        preInstallCheckModel.setDebugMsg(debugMsg);
+        preInstallCheckModel.setChksum(chksum);
 
-//        preInstallRepository.save(preInstallModel);
-        System.out.println("********************");
-        System.out.println(data.length());
-        System.out.println("********************");
-
-        PreInstallModel test =  preInstallService.findData(preInstallModel);
-
-        if (test != null) {
-
-            System.out.println(test);
+        SensorListModel preInstallDeviceInfos = sensorListService.findData(totalData, modemNumber);
+        //  return 되는 sensorListModel (Object)을 담음.
+        if (preInstallDeviceInfos != null) {
+//            System.out.println(preInstallDeviceInfos);
         } else {
             char nak = '9';
             System.out.println(nak);
         }
+
+        // PreInstall 값 or NAK
 
         mBuf.release();
         final ChannelFuture f = ctx.writeAndFlush(buff);
