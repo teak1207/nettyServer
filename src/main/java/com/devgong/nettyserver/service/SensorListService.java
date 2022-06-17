@@ -2,6 +2,7 @@ package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.DeviceSetModel;
 import com.devgong.nettyserver.domain.NetworkSetModel;
+import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.domain.SensorListModel;
 import com.devgong.nettyserver.repository.DeviceSetRepository;
 import com.devgong.nettyserver.repository.NetworkSetRepository;
@@ -14,23 +15,20 @@ import org.springframework.stereotype.Service;
 public class SensorListService {
 
     private final SensorListRepository sensorListRepository;
-
     private final DeviceSetRepository deviceSetRepository;
     private final NetworkSetRepository networkSetRepository;
 
 
-    public SensorListModel findData(String totaldata, String modemnum) {
-
+    public PreInstallSetModel findData(String totaldata, String modemnum) {
         /*
          * model -> repository 가서 값을 찾기위한 Object Value.
          * totaldata -> 넘어오는 데이터의 길이로 정확한 값이 넘어왔는지를 판단하기 위한 value
          */
-
-        SensorListModel sensorListInfo;
-        DeviceSetModel deviceSetInfo;
-        NetworkSetModel networkSetInfo;
+        PreInstallSetModel preinstallSetModel = new PreInstallSetModel();
+        SensorListModel sensorListModel;
+        DeviceSetModel deviceSetModel;
+        NetworkSetModel networkSetModel;
         // 만약 ChkSum의 값이 length 60이라면 Pass 아니면 NAK
-
         System.out.println("totaldata--> " + totaldata);
         System.out.println("modemnum--> " + modemnum);
 
@@ -40,28 +38,28 @@ public class SensorListService {
             -> DB  원하는 값이 있는지 체크.
             -> ModemNum를 통해 sensor_list_all 값 가져오기
             */
-            sensorListInfo = sensorListRepository.findPreInstallModelByMphone(modemnum);
+            sensorListModel = sensorListRepository.findPreInstallModelByMphone(modemnum);
+            networkSetModel = networkSetRepository.findByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
+            deviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
+            System.out.println("test(network)-->" + networkSetModel);
+            System.out.println("test(network)-->" + networkSetModel.getDataPort());
+            System.out.println("test(device)-->" + deviceSetModel);
+            System.out.println("test(device)-->" + deviceSetModel.getTime1());
 
-            System.out.println("ssn--> "+sensorListInfo.getSsn());
-            System.out.println("asid--> "+sensorListInfo.getAsid());
-            System.out.println("Aproject--> "+sensorListInfo.getAproject());
+            preinstallSetModel.setTime1(deviceSetModel.getTime1());
+            preinstallSetModel.setTime2(deviceSetModel.getTime2());
+            preinstallSetModel.setTime3(deviceSetModel.getTime3());
+            preinstallSetModel.setSerialNumber(deviceSetModel.getSn());
+            preinstallSetModel.setPeriod(deviceSetModel.getPreiod());
+            preinstallSetModel.setSamplingTime(deviceSetModel.getSampletime());
+            preinstallSetModel.setSampleRate(deviceSetModel.getSamplerate());
+            preinstallSetModel.setServerUrl(networkSetModel.getDataServer());
+            preinstallSetModel.setServerPort(networkSetModel.getDataPort());
+
+            System.out.println("preinstallSetInfo ==> " + preinstallSetModel);
 
 
-//            networkSetInfo = networkSetRepository.findBySidAndPname(sensorListInfo.getAsid(), sensorListInfo.getAproject());
-            networkSetInfo = networkSetRepository.findByPname( sensorListInfo.getAproject());
-            deviceSetInfo = deviceSetRepository.findBySn(sensorListInfo.getSsn());
-
-            System.out.println("test(network)-->" + networkSetInfo);
-            System.out.println("test(device)-->" + deviceSetInfo);
-
-
-            /*
-             * preInstallDeviceInfos.getSsn()->leakset_bysensor values 가져오기
-             * preInstallDeviceInfos.getAsid()+getAproject()->leak_project values 가져오기
-             * */
-
-
-            return sensorListInfo;
+            return preinstallSetModel;
         }
         return null;
 

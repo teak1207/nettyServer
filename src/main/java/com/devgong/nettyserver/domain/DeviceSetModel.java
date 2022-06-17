@@ -28,7 +28,7 @@ public class DeviceSetModel {
     @Column(name = "PERIOD")
     private String preiod;
     @Column(name = "SAMPLE")
-    private String sample;
+    private String sampletime;
     @Column(name = "SAMPLERATE")
     private String samplerate;
 

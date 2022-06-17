@@ -1,6 +1,6 @@
 package com.devgong.nettyserver.handler;
 
-import com.devgong.nettyserver.domain.PreInstallCheckModel;
+import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.domain.SensorListModel;
 import com.devgong.nettyserver.repository.SensorListRepository;
 import com.devgong.nettyserver.service.SensorListService;
@@ -26,20 +26,28 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     종류
     Inbound Handler	 입력 데이터(in bound)에 대한 변경 상태를 감시하고 처리하는 역할을 하는 핸들러
     Outbound Handler 출력 데이터(out bound)에 대한 동작을 가로채 처리하는 역할을 하는 핸들러
+
+    <<참고>>
+    간단히 파일만 주고 받는 것이 아닌 전문통신을 통해 파일과 더불어 사용자 정보 등 필요한 정보를 짜여진
+    protocol 에 맞춰 통신해야 해서 ByteArrayDecoder 를 선택, handler 에서 ByteBuf msg 를 byte[]로
+    받아 (dto 에서 parsing 하여  file 을 저장하는 방식으로 개발을 진행했다.)
+
+
     */
     private ByteBuf buff;
     private SensorListModel sensorListModel = new SensorListModel();
-    private PreInstallCheckModel preInstallCheckModel = new PreInstallCheckModel();
+//    private PreInstallCheckModel preInstallCheckModel = new PreInstallCheckModel();
     private final SensorListService sensorListService;
 
     //  넘어오는 데이터를 체크하기 위한 model
-
     @Autowired
     private SensorListRepository sensorListRepository;
 
     // 핸들러가 생성될 때 호출되는 메소드
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) {
+    public void handlerAdded(ChannelHandlerContext ctx)throws  Exception {
+
+        log.info("Handler Added");
         buff = ctx.alloc().buffer(DATA_LENGTH);
     }
 
@@ -62,6 +70,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         /* 클라이언트 -> 서버, 날린 데이터를 받아야하는부분, Inbound buffer에서 읽을 값이 있을 경우 호출 #2
            메세지가 들어올때마다 호출되는 메소드
         */
+
+
+
         ByteBuf mBuf = (ByteBuf) msg;
         buff.writeBytes(mBuf);  // 클라이언트에서 보내는 데이터가 축적됨
         String readMsg = (buff.toString(Charset.defaultCharset()));  // Bytebuf 객체 buff를 String으로 형변환한 값. ---> 이렇게 하면 안됨!!!
@@ -93,15 +104,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("**"+totalData);
         System.out.println("**"+totalData.length());
 
-        preInstallCheckModel.setFlag(flag);
-        preInstallCheckModel.setSerialNumber(serialNumber);
-        preInstallCheckModel.setDateTime(dateTime);
-        preInstallCheckModel.setParaLen(paraLen);
-        preInstallCheckModel.setModemNumber(modemNumber);
-        preInstallCheckModel.setDebugMsg(debugMsg);
-        preInstallCheckModel.setChksum(chksum);
 
-        SensorListModel preInstallDeviceInfos = sensorListService.findData(totalData, modemNumber);
+        PreInstallSetModel preInstallDeviceInfos = sensorListService.findData(totalData, modemNumber);
         //  return 되는 sensorListModel (Object)을 담음.
         if (preInstallDeviceInfos != null) {
 //            System.out.println(preInstallDeviceInfos);
