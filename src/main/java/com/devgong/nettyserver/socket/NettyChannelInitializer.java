@@ -1,22 +1,18 @@
 package com.devgong.nettyserver.socket;
 
-import com.devgong.nettyserver.handler.NettyServerHandler;
 import com.devgong.nettyserver.decoder.TestDecoder;
-
+import com.devgong.nettyserver.handler.NettyServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
-import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
-import io.netty.handler.ssl.SslContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class NettyChannelInitializer extends   ChannelInitializer<SocketChannel> {
+public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
 
     private final NettyServerHandler nettyServerHandler;
     // 클라이언트 소켓 채널이 생성될 때 호출

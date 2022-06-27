@@ -39,7 +39,9 @@ public class SensorListService {
             -> ModemNum를 통해 sensor_list_all 값 가져오기
             */
             sensorListModel = sensorListRepository.findPreInstallModelByMphone(modemnum);
-            networkSetModel = networkSetRepository.findByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
+
+            System.out.println(sensorListModel.getAproject() +"//"+sensorListModel.getAsid() );
+            networkSetModel = networkSetRepository.findAllByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
             deviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
             System.out.println("test(network)-->" + networkSetModel);
             System.out.println("test(network)-->" + networkSetModel.getDataPort());

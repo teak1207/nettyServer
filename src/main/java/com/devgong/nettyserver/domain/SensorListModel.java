@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class SensorListModel {
 
     @Id
-    @Column(name = "cid")
+    @Column(name = "CID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
     @Column(name = "REGDATE")

@@ -3,7 +3,6 @@ package com.devgong.nettyserver.handler;
 import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.service.SensorListService;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
@@ -21,7 +20,7 @@ import java.nio.charset.Charset;
 @RequiredArgsConstructor
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /*
-    현재는 클라이언트에서 정해진 길이 2048byte를 하나의 패킷으로 읽어오고 있음
+    현재는 클라이언트에서 정해진 길이 2048 byte 를 하나의 패킷으로 읽어오고 있음
 
     종류
     Inbound Handler	 입력 데이터(in bound)에 대한 변경 상태를 감시하고 처리하는 역할을 하는 핸들러
@@ -35,27 +34,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     */
     private ByteBuf buff;
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    // private SensorListModel sensorListModel = new SensorListModel();
-//    private PreInstallCheckModel preInstallCheckModel = new PreInstallCheckModel();
     private final SensorListService sensorListService;
 
     //  넘어오는 데이터를 체크하기 위한 model
-
-    // private SensorListRepository sensorListRepository;
-
     // 핸들러가 생성될 때 호출되는 메소드
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-
-//        System.out.println("handlerAdded Of [SERVER]");
-//        Channel incoming = ctx.channel();
-//        for(Channel channel : channelGroup){
-//
-//        }
-        log.info("");
+    public void handlerAdded(ChannelHandlerContext ctx) {
         int DATA_LENGTH = 100;
         buff = ctx.alloc().buffer(DATA_LENGTH);
-
     }
 
     // 핸들러가 제거될 때 호출되는 메소드
@@ -75,55 +61,45 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        /* 클라이언트 -> 서버, 날린 데이터를 받아야하는부분, Inbound buffer에서 읽을 값이 있을 경우 호출 #2
-           메세지가 들어올때마다 호출되는 메소드
-        */
         ByteBuf mBuf = (ByteBuf) msg;
-        buff.writeBytes(mBuf);  // 클라이언트에서 보내는 데이터가 축적됨
-        String readMsg = (buff.toString(Charset.defaultCharset()));  // Bytebuf 객체 buff를 String으로 형변환한 값. ---> 이렇게 하면 안됨!!!
-        // 클라이언트에서  append 한거를 하나하나 배열에 집어넣으면 되는데ㅐ..
-        //System.out.println((char) (buff.getByte(0)) + "***********");
-        //System.out.println(buff.isReadable());
-        // 읽을 수 있는 바이트가 하나 이상이면 true를 반환
-        //byte[] bytes = readMsg.getBytes();  //  [r],[e],[c],[o]...
-        System.out.println("-----------------");
-        System.out.println("===channelRead===");
-        System.out.println("-----------------");
-        char flag = readMsg.charAt(0);// A , flag
-        String serialNumber = readMsg.substring(1, 25);
-        String dateTime = readMsg.substring(25, 40);
-        String paraLen = readMsg.substring(40, 44); // 00ff
-        String modemNumber = readMsg.substring(44, 59);
-        String debugMsg = readMsg.substring(59, 61);
-        String chksum = readMsg.substring(61, 63);
-        String totalData = flag + serialNumber + dateTime + paraLen + modemNumber + debugMsg;
 
+        System.out.println("-------------------------------");
+        System.out.println("Channel Read");
+        System.out.println("-------------------------------");
 
-        System.out.println("-----------------");
-        System.out.println("**" + readMsg.substring(0, 60));
-        System.out.println("**" + totalData);
-        System.out.println("**" + totalData.length());
+        String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+        String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+        String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+        String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+        String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+        String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+        String chkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
 
+        String totalData = flag + serialNumber + datetime + paraLen + modemNumber + debugMsg + chkSum;
 
         PreInstallSetModel preInstallDeviceInfos = sensorListService.findData(totalData, modemNumber);
-        //  return 되는 sensorListModel (Object)을 담음.
-        if (preInstallDeviceInfos != null) {
-            System.out.println("****" + preInstallDeviceInfos);
 
+
+
+        if (preInstallDeviceInfos != null) {  // 체크썸 값이 맞다면 buff에 write 해라
+
+            System.out.println("++++" + preInstallDeviceInfos);
+            buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getTime3().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getSerialNumber().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getPeriod().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getSamplingTime().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getSampleRate().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getServerUrl().getBytes());
+            buff.writeBytes(preInstallDeviceInfos.getServerPort().getBytes());
         } else {
             char nak = '9';
-            System.out.println(nak);
+            buff.writeChar(nak);
         }
 
-        // PreInstall 값 or NAK
-
-        ctx.writeAndFlush("<<test>>" + preInstallDeviceInfos);
-
+        ctx.writeAndFlush(buff);
         mBuf.release();
-        final ChannelFuture f = ctx.writeAndFlush(buff);
-        f.addListener(ChannelFutureListener.CLOSE);
-
-
     }
 
     @Override
@@ -137,7 +113,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // Close the connection when an exception is raised.
         cause.printStackTrace();
         ctx.close();
