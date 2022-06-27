@@ -19,7 +19,7 @@ public class SensorListService {
     private final NetworkSetRepository networkSetRepository;
 
 
-    public PreInstallSetModel findData(String totaldata, String modemnum) {
+    public PreInstallSetModel findData(String totaldata, String modemnum, String flag) {
         /*
          * model -> repository 가서 값을 찾기위한 Object Value.
          * totaldata -> 넘어오는 데이터의 길이로 정확한 값이 넘어왔는지를 판단하기 위한 value
@@ -29,24 +29,20 @@ public class SensorListService {
         DeviceSetModel deviceSetModel;
         NetworkSetModel networkSetModel;
         // 만약 ChkSum의 값이 length 60이라면 Pass 아니면 NAK
-        System.out.println("totaldata--> " + totaldata);
-        System.out.println("modemnum--> " + modemnum);
 
-        if (totaldata.length() == 61) {
+
+        if (flag == "0") {
             /*
             -> model 길이를 체크한 후, 분기처리.
             -> DB  원하는 값이 있는지 체크.
             -> ModemNum를 통해 sensor_list_all 값 가져오기
             */
             sensorListModel = sensorListRepository.findPreInstallModelByMphone(modemnum);
-
-            System.out.println(sensorListModel.getAproject() +"//"+sensorListModel.getAsid() );
             networkSetModel = networkSetRepository.findAllByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
             deviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
+            System.out.println("-------------------------------");
             System.out.println("test(network)-->" + networkSetModel);
-            System.out.println("test(network)-->" + networkSetModel.getDataPort());
             System.out.println("test(device)-->" + deviceSetModel);
-            System.out.println("test(device)-->" + deviceSetModel.getTime1());
 
             preinstallSetModel.setTime1(deviceSetModel.getTime1());
             preinstallSetModel.setTime2(deviceSetModel.getTime2());
@@ -57,9 +53,6 @@ public class SensorListService {
             preinstallSetModel.setSampleRate(deviceSetModel.getSamplerate());
             preinstallSetModel.setServerUrl(networkSetModel.getDataServer());
             preinstallSetModel.setServerPort(networkSetModel.getDataPort());
-
-            System.out.println("preinstallSetInfo ==> " + preinstallSetModel);
-
 
             return preinstallSetModel;
         }
