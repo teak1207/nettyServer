@@ -19,7 +19,7 @@ public class SensorListService {
     private final NetworkSetRepository networkSetRepository;
 
 
-    public PreInstallSetModel findData(String totaldata, String modemnum, String flag) {
+    public PreInstallSetModel findData(String flag, String modemnum) {
         /*
          * model -> repository 가서 값을 찾기위한 Object Value.
          * totaldata -> 넘어오는 데이터의 길이로 정확한 값이 넘어왔는지를 판단하기 위한 value
@@ -31,7 +31,7 @@ public class SensorListService {
         // 만약 ChkSum의 값이 length 60이라면 Pass 아니면 NAK
 
 
-        if (flag == "0") {
+        if (flag.equals("0")) {   // flag =="0" (x)
             /*
             -> model 길이를 체크한 후, 분기처리.
             -> DB  원하는 값이 있는지 체크.

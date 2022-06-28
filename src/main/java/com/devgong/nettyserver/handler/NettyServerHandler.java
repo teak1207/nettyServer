@@ -60,18 +60,24 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+
         ByteBuf mBuf = (ByteBuf) msg;
 
-
-        String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-        PreInstallSetModel preInstallDeviceInfos = null;
 
         System.out.println("===================");
         System.out.println("Channel Read");
         System.out.println("===================");
+
+        String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+
+        System.out.println("test---->  "+ flag);
+        PreInstallSetModel preInstallDeviceInfos = null;
+        // 플래그에 값에 따라 분기
         try {
             switch (flag) {
-                case "0": // PREISNTALL
+
+                case "0":  //preinstall
+
                     String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                     String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                     String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
@@ -79,16 +85,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
                     String chkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
 
-                    String totalData = flag + serialNumber + datetime + paraLen + modemNumber + debugMsg + chkSum;
 
-                    preInstallDeviceInfos = sensorListService.findData(totalData, modemNumber,flag);
-
-                    System.out.println("-------------------");
-                    System.out.println("PreInstall Process");
-                    System.out.println("flag =====> " + flag);
-                    System.out.println("PreInstall ===> " + preInstallDeviceInfos);
-                    System.out.println("-------------------");
-
+                    // PreInstall  Service 단
+                    preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
                     if (preInstallDeviceInfos != null) {  // 체크썸 값이 맞다면 buff에 write 해라
                         buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
                         buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
@@ -99,49 +98,31 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         buff.writeBytes(preInstallDeviceInfos.getSampleRate().getBytes());
                         buff.writeBytes(preInstallDeviceInfos.getServerUrl().getBytes());
                         buff.writeBytes(preInstallDeviceInfos.getServerPort().getBytes());
+
+                        ctx.writeAndFlush(buff);
+                        mBuf.release();
+                        break;
                     } else {
                         char nak = '9';
-                        buff.writeChar(nak);
+                        buff.writeChar(nak); //0 이 아니며
+                        break;
                     }
-                    ctx.writeAndFlush(buff);
-                    mBuf.release();
+                case "1": //setting
 
-                case "1": // SETTING
+                case "2": //report
+                    System.out.println("report===>>> 이시담유매ㅕ륩ㅈ랴ㅐㅈ뷰랴ㅐㅂㅈ류ㅑㅐㅂㅈㄹ");
+                    break;
+                case "3": //request
 
-
-                case "2": // REPORT
-                    String reportDebugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                    String recordTimeOpt1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String recordTimeOpt2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String recordTimeOpt3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String firmWareVersion = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
-                    String batteryVoltage = mBuf.readCharSequence(5, Charset.defaultCharset()).toString();
-                    String modemRSSI = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String reportSamplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String reportSampleRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String reportModemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                    String project = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
-                    String sectionName = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); // (== SID)
-                    String reportPeriod = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String reportServerURL = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
-                    String reportServerPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String reportCheckSum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-
-
-                case "3": // REQUEST
-                case "4": // DATA
+                case "4": //data
 
 
             }
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            System.out.println("명세되어있지않은 플래그입니다");
         }
-
-
-//        ctx.writeAndFlush(buff);
-//        mBuf.release();
     }
+
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
