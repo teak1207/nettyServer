@@ -1,9 +1,6 @@
 package com.devgong.nettyserver.service;
 
-import com.devgong.nettyserver.domain.DeviceSetModel;
-import com.devgong.nettyserver.domain.NetworkSetModel;
-import com.devgong.nettyserver.domain.PreInstallSetModel;
-import com.devgong.nettyserver.domain.SensorListModel;
+import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.repository.DeviceSetRepository;
 import com.devgong.nettyserver.repository.NetworkSetRepository;
 import com.devgong.nettyserver.repository.SensorListRepository;
@@ -60,4 +57,13 @@ public class SensorListService {
 
 
     }
+
+
+    public char insertReport(){
+
+        ReportModel reportModel;
+
+        return 'a';
+    }
+
 }
