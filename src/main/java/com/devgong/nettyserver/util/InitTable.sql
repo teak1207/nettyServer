@@ -62,6 +62,45 @@ CREATE TABLE LEAKSET_BYSENSOR
     PRIMARY KEY (CID)
 );
 
+create table factory_report
+(
+    cid          int auto_increment,
+    serialNumber VARCHAR(64) null,
+    REPORTTIME   DATETIME    null,
+    ID           VARCHAR(16) null,
+    IP           VARCHAR(36) null,
+    PX           VARCHAR(16) null,
+    SID          VARCHAR(64) null,
+    PY           VARCHAR(16) null,
+    PNAME        VARCHAR(64) null,
+    TIME1        VARCHAR(8)  null,
+    TIME2        VARCHAR(8)  null,
+    TIME3        VARCHAR(8)  null,
+    DEBUG        VARCHAR(20) null,
+    FM           VARCHAR(8)  null,
+    FVER         VARCHAR(8)  null,
+    RSSI         VARCHAR(8)  null,
+    STATUS_TEMP  VARCHAR(2)  null,
+    PERIOD_TEMP  VARCHAR(2)  null,
+    BATTERY      VARCHAR(8)  null,
+    PROJECT      VARCHAR(32) null,
+    DATA_SERVER  VARCHAR(32) null,
+    DATA_PORT    VARCHAR(8)  null,
+    DB_SERVER    VARCHAR(32) null,
+    DB_PORT      VARCHAR(8)  null,
+    REPORT_CHK   VARCHAR(16) null,
+    FMTIME       VARCHAR(8)  null,
+    BAUDRATE     VARCHAR(8)  null,
+    PCBVERSION   VARCHAR(8)  null,
+    ACKNAK       VARCHAR(4)  null,
+    constraint factory_report_pk
+        primary key (cid)
+);
+
+
+
+
+
 --================================
 -- INSERT
 

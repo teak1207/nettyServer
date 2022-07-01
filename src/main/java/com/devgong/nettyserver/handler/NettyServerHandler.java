@@ -22,16 +22,13 @@ import java.nio.charset.Charset;
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     /*
     현재는 클라이언트에서 정해진 길이 2048 byte 를 하나의 패킷으로 읽어오고 있음
-
-    종류
+    <<종류>>
     Inbound Handler	 입력 데이터(in bound)에 대한 변경 상태를 감시하고 처리하는 역할을 하는 핸들러
     Outbound Handler 출력 데이터(out bound)에 대한 동작을 가로채 처리하는 역할을 하는 핸들러
-
     <<참고>>
     간단히 파일만 주고 받는 것이 아닌 전문통신을 통해 파일과 더불어 사용자 정보 등 필요한 정보를 짜여진
     protocol 에 맞춰 통신해야 해서 ByteArrayDecoder 를 선택, handler 에서 ByteBuf msg 를 byte[]로
     받아 (dto 에서 parsing 하여  file 을 저장하는 방식으로 개발을 진행했다.)
-
     */
     private ByteBuf buff;
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -89,6 +86,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     // PreInstall  Service
                     preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
+
+
                     if (preInstallDeviceInfos != null) {  // 체크썸 값이 맞다면 buff에 write 해라
                         buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
                         buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
@@ -137,7 +136,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                     // PreInstall  Service
-                     char reportResult = sensorListService.insertReport();
+                     boolean reportResult = sensorListService.insertReport();
 
                     if (preInstallDeviceInfos != null) {  // 체크썸 값이 맞다면 buff에 write 해라
 

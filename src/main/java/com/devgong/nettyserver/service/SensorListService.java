@@ -3,6 +3,7 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.repository.DeviceSetRepository;
 import com.devgong.nettyserver.repository.NetworkSetRepository;
+import com.devgong.nettyserver.repository.ReportRepository;
 import com.devgong.nettyserver.repository.SensorListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ public class SensorListService {
     private final DeviceSetRepository deviceSetRepository;
     private final NetworkSetRepository networkSetRepository;
 
+    private final ReportRepository reportRepository;
 
     public PreInstallSetModel findData(String flag, String modemnum) {
         /*
@@ -25,6 +27,7 @@ public class SensorListService {
         SensorListModel sensorListModel;
         DeviceSetModel deviceSetModel;
         NetworkSetModel networkSetModel;
+
         // 만약 ChkSum의 값이 length 60이라면 Pass 아니면 NAK
 
 
@@ -59,11 +62,13 @@ public class SensorListService {
     }
 
 
-    public char insertReport(){
+    public boolean insertReport(){
 
-        ReportModel reportModel;
 
-        return 'a';
+//        reportRepository.save();
+
+
+        return true;
     }
 
 }
