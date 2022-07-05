@@ -29,8 +29,6 @@ public class SensorListService {
         NetworkSetModel networkSetModel;
 
         // 만약 ChkSum의 값이 length 60이라면 Pass 아니면 NAK
-
-
         if (flag.equals("0")) {   // flag =="0" (x)
             /*
             -> model 길이를 체크한 후, 분기처리.
@@ -40,9 +38,10 @@ public class SensorListService {
             sensorListModel = sensorListRepository.findPreInstallModelByMphone(modemnum);
             networkSetModel = networkSetRepository.findAllByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
             deviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
+
             System.out.println("-------------------------------");
-            System.out.println("test(network)-->" + networkSetModel);
-            System.out.println("test(device)-->" + deviceSetModel);
+            System.out.println("PREINSTALL[NETWORK]-->" + networkSetModel);
+            System.out.println("PREINSTALL[DEVICE]-->" + deviceSetModel);
 
             preinstallSetModel.setTime1(deviceSetModel.getTime1());
             preinstallSetModel.setTime2(deviceSetModel.getTime2());
@@ -62,10 +61,15 @@ public class SensorListService {
     }
 
 
-    public boolean insertReport(){
+    public boolean insertReport(ReportModel reportModel){
 
+        if(reportModel != null){
+            reportRepository.save(reportModel);
+            System.out.println("[INSERT] : SUCCESS ");
+        }else{
+            System.out.println("[INSERT] : FAIL");
+        }
 
-//        reportRepository.save();
 
 
         return true;

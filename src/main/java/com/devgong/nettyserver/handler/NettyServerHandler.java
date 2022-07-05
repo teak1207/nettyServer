@@ -4,7 +4,9 @@ import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.domain.ReportModel;
 import com.devgong.nettyserver.service.SensorListService;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.*;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
@@ -33,6 +35,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private ByteBuf buff;
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final SensorListService sensorListService;
+
+    final char ack = '8';
+    final char nak = '9';
 
     //  넘어오는 데이터를 체크하기 위한 model
     // 핸들러가 생성될 때 호출되는 메소드
@@ -68,108 +73,105 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
 
-        System.out.println("test---->  " + flag);
         PreInstallSetModel preInstallDeviceInfos = null;
+        ReportModel reportModel = new ReportModel();
+
         // 플래그에 값에 따라 분기
         try {
-            switch (flag) {
+            if (flag.equals("0")) {
+                //  *** 주의 *** 밑 preinstall 프로토콜항목 순서를 바꾸면 안됨.
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+                String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+                String chkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
 
-                case "0":  //preinstall
+                preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
+                System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
 
-                    String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                    String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                    String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                    String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                    String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                    String chkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-
-
-                    // PreInstall  Service
-                    preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
-
-
-                    if (preInstallDeviceInfos != null) {  // 체크썸 값이 맞다면 buff에 write 해라
-                        buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getTime3().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getSerialNumber().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getPeriod().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getSamplingTime().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getSampleRate().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getServerUrl().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getServerPort().getBytes());
-
-                        ctx.writeAndFlush(buff);
-                        mBuf.release();
-                        break;
-                    } else {
-                        char nak = '9';
-                        buff.writeChar(nak); //0 이 아니며
-                        break;
-                    }
-                case "1": //setting
-
-                case "2": //report
-                    /*==== Header ====*/
-                    flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                    datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                    paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-
-                    /*==== Body ====*/
-                    String DebugMessage = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                    String RecordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String RecordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String RecordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String firmWareVersion = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
-                    String batteryVtg = mBuf.readCharSequence(5, Charset.defaultCharset()).toString();
-                    String RSSI = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String samplingRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                    String Project = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
-                    String Sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
-                    String Period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                    String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
-                    String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                    String checkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-
-
-                    // PreInstall  Service
-                     boolean reportResult = sensorListService.insertReport();
-
-                    if (preInstallDeviceInfos != null) {  // 체크썸 값이 맞다면 buff에 write 해라
-
-                        buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getTime3().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getSerialNumber().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getPeriod().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getSamplingTime().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getSampleRate().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getServerUrl().getBytes());
-                        buff.writeBytes(preInstallDeviceInfos.getServerPort().getBytes());
-
-                        ctx.writeAndFlush(buff);
-                        mBuf.release();
-                        break;
-                    } else {
-                        char nak = '9';
-                        buff.writeChar(nak); //0 이 아니며
-                        break;
-                    }
-
-                case "3": //request
-
-                case "4": //data
-
-
+                if (preInstallDeviceInfos != null) {
+                    buff.writeChar(ack);
+                    buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getTime3().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getSerialNumber().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getPeriod().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getSamplingTime().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getSampleRate().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getServerUrl().getBytes());
+                    buff.writeBytes(preInstallDeviceInfos.getServerPort().getBytes());
+                    ctx.writeAndFlush(buff);
+                    mBuf.release();
+                } else {
+                    buff.writeChar(nak); //0 이 아니며
+                }
             }
+//            System.out.println("flag"+  flag);
+
+            if (flag.equals("8") || flag.equals("9")) {
+                //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
+                /*==== Header ====*/
+                String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+                /*==== Body ====*/
+                String debugMessage = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+                String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String firmWareVersion = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
+                String batteryVtg = mBuf.readCharSequence(5, Charset.defaultCharset()).toString();
+                String RSSI = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //Number
+                String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
+                String samplingRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
+                String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String project = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
+                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
+                String period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
+                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
+                String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String chksum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+
+                reportModel.setSerialNumber(serialNum);
+                reportModel.setDateTime(datetime);
+                reportModel.setDebugMsg(debugMessage);
+                reportModel.setRecordingTime1(recordingTime1);
+                reportModel.setRecordingTime2(recordingTime2);
+                reportModel.setRecordingTime3(recordingTime3);
+                reportModel.setFirmWareVersion(firmWareVersion);
+                reportModel.setBatteryVtg(batteryVtg);
+                reportModel.setRSSI(RSSI);
+                reportModel.setSamplingTime(samplingTime);
+                reportModel.setSamplingRate(samplingRate);
+                reportModel.setModemNumber(modemNumber);
+                reportModel.setProject(project);
+                reportModel.setSid(sid);
+                reportModel.setPeriod(period);
+                reportModel.setServerUrl(serverUrl);
+                reportModel.setServerPort(serverPort);
+
+                System.out.println(reportModel.toString());
+
+                boolean reportResult = sensorListService.insertReport(reportModel);
+
+
+
+/*                if (reportResult == true) {  // 체크썸 값이 맞다면 buff에 write
+                    buff.writeChar(ack); //0 이 아니며
+                    ctx.writeAndFlush(buff);
+                    mBuf.release();
+                } else {
+                    buff.writeChar(nak);
+                    ctx.writeAndFlush(buff);
+                }*/
+            }
+
+
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {

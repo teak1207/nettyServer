@@ -1,29 +1,32 @@
 package com.devgong.nettyserver.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Getter
 @Setter
 @ToString
+@Entity
+@NoArgsConstructor
 @Table(name = "factory_report")
 public class ReportModel {
 
     @Id
     @Column(name = "cid")
     private int cid;
-    //    private char flag;
+
     @Column(name = "SERIALNUMBER")
     private String serialNumber;
+
     @Column(name = "REPORTTIME")
     private String dateTime;
-
-//    private String paraLen;
 
     @Column(name = "DEBUG")
     private String debugMsg;
@@ -55,7 +58,6 @@ public class ReportModel {
     private String serverUrl;
     @Column(name = "SERVER_PORT")
     private String serverPort;
-//    private String checkSum;
 
 
 }
