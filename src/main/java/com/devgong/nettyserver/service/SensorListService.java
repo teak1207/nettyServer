@@ -56,20 +56,16 @@ public class SensorListService {
             return preinstallSetModel;
         }
         return null;
-
-
     }
 
+    public boolean insertReport(ReportModel reportModel) {
 
-    public boolean insertReport(ReportModel reportModel){
-
-        if(reportModel != null){
+        if (reportModel != null) {
             reportRepository.save(reportModel);
             System.out.println("[INSERT] : SUCCESS ");
-        }else{
+        } else {
             System.out.println("[INSERT] : FAIL");
         }
-
 
 
         return true;

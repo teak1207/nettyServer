@@ -107,16 +107,21 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     buff.writeChar(nak); //0 이 아니며
                 }
             }
-//            System.out.println("flag"+  flag);
 
+            /* === [ REPORT PROCESS RECEIVE START ] === */
             if (flag.equals("8") || flag.equals("9")) {
+
+//                int x = (mBuf.readCharSequence(41, Charset.defaultCharset())).length();
+
                 //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
+                // report 값을 바이트크기에 따라 분할 후, 변수 저장.
                 /*==== Header ====*/
                 String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
                 /*==== Body ====*/
                 String debugMessage = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+
                 String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
@@ -126,10 +131,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
                 String samplingRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
                 String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String project = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
-                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
+                String project = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
+                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //*
                 String period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
-                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
+                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
                 String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String chksum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
 
@@ -152,12 +157,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 reportModel.setServerPort(serverPort);
 
                 System.out.println(reportModel.toString());
-
                 boolean reportResult = sensorListService.insertReport(reportModel);
+                System.out.println(reportResult);
 
-
-
-/*                if (reportResult == true) {  // 체크썸 값이 맞다면 buff에 write
+                /*
+                  if (reportResult == true) {  // 체크썸 값이 맞다면 buff에 write
                     buff.writeChar(ack); //0 이 아니며
                     ctx.writeAndFlush(buff);
                     mBuf.release();
