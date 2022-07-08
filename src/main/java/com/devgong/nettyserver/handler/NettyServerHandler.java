@@ -35,9 +35,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private ByteBuf buff;
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final SensorListService sensorListService;
+    final String ack = "8";
+    final String nak = "9";
 
-    final char ack = '8';
-    final char nak = '9';
 
     //  넘어오는 데이터를 체크하기 위한 model
     // 핸들러가 생성될 때 호출되는 메소드
@@ -91,7 +91,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
 
                 if (preInstallDeviceInfos != null) {
-                    buff.writeChar(ack);
+                    buff.writeBytes(ack.getBytes());
                     buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
                     buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
                     buff.writeBytes(preInstallDeviceInfos.getTime3().getBytes());
@@ -104,7 +104,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(buff);
                     mBuf.release();
                 } else {
-                    buff.writeChar(nak); //0 이 아니며
+//                    buff.writeChar(nak); //0 이 아니며
+                    buff.writeBytes(nak.getBytes());
                 }
             }
 
@@ -156,22 +157,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 reportModel.setServerUrl(serverUrl);
                 reportModel.setServerPort(serverPort);
 
-                System.out.println(reportModel.toString());
                 boolean reportResult = sensorListService.insertReport(reportModel);
-                System.out.println(reportResult);
 
-                /*
-                  if (reportResult == true) {  // 체크썸 값이 맞다면 buff에 write
-                    buff.writeChar(ack); //0 이 아니며
+                if (reportResult == true) {  // 체크썸 값이 맞다면 buff에 write
+
+                    buff.writeBytes(ack.getBytes());
                     ctx.writeAndFlush(buff);
-                    mBuf.release();
                 } else {
-                    buff.writeChar(nak);
+                    buff.writeBytes(nak.getBytes());
                     ctx.writeAndFlush(buff);
-                }*/
+                }
             }
-
-
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -179,8 +175,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        System.out.println("<<channelReadComplete>>");
-        ctx.flush();
+//        ctx.flush();
 
         /*ctx.writeAndFlush(Unpooled.EMPTY_BUFFER) // 대기중인 메시지를 플러시하고 채널을 닫음
                 .addListener(ChannelFutureListener.CLOSE);*/
