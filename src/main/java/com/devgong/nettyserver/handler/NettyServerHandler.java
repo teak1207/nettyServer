@@ -12,9 +12,16 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 
 
 @Slf4j
@@ -80,12 +87,71 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         try {
             if (flag.equals("0")) {
                 //  *** 주의 *** 밑 preinstall 프로토콜항목 순서를 바꾸면 안됨.
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+/*              String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
                 String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
                 String chkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+*/
+
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
+                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();    //number
+                String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString(); //number
+                String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString(); //number
+                String chkSum1 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
+                String chkSum2 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
+                String convertChk = Integer.toHexString(chkSum1.charAt(0)) + Integer.toHexString(chkSum2.charAt(0));
+
+                String chkData = serialNumber + datetime + requestType + paraLen + modemNumber + debugMsg;
+
+                int convertDecimalSum = 0;
+
+                for (int i = 0; i < chkData.length(); i++) {
+
+                    convertDecimalSum+= chkData.charAt(i);
+                }
+                System.out.println("=====================");
+                System.out.println(convertDecimalSum);
+//                            Integer.toHexString()
+                System.out.println(convertChk);
+                int decimal = Integer.parseInt(convertChk, 16);
+                System.out.println(decimal);
+
+
+                // 세팅값 타입에 맞게 형변환후 데이터의길이와 체크썸을 비교하여 데이터 온전한지 체크 여부
+/*                String[] vals = {serialNumber, datetime, requestType, paraLen, modemNumber, debugMsg};  //10,25
+                String test = "";
+                for (String v : vals) {
+                    test += v;
+                    System.out.println(test);
+                }*/
+
+
+
+                /*String hexString = convertChk;  //35
+                Integer changeHexInt = Integer.decode(hexString);
+                byte hexByte = (byte) (changeHexInt & 0x0FF);
+                System.out.println(hexByte);
+*/
+
+
+/*
+                String[] vals = {"0xa", "0x19"};  //10,25
+                byte test = 0;
+                for (String v : vals) {
+                    test += Integer.decode(v);
+                    System.out.println(test);
+                }
+                String hexString = "0x023";  //35
+                Integer changeHexInt = Integer.decode(hexString);
+                byte hexByte = (byte) (changeHexInt & 0x0FF);
+                System.out.println(hexByte);
+*/
+
 
                 preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
                 System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
@@ -112,7 +178,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             /* === [ REPORT PROCESS RECEIVE START ] === */
             if (flag.equals("8") || flag.equals("9")) {
 
-//                int x = (mBuf.readCharSequence(41, Charset.defaultCharset())).length();
 
                 //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
                 // report 값을 바이트크기에 따라 분할 후, 변수 저장.
@@ -163,6 +228,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     buff.writeBytes(ack.getBytes());
                     ctx.writeAndFlush(buff);
+
                 } else {
                     buff.writeBytes(nak.getBytes());
                     ctx.writeAndFlush(buff);
