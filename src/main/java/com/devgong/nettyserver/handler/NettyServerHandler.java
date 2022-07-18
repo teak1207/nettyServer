@@ -4,6 +4,7 @@ import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.domain.ReportModel;
 import com.devgong.nettyserver.service.SensorListService;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,16 +13,9 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.springframework.stereotype.Component;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-
-import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 
 
 @Slf4j
@@ -29,50 +23,33 @@ import static ch.qos.logback.core.encoder.ByteArrayUtil.hexStringToByteArray;
 @ChannelHandler.Sharable //#1 @Sharable 어노테이션은 여러채널에서 핸들러를 공유 할 수 있음을 나타냄.
 @RequiredArgsConstructor
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
-    /*
-    현재는 클라이언트에서 정해진 길이 2048 byte 를 하나의 패킷으로 읽어오고 있음
-    <<종류>>
-    Inbound Handler	 입력 데이터(in bound)에 대한 변경 상태를 감시하고 처리하는 역할을 하는 핸들러
-    Outbound Handler 출력 데이터(out bound)에 대한 동작을 가로채 처리하는 역할을 하는 핸들러
-    <<참고>>
-    간단히 파일만 주고 받는 것이 아닌 전문통신을 통해 파일과 더불어 사용자 정보 등 필요한 정보를 짜여진
-    protocol 에 맞춰 통신해야 해서 ByteArrayDecoder 를 선택, handler 에서 ByteBuf msg 를 byte[]로
-    받아 (dto 에서 parsing 하여  file 을 저장하는 방식으로 개발을 진행했다.)
-    */
-    private ByteBuf buff;
+
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final SensorListService sensorListService;
     final String ack = "8";
     final String nak = "9";
 
-
     //  넘어오는 데이터를 체크하기 위한 model
     // 핸들러가 생성될 때 호출되는 메소드
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
-        int DATA_LENGTH = 100;
-        buff = ctx.alloc().buffer(DATA_LENGTH);
     }
 
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         // 클라이언트와 연결되어 트래픽을 생성할 준비가 되었을 때 호출되는 메소드
-        buff = null;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         // 채널이 활성화 됐을 때 호출됨. 데이터를 받거나 보낼 수 있는 상태를 의미함.
-
         System.out.println("===channelActive===");
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-
         ByteBuf mBuf = (ByteBuf) msg;
-
 
         System.out.println("===================");
         System.out.println("Channel Read");
@@ -86,16 +63,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         // 플래그에 값에 따라 분기
         try {
             if (flag.equals("0")) {
-                //  *** 주의 *** 밑 preinstall 프로토콜항목 순서를 바꾸면 안됨.
-/*              String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                String chkSum = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-*/
-
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
@@ -106,78 +73,43 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String chkSum2 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
                 String convertChk = Integer.toHexString(chkSum1.charAt(0)) + Integer.toHexString(chkSum2.charAt(0));
 
-                String chkData = serialNumber + datetime + requestType + paraLen + modemNumber + debugMsg;
+                String chkData = flag + serialNumber + datetime + requestType + paraLen + modemNumber + debugMsg;
 
                 int convertDecimalSum = 0;
 
                 for (int i = 0; i < chkData.length(); i++) {
 
-                    convertDecimalSum+= chkData.charAt(i);
+                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
                 }
                 System.out.println("=====================");
                 System.out.println(convertDecimalSum);
-//                            Integer.toHexString()
                 System.out.println(convertChk);
                 int decimal = Integer.parseInt(convertChk, 16);
                 System.out.println(decimal);
-
-
-                // 세팅값 타입에 맞게 형변환후 데이터의길이와 체크썸을 비교하여 데이터 온전한지 체크 여부
-/*                String[] vals = {serialNumber, datetime, requestType, paraLen, modemNumber, debugMsg};  //10,25
-                String test = "";
-                for (String v : vals) {
-                    test += v;
-                    System.out.println(test);
-                }*/
-
-
-
-                /*String hexString = convertChk;  //35
-                Integer changeHexInt = Integer.decode(hexString);
-                byte hexByte = (byte) (changeHexInt & 0x0FF);
-                System.out.println(hexByte);
-*/
-
-
-/*
-                String[] vals = {"0xa", "0x19"};  //10,25
-                byte test = 0;
-                for (String v : vals) {
-                    test += Integer.decode(v);
-                    System.out.println(test);
-                }
-                String hexString = "0x023";  //35
-                Integer changeHexInt = Integer.decode(hexString);
-                byte hexByte = (byte) (changeHexInt & 0x0FF);
-                System.out.println(hexByte);
-*/
-
 
                 preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
                 System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
 
                 if (preInstallDeviceInfos != null) {
-                    buff.writeBytes(ack.getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getTime1().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getTime2().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getTime3().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getSerialNumber().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getPeriod().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getSamplingTime().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getSampleRate().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getServerUrl().getBytes());
-                    buff.writeBytes(preInstallDeviceInfos.getServerPort().getBytes());
-                    ctx.writeAndFlush(buff);
+                    ctx.write(Unpooled.copiedBuffer(ack.getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime1().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime2().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime3().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSerialNumber().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPeriod().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSamplingTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSampleRate().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerPort().getBytes()));
+                    ctx.flush();
                     mBuf.release();
                 } else {
-//                    buff.writeChar(nak); //0 이 아니며
-                    buff.writeBytes(nak.getBytes());
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    mBuf.release();
                 }
             }
-
             /* === [ REPORT PROCESS RECEIVE START ] === */
             if (flag.equals("8") || flag.equals("9")) {
-
 
                 //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
                 // report 값을 바이트크기에 따라 분할 후, 변수 저장.
@@ -187,7 +119,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
                 /*==== Body ====*/
                 String debugMessage = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-
                 String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
@@ -224,14 +155,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 boolean reportResult = sensorListService.insertReport(reportModel);
 
-                if (reportResult == true) {  // 체크썸 값이 맞다면 buff에 write
-
-                    buff.writeBytes(ack.getBytes());
-                    ctx.writeAndFlush(buff);
-
+                if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
+                    mBuf.release();
                 } else {
-                    buff.writeBytes(nak.getBytes());
-                    ctx.writeAndFlush(buff);
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    mBuf.release();
                 }
             }
         } catch (IllegalArgumentException e) {
@@ -241,16 +170,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-//        ctx.flush();
-
-        /*ctx.writeAndFlush(Unpooled.EMPTY_BUFFER) // 대기중인 메시지를 플러시하고 채널을 닫음
-                .addListener(ChannelFutureListener.CLOSE);*/
     }
-
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        // Close the connection when an exception is raised.
         cause.printStackTrace();
         ctx.close();
     }
