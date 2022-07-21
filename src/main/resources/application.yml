@@ -11,7 +11,7 @@ spring:
   datasource:
       url: jdbc:mysql://localhost:3306/leakmaster_db
       username: root
-      password: 1234
+      password: scsol92595
       driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
       show-sql: true

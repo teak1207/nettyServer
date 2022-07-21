@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Entity
 @NoArgsConstructor
 @Table(name = "factory_report")
-public class ReportModel {
+public class PreinstallReportModel {
 
     @Id
     @Column(name = "cid")

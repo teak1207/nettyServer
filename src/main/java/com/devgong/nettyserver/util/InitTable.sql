@@ -97,11 +97,26 @@ create table factory_report
         primary key (cid)
 );
 
+-- auto-generated definition
+create table leakset
+(
+    cid            int auto_increment
+        primary key,
+    recordingtime1 varchar(8) null,
+    recordingtime2 varchar(8) null,
+    recordingtime3 varchar(8) null,
+    period varchar (8) null,
+    sample         varchar(2) null,
+    samplerate     varchar(8) null,
+    sleep          varchar(1) null,
+    active         varchar(1) null
+);
 
 
 
 
---================================
+
+-- ================================
 -- INSERT
 
 INSERT INTO  leak_project VALUES (1,'thingsware.co.kr','8998');
@@ -110,10 +125,16 @@ INSERT INTO  leak_project VALUES (1,'SWFLB-20200312-0102-0004','2020-03-17 13:12
 
 INSERT INTO sensor_list_all VALUES  (1,now() ,'SWSLB-20220530-0000-0001','producttest','tesk_chk','8212-3266-1739');
 INSERT INTO sensor_list_all VALUES  (2,now() ,'SWFLB-20210408-0106-0543','producttest','test_hkchoi','862785043595621');
---================================
+
+INSERT INTO LEAKSET VALUES (1,'0200','0300','0400','1','3','4','1','1');
+
+-- ================================
 -- SELECT
-SELECT * FROM leak_project
+SELECT * FROM leak_project;
 SELECT * FROM LEAKSET_BYSENSOR;
---================================
+-- ================================
 -- DROP
 DROP TABLE LEAKSET_BYSENSOR;
+
+
+
