@@ -181,6 +181,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
                     ctx.writeAndFlush(Unpooled.copiedBuffer(ByteBuffer.allocateDirect(ack)));
+                    //testetest
                     mBuf.release();
                 } else {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
