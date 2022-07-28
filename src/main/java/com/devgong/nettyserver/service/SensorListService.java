@@ -1,10 +1,7 @@
 package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.*;
-import com.devgong.nettyserver.repository.DeviceSetRepository;
-import com.devgong.nettyserver.repository.NetworkSetRepository;
-import com.devgong.nettyserver.repository.ReportRepository;
-import com.devgong.nettyserver.repository.SensorListRepository;
+import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +12,7 @@ public class SensorListService {
     private final SensorListRepository sensorListRepository;
     private final DeviceSetRepository deviceSetRepository;
     private final NetworkSetRepository networkSetRepository;
+    private final PreInstallSensorListRepository preInstallSensorListRepository;
 
     private final ReportRepository reportRepository;
 
@@ -25,29 +23,42 @@ public class SensorListService {
          */
         PreInstallSetModel preinstallSetModel = new PreInstallSetModel();
         SensorListModel sensorListModel;
-        DeviceSetModel deviceSetModel;
-        NetworkSetModel networkSetModel;
+        PreinstallDeviceSetModel preinstallDeviceSetModel;
+        PreinstallNetworkSetModel preinstallNetworkSetModel;
+        PreInstallSensorListModel preInstallSensorListModel ;
 
-        if (flag.equals("0")) {   // flag =="0" (x)
+        if (flag.equals("A")) {   // flag =="0" (x)
             sensorListModel = sensorListRepository.findPreInstallModelByMphone(modemnum);
-            networkSetModel = networkSetRepository.findAllByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
-            deviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
+            preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
+            preinstallDeviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
+            preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(sensorListModel.getSsn());
 
             System.out.println("-------------------------------");
-            System.out.println("PREINSTALL[NETWORK] : " + networkSetModel);
-            System.out.println("PREINSTALL[DEVICE] : " + deviceSetModel);
+            System.out.println("PREINSTALL[NETWORK] : " + preinstallNetworkSetModel);
+            System.out.println("PREINSTALL[DEVICE] : " + preinstallDeviceSetModel);
 
-            preinstallSetModel.setTime1(deviceSetModel.getTime1());
-            preinstallSetModel.setTime2(deviceSetModel.getTime2());
-            preinstallSetModel.setTime3(deviceSetModel.getTime3());
-            preinstallSetModel.setSerialNumber(deviceSetModel.getSn());
-            preinstallSetModel.setPeriod(deviceSetModel.getPreiod());
-            preinstallSetModel.setSamplingTime(deviceSetModel.getSampletime());
-            preinstallSetModel.setSampleRate(deviceSetModel.getSamplerate());
-            preinstallSetModel.setServerUrl(networkSetModel.getDataServer());
-            preinstallSetModel.setServerPort(networkSetModel.getDataPort());
+            preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
+            preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
+            preinstallSetModel.setTime3(preinstallDeviceSetModel.getTime3());
+            preinstallSetModel.setFmFrequency(preinstallDeviceSetModel.getFmPrequency());//new
+
+            preinstallSetModel.setSid(preinstallNetworkSetModel.getSid()); //new
+            preinstallSetModel.setPname(preinstallNetworkSetModel.getPname());//new
+            preinstallSetModel.setPx(preInstallSensorListModel.getPx());
+            preinstallSetModel.setPy(preInstallSensorListModel.getPy());
+            preinstallSetModel.setSerialNumber(preinstallDeviceSetModel.getSn());
+            preinstallSetModel.setPeriod(preinstallDeviceSetModel.getPreiod());
+            preinstallSetModel.setSamplingTime(preinstallDeviceSetModel.getSampletime());
+            preinstallSetModel.setSampleRate(preinstallDeviceSetModel.getSamplerate());
+            preinstallSetModel.setServerUrl(preinstallNetworkSetModel.getDataServer());
+            preinstallSetModel.setServerPort(preinstallNetworkSetModel.getDataPort());
+            preinstallSetModel.setDbUrl(preinstallNetworkSetModel.getDbUrl());//new
+            preinstallSetModel.setDbPort(preinstallNetworkSetModel.getDbPort());//new
+            preinstallSetModel.setRadioTime(preinstallDeviceSetModel.getRadioTime());//new
+            preinstallSetModel.setBaudrate(preinstallDeviceSetModel.getBaudrate());//new
+
             return preinstallSetModel;
-        }else{
+        } else {
             System.out.println("[flag] : 0이 아닙니다. :)");
         }
 
@@ -59,12 +70,14 @@ public class SensorListService {
         if (preinstallReportModel != null) {
             reportRepository.save(preinstallReportModel);
             System.out.println("[INSERT] : SUCCESS ");
+            return true;
         } else {
             System.out.println("[INSERT] : FAIL");
+            return false;
         }
 
 
-        return true;
+
     }
 
 }
