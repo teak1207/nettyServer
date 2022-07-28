@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @ToString
 @Table(name = "leak_project")
-public class NetworkSetModel {
+public class PreinstallNetworkSetModel {
 
     @Id
     @Column(name = "CID")
@@ -25,6 +25,11 @@ public class NetworkSetModel {
     private String dataServer;
     @Column(name = "DATA_PORT")
     private String dataPort;
+
+    @Column(name = "DB_URL")
+    private String dbUrl;
+    @Column(name = "DB_PORT")
+    private String dbPort;
 
 
 }
