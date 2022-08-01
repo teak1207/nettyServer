@@ -45,8 +45,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
         SettingInitModel settingInitModel = new SettingInitModel();
 
-        // 플래그에 값에 따라 분기
+
+        /* 플래그에 값에 따라 분기*/
+        /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
+
             if (flag.equals("A")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
@@ -103,9 +106,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
                     ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
                     ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));
-/*                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));*/
+
                     ctx.flush();
                     mBuf.release();
                     report = true;
@@ -116,10 +117,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
             } else if ((flag.equals("8") || flag.equals("9")) && report == true) {
-                /* === [ REPORT PROCESS RECEIVE START ] === */
+                /* === [PREINSTALL REPORT PROCESS RECEIVE START ] === */
                 //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
                 // report 값을 바이트크기에 따라 분할 후, 변수 저장.
                 /*==== Header ====*/
+                System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
@@ -147,7 +149,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String baudrateNext = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
                 String pcbVersion = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
 
-
                 preinstallReportModel.setSerialNumber(serialNum);
                 preinstallReportModel.setDateTime(datetime);
                 preinstallReportModel.setDebugMsg(debugMessage);
@@ -162,7 +163,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 preinstallReportModel.setSamplingTime(samplingTime);
                 preinstallReportModel.setPx(px);
                 preinstallReportModel.setPy(py);
-
                 preinstallReportModel.setModemNumber(modemNumber);
                 preinstallReportModel.setSid(sid);
                 preinstallReportModel.setPeriod(period);
@@ -175,12 +175,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 System.out.println("[DB에 들어갈 값]" + preinstallReportModel.toString());
 
-
                 boolean reportResult = sensorListService.insertReport(preinstallReportModel);
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-//                    System.out.println(ack);
-//                    ctx.writeAndFlush(Unpooled.copiedBuffer(ByteBuffer.allocateDirect(ack)));
+
                     ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
                     mBuf.release();
                 } else {
@@ -189,10 +187,63 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
             }
 
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        /*   <<< Setting Step >>> ===========================================================================================*/
+
+
+        try {
+
+            if (flag.equals("6")) {
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
+                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();    //number
+                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //number
+                String pname = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //number
+                String chkSum1 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
+                String chkSum2 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
+                String convertChk = Integer.toHexString(chkSum1.charAt(0)) + Integer.toHexString(chkSum2.charAt(0));
+
+                String chkData = flag + serialNumber + datetime + requestType + paraLen + sid + pname;
+
+                System.out.println(serialNumber);
+                System.out.println(datetime);
+                System.out.println(requestType);
+                System.out.println(paraLen);
+                System.out.println(sid);
+                System.out.println(pname);
+                System.out.println(chkData);
+
+                int convertDecimalSum = 0;
+
+                for (int i = 0; i < chkData.length(); i++) {
+
+                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                }
+
+                int decimal = Integer.parseInt(convertChk, 16);
+                System.out.println("[preinstall 넘어온값] : " + chkData);
+                System.out.println("=====================");
+                System.out.println("[chkSum1] : " + chkSum1);
+                System.out.println("[chkSum2] : " + chkSum2);
+                System.out.println("[convertDecimalSum] : " + convertDecimalSum);
+                System.out.println("[convertChk] : " + convertChk);
+                System.out.println("[decimal] : " + decimal);
+                System.out.println("=====================");
+
+                //  convertDecimalSum 와  decimal 이게 같으면 진행하고 아니면 재요청
+                if (convertDecimalSum == decimal) {
+                    System.out.println("[CheckSum] : SUCCESS :)");
+
+                }
+            }
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+
 
     }
 
