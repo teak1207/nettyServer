@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 
@@ -28,8 +27,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final SensorListService sensorListService;
-    final byte ack = 8;
-    final String test = "8";
+    final String ack = "8";
     final String nak = "9";
     boolean report = false;
 
@@ -84,38 +82,39 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[CheckSum] : SUCCESS :)");
                     preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
                     System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
-
-                    if (preInstallDeviceInfos != null) {
-                        ctx.write(Unpooled.copiedBuffer(ByteBuffer.allocateDirect(ack)));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime1().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime2().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime3().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getFmFrequency().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSid().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPname().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPx().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPy().getBytes()));
-
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSerialNumber().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPeriod().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSamplingTime().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSampleRate().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerUrl().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerPort().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbUrl().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
-                        ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));
-                        ctx.flush();
-                        mBuf.release();
-                        report = true;
-                    } else {
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
-                        mBuf.release();
-                    }
-                } else {
-                    System.out.println("[CheckSum][FAIL] : Not Accurate");
                 }
+                if (preInstallDeviceInfos != null) {
+                    ctx.write(Unpooled.copiedBuffer(ack.getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime1().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime2().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime3().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getFmFrequency().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSid().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPname().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPx().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPy().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSerialNumber().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPeriod().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSamplingTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSampleRate().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));
+/*                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));*/
+                    ctx.flush();
+                    mBuf.release();
+                    report = true;
+                } else {
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    System.out.println("[CheckSum][FAIL] : Not Accurate");
+                    mBuf.release();
+                }
+
             } else if ((flag.equals("8") || flag.equals("9")) && report == true) {
                 /* === [ REPORT PROCESS RECEIVE START ] === */
                 //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
@@ -174,62 +173,22 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 preinstallReportModel.setBaudrate(baudrate);
                 preinstallReportModel.setPcbVersion(pcbVersion);
 
-                System.out.println("[DB에 들어갈 값]" +preinstallReportModel.toString());
+                System.out.println("[DB에 들어갈 값]" + preinstallReportModel.toString());
 
 
                 boolean reportResult = sensorListService.insertReport(preinstallReportModel);
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(ByteBuffer.allocateDirect(ack)));
-                    //testetest
+//                    System.out.println(ack);
+//                    ctx.writeAndFlush(Unpooled.copiedBuffer(ByteBuffer.allocateDirect(ack)));
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
                     mBuf.release();
                 } else {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
                     mBuf.release();
                 }
-                // setting process
-            } /*else if (flag.equals("1")) {
+            }
 
-                String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                String settingRecordingtime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String settingRecordingtime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String settingRecordingtime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-//                String period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                int period = mBuf.readByte();
-
-                String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String sampleRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String sleep = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String active = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String factoryReset = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-
-                String Px = mBuf.readCharSequence(8, Charset.defaultCharset()).toString();
-                String Py = mBuf.readCharSequence(8, Charset.defaultCharset()).toString();
-                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString();
-                String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-
-
-
-                System.out.println("[flag]" + flag);
-                System.out.println("[serialNum]" + serialNum);
-                System.out.println("[datetime]" + datetime);
-                System.out.println("[paraLen]" + paraLen);
-                System.out.println("[settingRecordingtime1]" + settingRecordingtime1);
-                System.out.println("[settingRecordingtime2]" + settingRecordingtime2);
-                System.out.println("[settingRecordingtime3]" + settingRecordingtime3);
-                System.out.println("[period] : " + period);
-                System.out.println("[samplingTime] : " + samplingTime);
-                System.out.println("[sampleRate] : " + sampleRate);
-                System.out.println("[sleep] : " + sleep);
-                System.out.println("[active] : " + active);
-                System.out.println("[factoryReset] : " + factoryReset);
-                System.out.println("[Px] : " + Px);
-                System.out.println("[Py] : " + Py);
-                System.out.println("[serverUrl] : " + serverUrl);
-                System.out.println("[serverPort] : " + serverPort);
-            }*/
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
