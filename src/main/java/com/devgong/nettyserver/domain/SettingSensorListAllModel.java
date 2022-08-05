@@ -1,6 +1,9 @@
 package com.devgong.nettyserver.domain;
 
-import lombok.*;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -9,8 +12,8 @@ import javax.persistence.*;
 @Entity
 @ToString
 @Table(name = "sensor_list_all")
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SensorListModel {
+public class SettingSensorListAllModel {
+
 
     @Id
     @Column(name = "CID")
@@ -27,8 +30,13 @@ public class SensorListModel {
 
     @Column(name = "APROJECT")
     private String aproject;
+
     @Column(name = "MPHONE")
     private String mphone;
+
+    @Column(name = "FRESET")
+    private String freset;
+
 
 
 }

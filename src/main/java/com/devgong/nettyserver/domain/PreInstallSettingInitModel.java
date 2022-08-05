@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SettingInitModel {
+public class PreInstallSettingInitModel {
 
     private int cid;
 

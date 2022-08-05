@@ -2,8 +2,10 @@ package com.devgong.nettyserver.handler;
 
 import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.domain.PreinstallReportModel;
-import com.devgong.nettyserver.domain.SettingInitModel;
-import com.devgong.nettyserver.service.SensorListService;
+import com.devgong.nettyserver.domain.PreInstallSettingInitModel;
+import com.devgong.nettyserver.domain.SettingSetModel;
+import com.devgong.nettyserver.service.PreinstallSensorListService;
+import com.devgong.nettyserver.service.SettingSensorListService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -26,7 +28,8 @@ import java.nio.charset.Charset;
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    private final SensorListService sensorListService;
+    private final PreinstallSensorListService preinstallSensorListService;
+    private final SettingSensorListService settingSensorListService;
     final String ack = "8";
     final String nak = "9";
     boolean report = false;
@@ -42,8 +45,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
 
         PreInstallSetModel preInstallDeviceInfos = null;
+        SettingSetModel SettingDeviceInfos = null;
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
-        SettingInitModel settingInitModel = new SettingInitModel();
+        PreInstallSettingInitModel preInstallSettingInitModel = new PreInstallSettingInitModel();
 
 
         /* 플래그에 값에 따라 분기*/
@@ -57,16 +61,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();    //number
                 String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString(); //number
                 String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString(); //number
-                String chkSum1 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
-                String chkSum2 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
-                String convertChk = Integer.toHexString(chkSum1.charAt(0)) + Integer.toHexString(chkSum2.charAt(0));
+                byte chkSum1 = (mBuf.readByte());
+                byte chkSum2 = (mBuf.readByte());
 
+                String convertChk = String.format("%x%x", chkSum1, chkSum2);
                 String chkData = flag + serialNumber + datetime + requestType + paraLen + modemNumber + debugMsg;
 
                 int convertDecimalSum = 0;
 
                 for (int i = 0; i < chkData.length(); i++) {
-
                     convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
                 }
 
@@ -83,7 +86,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //  convertDecimalSum 와  decimal 이게 같으면 진행하고 아니면 재요청
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
-                    preInstallDeviceInfos = sensorListService.findData(flag, modemNumber);
+                    preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(flag, modemNumber);
                     System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
                 }
                 if (preInstallDeviceInfos != null) {
@@ -116,7 +119,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-            } else if ((flag.equals("8") || flag.equals("9")) && report == true) {
+            } else if ((flag.equals("8") || flag.equals("9")) && report) {
                 /* === [PREINSTALL REPORT PROCESS RECEIVE START ] === */
                 //  *** 주의 *** 밑 report 프로토콜항목 순서를 바꾸면 안됨.
                 // report 값을 바이트크기에 따라 분할 후, 변수 저장.
@@ -175,10 +178,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 System.out.println("[DB에 들어갈 값]" + preinstallReportModel.toString());
 
-                boolean reportResult = sensorListService.insertReport(preinstallReportModel);
+                boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-
                     ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
                     mBuf.release();
                 } else {
@@ -191,53 +193,75 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             e.printStackTrace();
         }
         /*   <<< Setting Step >>> ===========================================================================================*/
-
-
         try {
-
             if (flag.equals("6")) {
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
-                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();    //number
-                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //number
-                String pname = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //number
-                String chkSum1 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
-                String chkSum2 = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); // number
-                String convertChk = Integer.toHexString(chkSum1.charAt(0)) + Integer.toHexString(chkSum2.charAt(0));
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
+                String pname = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
+                byte chksum1 = (mBuf.readByte());
+                byte chksum2 = (mBuf.readByte());
 
+                String convertChk = String.format("%x%x", chksum1, chksum2);
                 String chkData = flag + serialNumber + datetime + requestType + paraLen + sid + pname;
-
-                System.out.println(serialNumber);
-                System.out.println(datetime);
-                System.out.println(requestType);
-                System.out.println(paraLen);
-                System.out.println(sid);
-                System.out.println(pname);
-                System.out.println(chkData);
 
                 int convertDecimalSum = 0;
 
                 for (int i = 0; i < chkData.length(); i++) {
-
                     convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
                 }
-
+                System.out.println("[flag] " + flag);
+                System.out.println("[serialNumber] " + serialNumber);
+                System.out.println("[datetime] " + datetime);
+                System.out.println("[requestType] " + requestType);
+                System.out.println("[paraLen] " + paraLen);
+                System.out.println("[sid] " + sid);
+                System.out.println("[pname] " + pname);
+                System.out.println("[chksum1] " + chksum1);
+                System.out.println("[chksum2] " + chksum2);
+                System.out.println("[convertChk] " + convertChk);
                 int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[preinstall 넘어온값] : " + chkData);
-                System.out.println("=====================");
-                System.out.println("[chkSum1] : " + chkSum1);
-                System.out.println("[chkSum2] : " + chkSum2);
-                System.out.println("[convertDecimalSum] : " + convertDecimalSum);
-                System.out.println("[convertChk] : " + convertChk);
-                System.out.println("[decimal] : " + decimal);
+                System.out.println("[decimal] " + decimal);
+                System.out.println("[convertDecimalSum] " + convertDecimalSum);
                 System.out.println("=====================");
 
-                //  convertDecimalSum 와  decimal 이게 같으면 진행하고 아니면 재요청
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
+                    SettingDeviceInfos = settingSensorListService.settingFindData(flag,serialNumber);
 
                 }
+               /* if (SettingDeviceInfos != null) {
+                    ctx.write(Unpooled.copiedBuffer(ack.getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime1().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime2().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime3().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getFmFrequency().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSid().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPname().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPx().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPy().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSerialNumber().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPeriod().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSamplingTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSampleRate().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));
+
+                    ctx.flush();
+                    mBuf.release();
+                    report = true;
+                } else {
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    System.out.println("[CheckSum][FAIL] : Not Accurate");
+                    mBuf.release();
+                }*/
+
             }
 
         } catch (IllegalArgumentException e) {

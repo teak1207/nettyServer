@@ -7,31 +7,39 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class SensorListService {
+public class PreinstallSensorListService {
 
-    private final SensorListRepository sensorListRepository;
+    private final PreInstallSensorListAllRepository preInstallSensorListAllRepository;
     private final DeviceSetRepository deviceSetRepository;
     private final NetworkSetRepository networkSetRepository;
     private final PreInstallSensorListRepository preInstallSensorListRepository;
 
     private final ReportRepository reportRepository;
 
-    public PreInstallSetModel findData(String flag, String modemnum) {
+    public PreInstallSetModel preInstallfindData(String flag, String modemnum) {
         /*
          * model -> repository 가서 값을 찾기위한 Object Value.
          * totaldata -> 넘어오는 데이터의 길이로 정확한 값이 넘어왔는지를 판단하기 위한 value
          */
+
         PreInstallSetModel preinstallSetModel = new PreInstallSetModel();
-        SensorListModel sensorListModel;
+
+        PreInstallSensorListAllModel preInstallSensorListAllModel;
         PreinstallDeviceSetModel preinstallDeviceSetModel;
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel ;
 
         if (flag.equals("A")) {   // flag =="0" (x)
-            sensorListModel = sensorListRepository.findPreInstallModelByMphone(modemnum);
-            preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(sensorListModel.getAproject(), sensorListModel.getAsid());
-            preinstallDeviceSetModel = deviceSetRepository.findBySn(sensorListModel.getSsn());
-            preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(sensorListModel.getSsn());
+            preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
+
+            System.out.println(preInstallSensorListAllModel.toString());
+
+            preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
+            preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
+            preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
+
+
+
 
             System.out.println("-------------------------------");
             System.out.println("PREINSTALL[NETWORK] : " + preinstallNetworkSetModel);
@@ -41,7 +49,6 @@ public class SensorListService {
             preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
             preinstallSetModel.setTime3(preinstallDeviceSetModel.getTime3());
             preinstallSetModel.setFmFrequency(preinstallDeviceSetModel.getFmPrequency());//new
-
             preinstallSetModel.setSid(preinstallNetworkSetModel.getSid()); //new
             preinstallSetModel.setPname(preinstallNetworkSetModel.getPname());//new
             preinstallSetModel.setPx(preInstallSensorListModel.getPx());
@@ -75,9 +82,6 @@ public class SensorListService {
             System.out.println("[INSERT] : FAIL");
             return false;
         }
-
-
-
     }
 
 }

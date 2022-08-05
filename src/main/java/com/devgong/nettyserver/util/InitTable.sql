@@ -43,7 +43,7 @@ CREATE TABLE LEAK_PROJECT
 (
     CID         INT AUTO_INCREMENT,
     SID         VARCHAR(32),
-    PNAME         VARCHAR(64),
+    PNAME       VARCHAR(64),
     DATA_SERVER VARCHAR(32),
     DATA_PORT   VARCHAR(8),
     PRIMARY KEY (CID)
@@ -51,14 +51,14 @@ CREATE TABLE LEAK_PROJECT
 
 CREATE TABLE LEAKSET_BYSENSOR
 (
-    CID         INT AUTO_INCREMENT,
-    SN          VARCHAR(32),
-    TIMEOPT1    VARCHAR(8),
+    CID        INT AUTO_INCREMENT,
+    SN         VARCHAR(32),
+    TIMEOPT1   VARCHAR(8),
     TIMEOPT2   VARCHAR(8),
     TIMEOPT3   VARCHAR(8),
-    PERIOD      VARCHAR (8),
-    SAMPLE      VARCHAR(2),
-    SAMPLERATE  VARCHAR(8),
+    PERIOD     VARCHAR (8),
+    SAMPLE     VARCHAR(2),
+    SAMPLERATE VARCHAR(8),
     PRIMARY KEY (CID)
 );
 
@@ -105,7 +105,7 @@ create table leakset
     recordingtime1 varchar(8) null,
     recordingtime2 varchar(8) null,
     recordingtime3 varchar(8) null,
-    period varchar (8) null,
+    period         varchar (8) null,
     sample         varchar(2) null,
     samplerate     varchar(8) null,
     sleep          varchar(1) null,
@@ -113,25 +113,42 @@ create table leakset
 );
 
 
-
+create table factory_sensor_list
+(
+    cid          int auto_increment,
+    sid          varchar(64) null,
+    pname        varchar(64) null,
+    sn           varchar(64) null,
+    factorypname varchar(32) null,
+    constraint factory_sensor_list_pk
+        primary key (cid)
+);
 
 
 -- ================================
 -- INSERT
 
-INSERT INTO  leak_project VALUES (1,'thingsware.co.kr','8998');
+INSERT INTO leak_project
+VALUES (1, 'thingsware.co.kr', '8998');
 
-INSERT INTO  leak_project VALUES (1,'SWFLB-20200312-0102-0004','2020-03-17 13:12:01','','218.155.80.145','scleak','0200','0300','0400','099','2','2','0','20200310_20','-1','5',);
+INSERT INTO leak_project
+VALUES (1, 'SWFLB-20200312-0102-0004', '2020-03-17 13:12:01', '', '218.155.80.145', 'scleak', '0200', '0300', '0400',
+        '099', '2', '2', '0', '20200310_20', '-1', '5',);
 
-INSERT INTO sensor_list_all VALUES  (1,now() ,'SWSLB-20220530-0000-0001','producttest','tesk_chk','8212-3266-1739');
-INSERT INTO sensor_list_all VALUES  (2,now() ,'SWFLB-20210408-0106-0543','producttest','test_hkchoi','862785043595621');
+INSERT INTO sensor_list_all
+VALUES (1, now(), 'SWSLB-20220530-0000-0001', 'producttest', 'tesk_chk', '8212-3266-1739');
+INSERT INTO sensor_list_all
+VALUES (2, now(), 'SWFLB-20210408-0106-0543', 'producttest', 'test_hkchoi', '862785043595621');
 
-INSERT INTO LEAKSET VALUES (1,'0200','0300','0400','1','3','4','1','1');
+INSERT INTO LEAKSET
+VALUES (1, '0200', '0300', '0400', '1', '3', '4', '1', '1');
 
 -- ================================
 -- SELECT
-SELECT * FROM leak_project;
-SELECT * FROM LEAKSET_BYSENSOR;
+SELECT *
+FROM leak_project;
+SELECT *
+FROM LEAKSET_BYSENSOR;
 -- ================================
 -- DROP
 DROP TABLE LEAKSET_BYSENSOR;
