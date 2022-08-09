@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SettingLeaksetRepository extends JpaRepository<SettingLeaksetModel, Integer> {
-    SettingLeaksetModel findAllBySidAndPname(String sid, String pname);
+    SettingLeaksetModel findAllBySidAndPnameAndReset(String sid, String pname,String freset);
 
 }

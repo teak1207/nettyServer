@@ -13,7 +13,6 @@ public class PreinstallSensorListService {
     private final DeviceSetRepository deviceSetRepository;
     private final NetworkSetRepository networkSetRepository;
     private final PreInstallSensorListRepository preInstallSensorListRepository;
-
     private final ReportRepository reportRepository;
 
     public PreInstallSetModel preInstallfindData(String flag, String modemnum) {
@@ -27,7 +26,7 @@ public class PreinstallSensorListService {
         PreInstallSensorListAllModel preInstallSensorListAllModel;
         PreinstallDeviceSetModel preinstallDeviceSetModel;
         PreinstallNetworkSetModel preinstallNetworkSetModel;
-        PreInstallSensorListModel preInstallSensorListModel ;
+        PreInstallSensorListModel preInstallSensorListModel;
 
         if (flag.equals("A")) {   // flag =="0" (x)
             preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
@@ -37,8 +36,6 @@ public class PreinstallSensorListService {
             preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
             preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
             preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
-
-
 
 
             System.out.println("-------------------------------");
@@ -66,7 +63,7 @@ public class PreinstallSensorListService {
 
             return preinstallSetModel;
         } else {
-            System.out.println("[flag] : 0이 아닙니다. :)");
+            System.out.println("[FAILURE] : FLAG가 0이 아닙니다. :)");
         }
 
         return null;

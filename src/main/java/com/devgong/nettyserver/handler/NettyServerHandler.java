@@ -45,7 +45,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
 
         PreInstallSetModel preInstallDeviceInfos = null;
-        SettingSetModel SettingDeviceInfos = null;
+        SettingSetModel settingDeviceInfos = null;
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
         PreInstallSettingInitModel preInstallSettingInitModel = new PreInstallSettingInitModel();
 
@@ -229,29 +229,33 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
-                    SettingDeviceInfos = settingSensorListService.settingFindData(flag,serialNumber);
-
+                    settingDeviceInfos = settingSensorListService.settingFindData(flag, serialNumber);
+                    System.out.println("[SettingDeviceInfos] : " + settingDeviceInfos.toString());
                 }
-               /* if (SettingDeviceInfos != null) {
+
+                if (settingDeviceInfos != null) {
                     ctx.write(Unpooled.copiedBuffer(ack.getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime1().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime2().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime3().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getFmFrequency().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSid().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPname().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPx().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPy().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSerialNumber().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPeriod().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSamplingTime().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSampleRate().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerUrl().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbUrl().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime2().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime3().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getFmFrequency().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSid().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPname().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSleep().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getReset().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPeriod().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSamplingTime().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getFReset().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPx().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPy().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getActive().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getActive().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSampleRate().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getServerUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getServerPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getDbUrl().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getDbPort().getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getRadioTime().getBytes()));
 
                     ctx.flush();
                     mBuf.release();
@@ -260,8 +264,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
-                }*/
-
+                }
             }
 
         } catch (IllegalArgumentException e) {
