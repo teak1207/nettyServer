@@ -203,7 +203,42 @@ create table `sensor_report_goseong_kw_SWFLB-20220708-0760-3465`
         primary key (cid)
 );
 
-
+create table `sensor_report_goseong_kw_swflb-20220708-0760-3465`
+(
+    cid             int auto_increment
+        primary key,
+    serialNumber    varchar(64) null,
+    date            datetime    null,
+    id              varchar(16) null,
+    ip              varchar(36) null,
+    px              varchar(16) null,
+    sid             varchar(64) null,
+    py              varchar(16) null,
+    pname           varchar(64) null,
+    time1           varchar(8)  null,
+    time2           varchar(8)  null,
+    time3           varchar(8)  null,
+    end_record_time varchar(20) null,
+    fm              varchar(8)  null,
+    firmwareVersion varchar(8)  null,
+    rssi            varchar(8)  null,
+    status          varchar(2)  null,
+    sample          varchar(2)  null,
+    period varchar (2) null,
+    battery         varchar(8)  null,
+    project         varchar(32) null,
+    server_url      varchar(32) null,
+    server_port     varchar(8)  null,
+    db_url          varchar(32) null,
+    db_port         varchar(8)  null,
+    fmtime          varchar(2)  null,
+    creg            varchar(4)  null,
+    samplerate      varchar(2)  null,
+    sleep           varchar(2)  null,
+    active          varchar(2)  null,
+    reset           varchar(2)  null,
+    f_reset         varchar(2)  null
+);
 
 -- auto-generated definition
 create table sensor_list
