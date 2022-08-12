@@ -1,9 +1,10 @@
 package com.devgong.nettyserver.handler;
 
+import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.domain.PreinstallReportModel;
-import com.devgong.nettyserver.domain.PreInstallSettingInitModel;
 import com.devgong.nettyserver.domain.SettingSetModel;
+import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
 import io.netty.buffer.ByteBuf;
@@ -30,6 +31,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final PreinstallSensorListService preinstallSensorListService;
     private final SettingSensorListService settingSensorListService;
+    private final DataSensorListService dataSensorListService;
     final String ack = "8";
     final String nak = "9";
     boolean report = false;
@@ -47,7 +49,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreInstallSetModel preInstallDeviceInfos = null;
         SettingSetModel settingDeviceInfos = null;
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
-        PreInstallSettingInitModel preInstallSettingInitModel = new PreInstallSettingInitModel();
+        DataInsertModel dataInsertModel = null;
 
 
         /* 플래그에 값에 따라 분기*/
@@ -271,6 +273,118 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             e.printStackTrace();
         }
 
+        try {
+
+            if (flag.equals("7")) {
+
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+
+                String endRecordingTime1 = mBuf.readCharSequence(13, Charset.defaultCharset()).toString();
+                String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String fmRadio = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String firmWareVersion = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
+                String batteryVtg = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
+                String RSSI = mBuf.readCharSequence(3, Charset.defaultCharset()).toString(); //Number
+                String deviceStatus = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+                String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
+                String px = mBuf.readCharSequence(10, Charset.defaultCharset()).toString();
+                String py = mBuf.readCharSequence(10, Charset.defaultCharset()).toString();
+                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
+                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //*
+                String period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
+                String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String DBUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
+                String DBPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String sleep = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String active = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String fReset = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String reset = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String samplerate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String radioTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                byte chksum1 = (mBuf.readByte());
+                byte chksum2 = (mBuf.readByte());
+
+                String convertChk = String.format("%x%x", chksum1, chksum2);
+                String chkData = flag + serialNumber + endRecordingTime1 + requestType + paraLen + sid + recordingTime1 + recordingTime2 + recordingTime3 +
+                        fmRadio + firmWareVersion + batteryVtg + RSSI + deviceStatus + samplingTime + px + py + modemNumber + period + serverUrl + serverPort +
+                        DBUrl + DBPort + sleep + active + fReset + reset + samplerate + radioTime;
+
+                int convertDecimalSum = 0;
+
+                for (int i = 0; i < chkData.length(); i++) {
+                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                }
+
+                System.out.println("===========data process (D-->S)==========");
+                System.out.println("[flag] " + flag);
+                System.out.println("[serialNumber] " + serialNumber);
+                System.out.println("[requestType] " + requestType);
+                System.out.println("[paraLen] " + paraLen);
+                System.out.println("[endRecordingTime1] " + endRecordingTime1);
+                System.out.println("[recordingTime1] " + recordingTime1);
+                System.out.println("[recordingTime2] " + recordingTime2);
+                System.out.println("[recordingTime3] " + recordingTime3);
+                System.out.println("[fmRadio] " + fmRadio);
+                System.out.println("[firmWareVersion] " + firmWareVersion);
+                System.out.println("[batteryVtg] " + batteryVtg);
+                System.out.println("[RSSI] " + RSSI);
+                System.out.println("[deviceStatus] " + deviceStatus);
+                System.out.println("[samplingTime] " + samplingTime);
+                System.out.println("[px] " + px);
+                System.out.println("[py] " + py);
+                System.out.println("[modemNumber] " + modemNumber);
+                System.out.println("[sid] " + sid);
+                System.out.println("[period] " + period);
+                System.out.println("[serverUrl] " + serverUrl);
+                System.out.println("[serverPort] " + serverPort);
+                System.out.println("[DBUrl] " + DBUrl);
+                System.out.println("[DBPort] " + DBPort);
+                System.out.println("[sleep] " + sleep);
+                System.out.println("[active] " + active);
+                System.out.println("[fReset] " + fReset);
+                System.out.println("[reset] " + reset);
+                System.out.println("[samplerate] " + samplerate);
+                System.out.println("[radioTime] " + radioTime);
+                System.out.println("[convertChk] " + convertChk);
+                int decimal = Integer.parseInt(convertChk, 16);
+                System.out.println("[decimal] " + decimal);
+                System.out.println("[convertDecimalSum] " + convertDecimalSum);
+
+                System.out.println("=================================");
+
+
+
+
+
+                if (convertDecimalSum == decimal) {
+                    System.out.println("[CheckSum] : SUCCESS :)");
+                    boolean dataExistence = dataSensorListService.findDataExistence(flag, serialNumber);
+
+                    if (!dataExistence) {
+                        System.out.println("[fail] : 값이 존재하질 않습니다");
+                    } else {
+
+                    // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+
+
+
+
+                    }
+
+                }
+
+            }
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
