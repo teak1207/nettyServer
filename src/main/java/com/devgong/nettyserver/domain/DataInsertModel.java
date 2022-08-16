@@ -2,16 +2,25 @@ package com.devgong.nettyserver.domain;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Getter
 @Setter
-/*@ToString
 @Entity
+@ToString
+
 @NoArgsConstructor
-@Table(name = "factory_report")*/
+@Table(name = "factory_report")
 public class DataInsertModel {
 
+    @Id
+    private int cid;
     private String endRecordTime;
     private String time1;
     private String time2;
@@ -37,8 +46,6 @@ public class DataInsertModel {
     private String reset;
     private String SampleRate;
     private String radioTime;
-
-
 
 
 }

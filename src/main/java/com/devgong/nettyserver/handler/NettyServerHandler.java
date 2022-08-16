@@ -1,9 +1,6 @@
 package com.devgong.nettyserver.handler;
 
-import com.devgong.nettyserver.domain.DataInsertModel;
-import com.devgong.nettyserver.domain.PreInstallSetModel;
-import com.devgong.nettyserver.domain.PreinstallReportModel;
-import com.devgong.nettyserver.domain.SettingSetModel;
+import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
@@ -20,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 
 @Slf4j
@@ -49,8 +47,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreInstallSetModel preInstallDeviceInfos = null;
         SettingSetModel settingDeviceInfos = null;
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
-        DataInsertModel dataInsertModel = null;
 
+        DataInsertModel dataInsertModel = new DataInsertModel();
+        PreInstallSensorListAllModel reportFindResults = new PreInstallSensorListAllModel();
 
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
@@ -281,7 +280,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
 
-                String endRecordingTime1 = mBuf.readCharSequence(13, Charset.defaultCharset()).toString();
+                String endRecordingTime = mBuf.readCharSequence(13, Charset.defaultCharset()).toString();
                 String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
@@ -306,13 +305,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String reset = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String samplerate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String radioTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String cregCnt = mBuf.readCharSequence(3, Charset.defaultCharset()).toString();
+                String sleepCnt = mBuf.readCharSequence(3, Charset.defaultCharset()).toString();
                 byte chksum1 = (mBuf.readByte());
                 byte chksum2 = (mBuf.readByte());
 
                 String convertChk = String.format("%x%x", chksum1, chksum2);
-                String chkData = flag + serialNumber + endRecordingTime1 + requestType + paraLen + sid + recordingTime1 + recordingTime2 + recordingTime3 +
+                String chkData = flag + serialNumber + endRecordingTime + requestType + paraLen + sid + recordingTime1 + recordingTime2 + recordingTime3 +
                         fmRadio + firmWareVersion + batteryVtg + RSSI + deviceStatus + samplingTime + px + py + modemNumber + period + serverUrl + serverPort +
-                        DBUrl + DBPort + sleep + active + fReset + reset + samplerate + radioTime;
+                        DBUrl + DBPort + sleep + active + fReset + reset + samplerate + radioTime + cregCnt + sleepCnt;
 
                 int convertDecimalSum = 0;
 
@@ -321,35 +322,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 System.out.println("===========data process (D-->S)==========");
-                System.out.println("[flag] " + flag);
-                System.out.println("[serialNumber] " + serialNumber);
-                System.out.println("[requestType] " + requestType);
-                System.out.println("[paraLen] " + paraLen);
-                System.out.println("[endRecordingTime1] " + endRecordingTime1);
-                System.out.println("[recordingTime1] " + recordingTime1);
-                System.out.println("[recordingTime2] " + recordingTime2);
-                System.out.println("[recordingTime3] " + recordingTime3);
-                System.out.println("[fmRadio] " + fmRadio);
-                System.out.println("[firmWareVersion] " + firmWareVersion);
-                System.out.println("[batteryVtg] " + batteryVtg);
-                System.out.println("[RSSI] " + RSSI);
-                System.out.println("[deviceStatus] " + deviceStatus);
-                System.out.println("[samplingTime] " + samplingTime);
-                System.out.println("[px] " + px);
-                System.out.println("[py] " + py);
-                System.out.println("[modemNumber] " + modemNumber);
-                System.out.println("[sid] " + sid);
-                System.out.println("[period] " + period);
-                System.out.println("[serverUrl] " + serverUrl);
-                System.out.println("[serverPort] " + serverPort);
-                System.out.println("[DBUrl] " + DBUrl);
-                System.out.println("[DBPort] " + DBPort);
-                System.out.println("[sleep] " + sleep);
-                System.out.println("[active] " + active);
-                System.out.println("[fReset] " + fReset);
-                System.out.println("[reset] " + reset);
-                System.out.println("[samplerate] " + samplerate);
-                System.out.println("[radioTime] " + radioTime);
                 System.out.println("[convertChk] " + convertChk);
                 int decimal = Integer.parseInt(convertChk, 16);
                 System.out.println("[decimal] " + decimal);
@@ -358,22 +330,43 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println("=================================");
 
 
-
-
-
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
-                    boolean dataExistence = dataSensorListService.findDataExistence(flag, serialNumber);
+                    dataInsertModel.setEndRecordTime(endRecordingTime.trim());
+                    dataInsertModel.setTime1(recordingTime1.trim());
+                    dataInsertModel.setTime2(recordingTime2.trim());
+                    dataInsertModel.setTime3(recordingTime3.trim());
+                    dataInsertModel.setFmFrequency(fmRadio.trim());
+                    dataInsertModel.setFirmwareVersion(firmWareVersion.trim());
+                    dataInsertModel.setBatteryVtg(batteryVtg.trim());
+                    dataInsertModel.setRSSI(RSSI.trim());
+                    dataInsertModel.setDeviceStatus(deviceStatus.trim());
+                    dataInsertModel.setSamplingTime(samplingTime.trim());
+                    dataInsertModel.setPx(px.trim());
+                    dataInsertModel.setPy(py.trim());
+                    dataInsertModel.setModemNumber(modemNumber.trim());
+                    dataInsertModel.setSid(sid.trim());
+                    dataInsertModel.setPeriod(period.trim());
+                    dataInsertModel.setServerUrl(serverUrl.trim());
+                    dataInsertModel.setServerPort(serverPort.trim());
+                    dataInsertModel.setDbUrl(DBUrl.trim());
+                    dataInsertModel.setDbPort(DBPort.trim());
+                    dataInsertModel.setSleep(sleep.trim());
+                    dataInsertModel.setActive(active.trim());
+                    dataInsertModel.setFReset(fReset.trim());
+                    dataInsertModel.setReset(reset.trim());
+                    dataInsertModel.setSampleRate(samplerate.trim());
+                    dataInsertModel.setRadioTime(radioTime.strip());
 
-                    if (!dataExistence) {
+
+                    reportFindResults = dataSensorListService.findDataExistence(flag, serialNumber);
+
+                    if (Objects.isNull(reportFindResults)) {
                         System.out.println("[fail] : 값이 존재하질 않습니다");
                     } else {
-
-                    // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-
-
-
-
+                        System.out.println("[reportFindResults]"+reportFindResults.toString());
+                        // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+                        dataSensorListService.insertUniqueInformation(dataInsertModel);
                     }
 
                 }
