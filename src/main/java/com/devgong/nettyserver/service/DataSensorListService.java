@@ -3,18 +3,25 @@ package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
+import com.devgong.nettyserver.domain.TestModel;
 import com.devgong.nettyserver.repository.DataSensorListAllRepository;
 import com.devgong.nettyserver.repository.DataSensorReportRepository;
+import com.devgong.nettyserver.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class DataSensorListService {
 
     private final DataSensorListAllRepository dataSensorListAllRepository;
+
     private final DataSensorReportRepository dataSensorReportRepository;
+    private final TestRepository testRepository;
+
     PreInstallSensorListAllModel dataSensorListAllModel = null;
 
     public PreInstallSensorListAllModel findDataExistence(String flag, String serialNumber) throws IllegalAccessException {
@@ -44,14 +51,22 @@ public class DataSensorListService {
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel) {
 
         if (dataInsertModel != null) {
-            dataSensorReportRepository.save(dataInsertModel);
+//            dataSensorReportRepository.save(dataInsertModel);
+            log.info(testRepository.selectAllJPQL().toString());
+
+            TestModel testModel = new TestModel( "na", 99, "yongin");
+
+            log.info(testModel.toString());
+//            testRepository.insertWithQuery(testModel.getCid(),testModel.getName(),testModel.getAge(), testModel.getAddr());
+            testRepository.insertWithQuery(testModel.getCid(), testModel.getName(), testModel.getAge(), testModel.getAddr());
+
             System.out.println("[INSERT] :Data Sensor report/" + dataSensorListAllModel.getAproject() + "/" + dataSensorListAllModel.getSsn() + "/SUCCESS ");
         } else {
             System.out.println("[INSERT] : FAIL");
             return false;
         }
 
-    return true;
+        return true;
     }
 
 

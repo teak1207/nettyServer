@@ -358,7 +358,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     dataInsertModel.setSampleRate(samplerate.trim());
                     dataInsertModel.setRadioTime(radioTime.strip());
 
-
                     reportFindResults = dataSensorListService.findDataExistence(flag, serialNumber);
 
                     if (Objects.isNull(reportFindResults)) {

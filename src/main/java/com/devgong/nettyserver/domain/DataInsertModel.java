@@ -6,9 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -16,11 +14,12 @@ import javax.persistence.Table;
 @ToString
 
 @NoArgsConstructor
-@Table(name = "factory_report")
+@Table(name = "sensor_report_goseong_kw_swflb-20220708-0760-3465")
 public class DataInsertModel {
 
     @Id
     private int cid;
+
     private String endRecordTime;
     private String time1;
     private String time2;
