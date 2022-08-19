@@ -179,7 +179,24 @@ create table `sensor_report_goseong_kw_swflb-20220708-0760-3465`
     f_reset         varchar(2)  null
 );
 
-
+create table `leak_send_data_goseong_kw_swflb-20220708-0760-3465`
+(
+    cid           int auto_increment
+        primary key,
+    pname         varchar(64)  null,
+    date          varchar(32)  null,
+    id            varchar(16)  null,
+    ip            varchar(20)  null,
+    sid           varchar(64)  null,
+    valid         varchar(1)   null,
+    request_time  varchar(32)  null,
+    fname         varchar(256) null,
+    sn            varchar(32)  null,
+    complete      varchar(1)   null,
+    complete_time varchar(32)  null,
+    fnum          varchar(8)   null,
+    inference     varchar(8)   null
+);
 
 
 
