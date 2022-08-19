@@ -3,6 +3,7 @@ package com.devgong.nettyserver.handler;
 import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
+import com.devgong.nettyserver.service.RequestSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.Charset;
 import java.util.Objects;
 
-
 @Slf4j
 @Component
 @ChannelHandler.Sharable //#1 @Sharable 어노테이션은 여러채널에서 핸들러를 공유 할 수 있음을 나타냄.
@@ -30,10 +30,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final PreinstallSensorListService preinstallSensorListService;
     private final SettingSensorListService settingSensorListService;
     private final DataSensorListService dataSensorListService;
+
+    private final RequestSensorListService requestSensorListService;
     final String ack = "8";
     final String nak = "9";
     boolean report = false;
-
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -50,7 +51,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         DataInsertModel dataInsertModel = new DataInsertModel();
         PreInstallSensorListAllModel reportFindResults = new PreInstallSensorListAllModel();
-
+        RequestListAllModel RequestFindResults ;
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
@@ -273,13 +274,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         try {
-
             if (flag.equals("7")) {
-
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-
                 String endRecordingTime = mBuf.readCharSequence(13, Charset.defaultCharset()).toString();
                 String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
                 String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
@@ -326,9 +324,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 int decimal = Integer.parseInt(convertChk, 16);
                 System.out.println("[decimal] " + decimal);
                 System.out.println("[convertDecimalSum] " + convertDecimalSum);
-
                 System.out.println("=================================");
-
 
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
@@ -363,21 +359,70 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     if (Objects.isNull(reportFindResults)) {
                         System.out.println("[fail] : 값이 존재하질 않습니다");
                     } else {
-                        System.out.println("[reportFindResults]"+reportFindResults.toString());
+                        System.out.println("[reportFindResults]" + reportFindResults.toString());
                         // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-                        dataSensorListService.insertUniqueInformation(dataInsertModel);
+                        if (dataSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
+                            ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
+                            mBuf.release();
+                        } else {
+                            ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                            mBuf.release();
+                        }
                     }
-
                 }
-
             }
-
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
 
+
+        try {
+            if (flag.equals("4")) {
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String frame = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
+                String dataSize = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String sampleRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                byte chksum1 = (mBuf.readByte());
+                byte chksum2 = (mBuf.readByte());
+
+                String convertChk = String.format("%x%x", chksum1, chksum2);
+                String chkData = flag + serialNumber + datetime + requestType + paraLen + frame + dataSize + sampleRate;
+
+                int convertDecimalSum = 0;
+
+                for (int i = 0; i < chkData.length(); i++) {
+                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                }
+
+                int decimal = Integer.parseInt(convertChk, 16);
+                System.out.println("[decimal] " + decimal);
+                System.out.println("[convertDecimalSum] " + convertDecimalSum);
+                System.out.println("=====================");
+
+                if (convertDecimalSum == decimal) {
+                    System.out.println("[CheckSum] : SUCCESS :)");
+
+                    RequestFindResults =  requestSensorListService.findDataExistence(flag, serialNumber);
+
+                    if (Objects.isNull(RequestFindResults)) {
+                        System.out.println("[fail] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
+                    } else {
+
+                        // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+
+                    }
+                }
+
+            }
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -393,7 +438,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         // 채널이 활성화 됐을 때 호출됨. 데이터를 받거나 보낼 수 있는 상태를 의미함.
-        System.out.println("===channelActive===");
+        System.out.println("=== 채널 활성화 ===");
     }
 
     @Override

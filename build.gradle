@@ -36,6 +36,9 @@ dependencies {
     implementation 'mysql:mysql-connector-java'
 
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+    //2022-08-18
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jdbc', version: '2.6.6'
+
 }
 
 tasks.named('test') {

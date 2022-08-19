@@ -1,6 +1,4 @@
 -- ================================
--- CREATE
--- auto-generated definition
 create table factory_leak_project
 (
     cid           int auto_increment
@@ -12,64 +10,6 @@ create table factory_leak_project
     db_PORT       varchar(8)  null
 );
 
-
--- auto-generated definition
-create table sensor_list_all
-(
-    CID      int auto_increment
-        primary key,
-    REGDATE  varchar(30) null,
-    SSN      varchar(32) null,
-    ASID     varchar(32) null,
-    APROJECT varchar(32) null,
-    MPHONE   varchar(24) null,
-    FRESET   varchar(1)  null
-)
-    auto_increment = 5;
-
-
-
--- auto-generated definition
-create table leak_project
-(
-    CID         int auto_increment
-        primary key,
-    SID         varchar(32) null,
-    PNAME       varchar(64) null,
-    DATA_SERVER varchar(32) null,
-    DATA_PORT   varchar(8)  null,
-    DB_URL      varchar(32) null,
-    DB_PORT     varchar(8)  null
-)
-    auto_increment = 3;
-create table preinstall
-(
-    cid        int auto_increment
-        primary key,
-    MODEMNUM   varchar(30) null,
-    FLAG       varchar(5)  null,
-    SERIALNUM  varchar(30) null,
-    SIGNALTIME varchar(20) null,
-    PARALEN    varchar(10) null,
-    DEBUGMSG   varchar(10) null,
-    CHKSUM     varchar(5)  null
-)
--- auto-generated definition
-create table leakset
-(
-    cid            int auto_increment
-        primary key,
-    recordingtime1 varchar(8) null,
-    recordingtime2 varchar(8) null,
-    recordingtime3 varchar(8) null,
-    period         varchar (8) null,
-    sample         varchar(2) null,
-    samplerate     varchar(8) null,
-    sleep          varchar(1) null,
-    active         varchar(1) null
-);
-
--- auto-generated definition
 create table factory_report
 (
     cid           int auto_increment
@@ -99,7 +39,6 @@ create table factory_report
     PCB_VER       varchar(1)  null
 );
 
--- auto-generated definition
 create table factory_sensor_list
 (
     cid          int auto_increment
@@ -109,9 +48,18 @@ create table factory_sensor_list
     sn           varchar(64) null,
     factorypname varchar(32) null
 );
+create table leak_project
+(
+    CID         int auto_increment
+        primary key,
+    SID         varchar(32) null,
+    PNAME       varchar(64) null,
+    DATA_SERVER varchar(32) null,
+    DATA_PORT   varchar(8)  null,
+    DB_URL      varchar(32) null,
+    DB_PORT     varchar(8)  null
+);
 
-
--- auto-generated definition
 create table leakmaster_init_infos
 (
     ID       int auto_increment
@@ -122,11 +70,8 @@ create table leakmaster_init_infos
     SIZE     int         not null,
     PHONENUM varchar(32) not null,
     REGDATE  varchar(32) not null
-)
-    auto_increment = 3;
+);
 
-
--- auto-generated definition
 create table leakset
 (
     cid          int auto_increment
@@ -139,15 +84,13 @@ create table leakset
     pname        varchar(32) null,
     sleep        varchar(1)  null,
     reset        varchar(1)  null,
-    period       varchar (8) null,
+    period varchar (8) null,
     sampletime   varchar(2)  null,
     active       varchar(1)  null,
     samplerate   varchar(8)  null,
     fmtime       varchar(8)  null
-)
-    auto_increment = 2;
+);
 
--- auto-generated definition
 create table leakset_bysensor
 (
     CID          int auto_increment
@@ -162,45 +105,42 @@ create table leakset_bysensor
     SAMPLERATE   varchar(8)  null,
     RADIO_TIME   varchar(8)  null,
     BAUDRATE     varchar(8)  null
-)
-    auto_increment = 3;
+);
 
-create table `sensor_report_goseong_kw_SWFLB-20220708-0760-3465`
+create table preinstall
 (
-    cid             int auto_increment,
-    serialNumber    varchar(64) null,
-    date            DATETIME    null,
-    id              varchar(16) null,
-    ip              varchar(36) null,
-    px              varchar(16) null,
-    sid             varchar(64) null,
-    py              varchar(16) null,
-    pname           varchar(64) null,
-    time1           varchar(8)  null,
-    time2           varchar(8)  null,
-    time3           varchar(8)  null,
-    end_record_time varchar(20) null,
-    fm              varchar(8)  null,
-    firmwareVersion varchar(8)  null,
-    rssi            varchar(8)  null,
-    status          varchar(2)  null,
-    sample          varchar(2)  null,
-    period varchar (2) null,
-    battery         varchar(8)  null,
-    project         varchar(32) null,
-    server_url      varchar(32) null,
-    server_port     varchar(8)  null,
-    db_url          varchar(32) null,
-    db_port         varchar(8)  null,
-    fmtime          varchar(2)  null,
-    creg            varchar(4)  null,
-    samplerate      varchar(2)  null,
-    sleep           varchar(2)  null,
-    active          varchar(2)  null,
-    reset           varchar(2)  null,
-    f_reset         varchar(2)  null,
-    constraint `sensor_report_goseong_kw_SWFLB-20220708-0760-3465_pk`
-        primary key (cid)
+    cid        int auto_increment
+        primary key,
+    MODEMNUM   varchar(30) null,
+    FLAG       varchar(5)  null,
+    SERIALNUM  varchar(30) null,
+    SIGNALTIME varchar(20) null,
+    PARALEN    varchar(10) null,
+    DEBUGMSG   varchar(10) null,
+    CHKSUM     varchar(5)  null
+);
+
+create table sensor_list
+(
+    cid   int auto_increment
+        primary key,
+    sn    varchar(64) null,
+    px    varchar(16) null,
+    py    varchar(16) null,
+    pname varchar(64) null,
+    sid   varchar(64) null
+);
+
+create table sensor_list_all
+(
+    CID      int auto_increment
+        primary key,
+    REGDATE  varchar(30) null,
+    SSN      varchar(32) null,
+    ASID     varchar(32) null,
+    APROJECT varchar(32) null,
+    MPHONE   varchar(24) null,
+    FRESET   varchar(1)  null
 );
 
 create table `sensor_report_goseong_kw_swflb-20220708-0760-3465`
@@ -232,7 +172,6 @@ create table `sensor_report_goseong_kw_swflb-20220708-0760-3465`
     db_url          varchar(32) null,
     db_port         varchar(8)  null,
     fmtime          varchar(2)  null,
-    creg            varchar(4)  null,
     samplerate      varchar(2)  null,
     sleep           varchar(2)  null,
     active          varchar(2)  null,
@@ -240,18 +179,7 @@ create table `sensor_report_goseong_kw_swflb-20220708-0760-3465`
     f_reset         varchar(2)  null
 );
 
--- auto-generated definition
-create table sensor_list
-(
-    cid   int auto_increment
-        primary key,
-    sn    varchar(64) null,
-    px    varchar(16) null,
-    py    varchar(16) null,
-    pname varchar(64) null,
-    sid   varchar(64) null
-)
-    auto_increment = 3;
+
 
 
 

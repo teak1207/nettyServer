@@ -19,3 +19,4 @@ spring:
           ddl-auto: none
           generate-ddl: false
           show-sql: true
+

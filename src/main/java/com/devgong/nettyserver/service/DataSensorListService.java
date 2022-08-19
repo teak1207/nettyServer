@@ -3,10 +3,8 @@ package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
-import com.devgong.nettyserver.domain.TestModel;
 import com.devgong.nettyserver.repository.DataSensorListAllRepository;
 import com.devgong.nettyserver.repository.DataSensorReportRepository;
-import com.devgong.nettyserver.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ public class DataSensorListService {
     private final DataSensorListAllRepository dataSensorListAllRepository;
 
     private final DataSensorReportRepository dataSensorReportRepository;
-    private final TestRepository testRepository;
 
     PreInstallSensorListAllModel dataSensorListAllModel = null;
 
@@ -48,21 +45,16 @@ public class DataSensorListService {
     }
 
 
-    public boolean insertUniqueInformation(DataInsertModel dataInsertModel) {
+    public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber) {
+
 
         if (dataInsertModel != null) {
-//            dataSensorReportRepository.save(dataInsertModel);
-            log.info(testRepository.selectAllJPQL().toString());
 
-            TestModel testModel = new TestModel( "na", 99, "yongin");
+            dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
+            System.out.println("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
 
-            log.info(testModel.toString());
-//            testRepository.insertWithQuery(testModel.getCid(),testModel.getName(),testModel.getAge(), testModel.getAddr());
-            testRepository.insertWithQuery(testModel.getCid(), testModel.getName(), testModel.getAge(), testModel.getAddr());
-
-            System.out.println("[INSERT] :Data Sensor report/" + dataSensorListAllModel.getAproject() + "/" + dataSensorListAllModel.getSsn() + "/SUCCESS ");
         } else {
-            System.out.println("[INSERT] : FAIL");
+            System.out.println("[INSERT FAIL] :  SENSOR_REPORT_(SID)_(SN) 추가 안됨.");
             return false;
         }
 
