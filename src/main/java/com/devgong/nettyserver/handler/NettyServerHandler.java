@@ -17,7 +17,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 @Slf4j
@@ -26,15 +32,17 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
+
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final PreinstallSensorListService preinstallSensorListService;
     private final SettingSensorListService settingSensorListService;
     private final DataSensorListService dataSensorListService;
-
     private final RequestSensorListService requestSensorListService;
     final String ack = "8";
     final String nak = "9";
     boolean report = false;
+    DataRefModel dataRefModel = new DataRefModel();
+    static int framesize;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -51,7 +59,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         DataInsertModel dataInsertModel = new DataInsertModel();
         PreInstallSensorListAllModel reportFindResults = new PreInstallSensorListAllModel();
-        RequestListAllModel RequestFindResults ;
+        RequestListAllModel requestFindResults;
+
+
+
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
@@ -60,9 +71,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
-                String paraLen = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();    //number
-                String modemNumber = mBuf.readCharSequence(15, Charset.defaultCharset()).toString(); //number
-                String debugMsg = mBuf.readCharSequence(2, Charset.defaultCharset()).toString(); //number
+                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();    //number
+                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //number
+                String debugMsg = mBuf.readCharSequence(13, Charset.defaultCharset()).toString(); //number
                 byte chkSum1 = (mBuf.readByte());
                 byte chkSum2 = (mBuf.readByte());
 
@@ -76,7 +87,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[preinstall 넘어온값] : " + chkData);
+
+                System.out.println("chkData=" + chkData);
+                System.out.println("serialNumber=" + serialNumber);
+                System.out.println("datetime=" + datetime);
+                System.out.println("requestType=" + requestType);
+                System.out.println("paraLen=" + paraLen.trim());
+                System.out.println("modemNumber=" + modemNumber.trim());
+                System.out.println("debugMsg=" + debugMsg.trim());
+
                 System.out.println("=====================");
                 System.out.println("[chkSum1] : " + chkSum1);
                 System.out.println("[chkSum2] : " + chkSum2);
@@ -86,7 +105,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println("=====================");
 
                 //  convertDecimalSum 와  decimal 이게 같으면 진행하고 아니면 재요청
-                if (convertDecimalSum == decimal) {
+//                if (convertDecimalSum == decimal) {
+                if (true) {
                     System.out.println("[CheckSum] : SUCCESS :)");
                     preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(flag, modemNumber);
                     System.out.println("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
@@ -194,7 +214,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        /*   <<< Setting Step >>> ===========================================================================================*/
+        /*<<< Setting Step >>> ===========================================================================================*/
         try {
             if (flag.equals("6")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
@@ -360,7 +380,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         System.out.println("[fail] : 값이 존재하질 않습니다");
                     } else {
                         System.out.println("[reportFindResults]" + reportFindResults.toString());
-                        // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+                        // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                         if (dataSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
                             ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
                             mBuf.release();
@@ -379,16 +399,81 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
         try {
+            if (flag.equals("5")) {
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String data = mBuf.readCharSequence(256, Charset.defaultCharset()).toString();
+                byte chksum1 = (mBuf.readByte());
+                byte chksum2 = (mBuf.readByte());
+
+
+                log.info(serialNumber);
+                log.info(datetime);
+                log.info(requestType);
+                log.info(paraLen);
+                log.info(data);
+
+                String convertChk = String.format("%x%x", chksum1, chksum2);
+                String chkData = flag + serialNumber + datetime + requestType + paraLen + data;
+
+                int convertDecimalSum = 0;
+
+                for (int i = 0; i < chkData.length(); i++) {
+                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                }
+
+                int decimal = Integer.parseInt(convertChk, 16);
+                System.out.println("[decimal] " + decimal);
+                System.out.println("[convertDecimalSum] " + convertDecimalSum);
+                System.out.println("=====================");
+
+                log.info(dataRefModel.getFilepath());
+
+                File file = new File(dataRefModel.getFilepath());
+                FileWriter writer = null;
+
+                if (convertDecimalSum == decimal) {
+                    System.out.println("[CheckSum] : SUCCESS :)");
+
+                    for (int i = 0; i < framesize; i++) {
+                        writer = new FileWriter(file, true);
+                        writer.write(data);
+                        writer.flush();
+                    }
+
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
             if (flag.equals("4")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String frame = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                String dataSize = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+
+                String frame = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String dataSize = mBuf.readCharSequence(3, Charset.defaultCharset()).toString();
                 String sampleRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 byte chksum1 = (mBuf.readByte());
                 byte chksum2 = (mBuf.readByte());
+
+                log.info(serialNumber);
+                log.info(datetime);
+                log.info(requestType);
+                log.info(paraLen);
+                log.info(frame);
+                log.info(dataSize);
+                log.info(sampleRate);
+
+                // data process에서 쓰고자  static으로 선언.
+                framesize = Integer.parseInt(frame);
 
                 String convertChk = String.format("%x%x", chksum1, chksum2);
                 String chkData = flag + serialNumber + datetime + requestType + paraLen + frame + dataSize + sampleRate;
@@ -407,19 +492,88 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
 
-                    RequestFindResults =  requestSensorListService.findDataExistence(flag, serialNumber);
+                    requestFindResults = requestSensorListService.findDataExistence(flag, serialNumber);
 
-                    if (Objects.isNull(RequestFindResults)) {
+                    if (requestFindResults == null) {
                         System.out.println("[fail] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
                     } else {
+                        String path1 = "C:\\dev\\" + requestFindResults.getAsid();
+                        String path2 = "C:\\dev\\" + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject();
+                        String path3 = "C:\\dev\\" + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject() + "\\" + requestFindResults.getSsn();
 
-                        // firmware에서 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+                        String convertedSampleRate;
 
+                        /*
+                           sampleRate 기존 4,8  외에 16 일 경우, 변환
+                           sampleRate = 한자리 --> 004 or 008
+                           sampleRate = 두자리 --> 016
+                        */
+
+                        if (sampleRate.length() == 1) {
+                            convertedSampleRate = "00" + sampleRate;
+                            log.info(convertedSampleRate);
+                        } else {
+                            convertedSampleRate = "0" + sampleRate;
+                            log.info(convertedSampleRate);
+                        }
+
+                        char underBar = '_';
+                        String filePath = path3 + "\\" + serialNumber + underBar + datetime + underBar + convertedSampleRate + ".dat";
+                        File initFilePath = new File(filePath);
+                        File file1 = new File(path1);
+                        File file2 = new File(path2);
+                        File file3 = new File(path3);
+                        Path filePathExistence = Paths.get(filePath);
+
+                        dataRefModel.setFilepath(filePath);
+                        log.info(dataRefModel.getFilepath());
+
+
+                        if (file1.isDirectory()) {
+                            System.out.println("[PASS] : " + path1 + " 경로가 존재합니다");
+                            if (file2.isDirectory()) {
+                                System.out.println("[PASS] : " + path2 + " 경로가 존재합니다");
+                                if (file3.isDirectory()) {
+                                    System.out.println("[PASS] : " + path3 + " 경로가 존재합니다");
+
+                                    if (Files.exists(filePathExistence)) {
+                                        System.out.println("[EXIST] : " + filePath + " 경로에 파일이 존재합니다");
+
+                                        // 해당경로 파일 존재 시, NAK 처리
+                                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                                        mBuf.release();
+
+                                    } else {
+                                        System.out.println("[NOT EXIST] : " + filePath + " 경로에 파일이 존재하지 않습니다. 파일을 생성합니다.");
+                                        // 해당경로 파일 없을 경우, ACK 처리
+                                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
+
+                                        mBuf.release();
+
+                                        try {
+                                            if (initFilePath.createNewFile()) {
+                                                System.out.println("File created");
+
+                                            } else {
+                                                System.out.println("File already exists");
+                                            }
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                } else {
+                                    System.out.println("[FAIL] : " + path3 + " 경로가 존재하지 않습니다.");
+                                }
+                            } else {
+                                System.out.println("[FAIL] : " + path2 + " 경로가 존재하지 않습니다.");
+                            }
+                        } else {
+                            System.out.println("[FAIL] : " + path1 + " 경로가 존재하지 않습니다.");
+                        }
                     }
                 }
-
             }
-
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
