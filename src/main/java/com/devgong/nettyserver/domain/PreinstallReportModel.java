@@ -55,12 +55,10 @@ public class PreinstallReportModel {
     private String Sid;
     @Column(name = "PERIOD")
     private String Period;
-
     @Column(name = "SERVER_URL")
     private String serverUrl;
     @Column(name = "SERVER_PORT")
     private String serverPort;
-
     @Column(name = "DB_URL")
     private String dbUrl;
     @Column(name = "DB_PORT")

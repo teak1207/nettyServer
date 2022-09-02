@@ -31,7 +31,7 @@ public class PreinstallSensorListService {
         if (flag.equals("A")) {   // flag =="0" (x)
             preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
 
-            System.out.println(preInstallSensorListAllModel.toString());
+            System.out.println("test"+preInstallSensorListAllModel.toString());
 
             preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
             preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
