@@ -21,10 +21,13 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
@@ -40,7 +43,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final DataSensorListService dataSensorListService;
     private final RequestSensorListService requestSensorListService;
 
-    CalcCheckSum calcCheckSum  = new CalcCheckSum();
+    CalcCheckSum calcCheckSum = new CalcCheckSum();
     final String ack = "8";
     final String nak = "9";
     final String preInstallFlag = "A";
@@ -80,8 +83,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreInstallSensorListAllModel reportFindResults = new PreInstallSensorListAllModel();
         RequestListAllModel requestFindResults;
 
-
-
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
@@ -108,19 +109,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 int decimal = Integer.parseInt(convertChk, 16);
 
                 System.out.println("chkData=" + chkData);
-                System.out.println("serialNumber=" + serialNumber);
-                System.out.println("datetime=" + datetime);
-                System.out.println("requestType=" + requestType);
-                System.out.println("paraLen=" + paraLen);
-                System.out.println("modemNumber=" + modemNumber.trim());
-                System.out.println("debugMsg=" + debugMsg.trim());
-
                 System.out.println("=====================");
-                System.out.println("[chkSum1] : " + chkSum1);
-                System.out.println("[chkSum2] : " + chkSum2);
-                System.out.println("[convertDecimalSum] : " + convertDecimalSum);
-                System.out.println("[convertChk] : " + convertChk);
-                System.out.println("[decimal] : " + decimal);
+                System.out.println("[chkSum1]:" + chkSum1);
+                System.out.println("[chkSum2]:" + chkSum2);
+                System.out.println("[convertDecimalSum]:" + convertDecimalSum);
+                System.out.println("[convertChk]:" + convertChk);
+                System.out.println("[decimal]:" + decimal);
                 System.out.println("=====================");
 
                 //  convertDecimalSum 와  decimal 이게 같으면 진행하고 아니면 재요청
@@ -131,36 +125,54 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
                 }
 
+                PreInstallResponseModel preInstallResponseModel = PreInstallResponseModel.builder()
+                        .recordTime1(preInstallDeviceInfos.getTime1().toCharArray())
+                        .recordTime2(preInstallDeviceInfos.getTime2().toCharArray())
+                        .recordTime3(preInstallDeviceInfos.getTime3().toCharArray())
+                        .fmFrequency(preInstallDeviceInfos.getFmFrequency().toCharArray())
+                        .sid(preInstallDeviceInfos.getSid().toCharArray())
+                        .pname(preInstallDeviceInfos.getPname().toCharArray())
+                        .px(preInstallDeviceInfos.getPx().toCharArray())
+                        .py(preInstallDeviceInfos.getPy().toCharArray())
+                        .serialNumber(preInstallDeviceInfos.getSerialNumber().toCharArray())
+                        .period(preInstallDeviceInfos.getPeriod().toCharArray())
+                        .samplingTime(preInstallDeviceInfos.getSamplingTime().toCharArray())
+                        .samplerate(preInstallDeviceInfos.getSampleRate().toCharArray())
+                        .serverUrl(preInstallDeviceInfos.getServerUrl().toCharArray())
+                        .serverPort(preInstallDeviceInfos.getServerPort().toCharArray())
+                        .dbUrl(preInstallDeviceInfos.getDbUrl().toCharArray())
+                        .dbPort(preInstallDeviceInfos.getDbPort().toCharArray())
+                        .radioTime(preInstallDeviceInfos.getRadioTime().toCharArray())
+                        .baudrate(preInstallDeviceInfos.getBaudrate().toCharArray()).build();
+
+
+                int headerLength = flag.length()+serialNumber.length()+datetime.length()+requestType.length()+paraLen.length();
+
+
                 int preinstallLength = preInstallDeviceInfos.getTime1().length() + preInstallDeviceInfos.getTime2().length() + preInstallDeviceInfos.getTime3().length() +
                         preInstallDeviceInfos.getFmFrequency().length() + preInstallDeviceInfos.getSid().length() + preInstallDeviceInfos.getPname().length() +
                         preInstallDeviceInfos.getPx().length() + preInstallDeviceInfos.getPy().length() + preInstallDeviceInfos.getSerialNumber().length() +
                         preInstallDeviceInfos.getPeriod().length() + preInstallDeviceInfos.getSamplingTime().length() + preInstallDeviceInfos.getSampleRate().length() +
                         preInstallDeviceInfos.getServerUrl().length() + preInstallDeviceInfos.getServerPort().length() + preInstallDeviceInfos.getDbUrl().length() +
-                        preInstallDeviceInfos.getDbPort().length() + preInstallDeviceInfos.getRadioTime().length() + preInstallDeviceInfos.getBaudrate().length()+"testtesttesttesttesttesttesttesttesttesttesttesttest".length() ;
-
+                        preInstallDeviceInfos.getDbPort().length() + preInstallDeviceInfos.getRadioTime().length() + preInstallDeviceInfos.getBaudrate().length() + "tetesttesttesttesttesttesttesttesttesttesttesttestte".length();
 
                 String preInstallReport = preInstallDeviceInfos.getTime1() + preInstallDeviceInfos.getTime2() + preInstallDeviceInfos.getTime3() +
-                        preInstallDeviceInfos.getFmFrequency() + preInstallDeviceInfos.getSid() + preInstallDeviceInfos.getPname() +
                         preInstallDeviceInfos.getPx() + preInstallDeviceInfos.getPy() + preInstallDeviceInfos.getSerialNumber() +
                         preInstallDeviceInfos.getPeriod() + preInstallDeviceInfos.getSamplingTime() + preInstallDeviceInfos.getSampleRate() +
                         preInstallDeviceInfos.getServerUrl() + preInstallDeviceInfos.getServerPort() + preInstallDeviceInfos.getDbUrl() +
-                        preInstallDeviceInfos.getDbPort() + preInstallDeviceInfos.getRadioTime() + preInstallDeviceInfos.getBaudrate()+"testtesttesttesttesttesttesttesttesttesttesttesttest";
+                        preInstallDeviceInfos.getDbPort() + preInstallDeviceInfos.getRadioTime() + preInstallDeviceInfos.getBaudrate() + "testtestteststtesttesttesttesttesttesttesttesttestte";
 
 
                 byte[] totalData = preInstallReport.getBytes();
                 byte[] chkSumData = calcCheckSum.makeChecksum(preInstallReport);
                 int arrayLength = totalData.length + chkSumData.length;
-                byte[] finalArr = new byte[arrayLength];
 
-                log.info("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
-                log.info(String.valueOf(preinstallLength));
-                log.info(preInstallReport);
+                System.out.println("preinstallLength->" + preinstallLength);
+                System.out.println("preInstallReport->" + preInstallReport);
+                System.out.println("arrayLength->" + arrayLength);
+                System.out.println("chkSumData->" + new String(chkSumData));
+                System.out.println("headerLength->" + headerLength);
 
-                System.arraycopy(totalData, 0, finalArr, 0, totalData.length);
-                System.arraycopy(chkSumData, 0, finalArr, finalArr.length - 2, chkSumData.length);
-
-                System.out.println("totalData " + new String(totalData));
-                System.out.println("chkSumData " + new String(chkSumData));
 
                 if (preInstallDeviceInfos != null) {
                     ctx.write(Unpooled.copiedBuffer(preInstallFlag.getBytes()));
@@ -168,25 +180,27 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.write(Unpooled.copiedBuffer(datetime.getBytes()));
                     ctx.write(Unpooled.copiedBuffer(ServerToDevice.getBytes()));
                     ctx.write(Unpooled.copiedBuffer(intToByte(preinstallLength)));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime1().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime2().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getTime3().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getFmFrequency().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSid().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPname().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPx().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPy().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSerialNumber().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getPeriod().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSamplingTime().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getSampleRate().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerUrl().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getServerPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbUrl().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getDbPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getRadioTime().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(preInstallDeviceInfos.getBaudrate().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(finalArr));
+
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime1(), Charset.defaultCharset()));  //4
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime2(), Charset.defaultCharset()));  //4
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime3(), Charset.defaultCharset()));  //4
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getFmFrequency(), Charset.defaultCharset()));    //6 x (10)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSid(), Charset.defaultCharset()));    //8 x (8)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPname(), Charset.defaultCharset()));  //10
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPx(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPy(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSerialNumber(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPeriod(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSamplingTime(), Charset.defaultCharset())); //9 x(1)
+
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSamplerate(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getServerUrl(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getServerPort(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getDbUrl(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getDbPort(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRadioTime(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getBaudrate(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(chkSumData));
 
                     ctx.flush();
                     mBuf.release();
@@ -230,9 +244,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte chkSum1 = (mBuf.readByte());
                 byte chkSum2 = (mBuf.readByte());
 
-
                 // 체크썸 기능 빠짐
-
                 preinstallReportModel.setSerialNumber(serialNum);
                 preinstallReportModel.setDateTime(datetime);
                 preinstallReportModel.setDebugMsg(debugMessage);
@@ -523,14 +535,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte chksum1 = (mBuf.readByte());
                 byte chksum2 = (mBuf.readByte());
 
-                log.info(serialNumber);
-                log.info(datetime);
-                log.info(requestType);
-                log.info(paraLen);
-                log.info(frame);
-                log.info(dataSize);
-                log.info(sampleRate);
-
                 // data process에서 쓰고자  static으로 선언.
                 framesize = Integer.parseInt(frame);
 
@@ -651,7 +655,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         // 채널이 활성화 됐을 때 호출됨. 데이터를 받거나 보낼 수 있는 상태를 의미함.
-        System.out.println("=== 채널 활성화 ===");
     }
 
     @Override
