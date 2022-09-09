@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @ToString
 @Table(name = "sensor_list_all")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PreInstallSensorListAllModel {
 
     @Id

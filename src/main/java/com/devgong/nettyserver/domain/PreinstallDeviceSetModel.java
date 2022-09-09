@@ -19,13 +19,13 @@ public class PreinstallDeviceSetModel {
     private int cid;
     @Column(name = "SN")
     private String sn;
-    @Column(name = "TIMEOPT1")
+    @Column(name = "TIME1")
     private String time1;
-    @Column(name = "TIMEOPT2")
+    @Column(name = "TIME2")
     private String time2;
-    @Column(name = "TIMEOPT3")
+    @Column(name = "TIME3")
     private String time3;
-    @Column(name = "FM_FREQUENCY")
+    @Column(name = "FM")
     private String fmPrequency;
     @Column(name = "PERIOD")
     private String preiod;
@@ -33,7 +33,7 @@ public class PreinstallDeviceSetModel {
     private String sampletime;
     @Column(name = "SAMPLERATE")
     private String samplerate;
-    @Column(name = "RADIO_TIME")
+    @Column(name = "FMTIME")
     private String radioTime;
     @Column(name = "BAUDRATE")
     private String baudrate;
