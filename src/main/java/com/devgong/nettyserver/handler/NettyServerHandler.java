@@ -51,7 +51,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     final String preInstallFlag = "A";
 
     final String ServerToDevice = "S";
-    boolean report = false;
 
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
@@ -207,14 +206,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     ctx.flush();
                     mBuf.release();
-                    report = true;
                 } else {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
 
-            } else if ((flag.equals("8") || flag.equals("9")) && report) {
+            } else if (flag.equals("8") || flag.equals("9")) {
                 /*==== Header ====*/
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
@@ -353,7 +351,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     ctx.flush();
                     mBuf.release();
-                    report = true;
                 } else {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
