@@ -88,6 +88,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
+            log.info("FLAG : {}", flag);
 
             if (flag.equals("A")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
@@ -287,16 +288,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.error("Report insert failed");
                 }
-            }
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-
-        log.info("FLAG : {}", flag);
-        /*<<< Setting Step >>> ===========================================================================================*/
-        try {
-            if (flag.equals("6")) {
+            } else if (flag.equals("6")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
@@ -367,14 +359,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
-            }
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (flag.equals("7")) {
+            } else if (flag.equals("7")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
                 String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
@@ -470,16 +455,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         }
                     }
                 }
-            }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        try {
-            if (flag.equals("5")) {
+            } else if (flag.equals("5")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
@@ -525,14 +501,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            if (flag.equals("4")) {
+            } else if (flag.equals("4")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
@@ -646,7 +615,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
