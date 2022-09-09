@@ -181,22 +181,22 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    ctx.write(Unpooled.copiedBuffer(intToByte(preInstallFlaginstallLength)));
                     ctx.write(Unpooled.copiedBuffer(intToByte(171)));
 
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
                     ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
                     ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
                     ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
                     ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
                     ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
 
@@ -220,6 +220,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRadioTime(), Charset.defaultCharset())); //9 x(1)
 //                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getBaudrate(), Charset.defaultCharset())); //9 x(1)
 //                    ctx.write(Unpooled.copiedBuffer(chkSumData));
+
+                    StringBuilder a = new StringBuilder();
+                    ctx.write(calcCheckSum.makeChecksum(a.append("1".repeat(171)).toString()));
 
                     ctx.flush();
                     mBuf.release();
