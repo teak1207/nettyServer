@@ -16,7 +16,7 @@ public class PreInstallSensorListAllModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
 
-    @Column(name = "REGDATE")
+    @Column(name = "DATE")
     private String regdate;
 
     @Column(name = "SSN")
