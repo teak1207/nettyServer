@@ -43,11 +43,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final RequestSensorListService requestSensorListService;
 
     CalcCheckSum calcCheckSum = new CalcCheckSum();
-    final String ack = "8";
-    final String nak = "9";
-    final String preInstallFlag = "A";
+    final byte[] ack = {8};
+    final byte[] nak = {9};
+    final byte preInstallFlag = 'A';
 
-    final String ServerToDevice = "S";
+    final byte ServerToDevice = 'S';
 
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
@@ -174,37 +174,57 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 if (preInstallDeviceInfos != null) {
-                    ctx.write(Unpooled.copiedBuffer(preInstallFlag.getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{preInstallFlag}));
                     ctx.write(Unpooled.copiedBuffer(serialNumber.getBytes()));
                     ctx.write(Unpooled.copiedBuffer(datetime.getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(ServerToDevice.getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(intToByte(preinstallLength)));
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{ServerToDevice}));
+//                    ctx.write(Unpooled.copiedBuffer(intToByte(preInstallFlaginstallLength)));
+                    ctx.write(Unpooled.copiedBuffer(intToByte(171)));
 
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime1(), Charset.defaultCharset()));  //4
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime2(), Charset.defaultCharset()));  //4
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime3(), Charset.defaultCharset()));  //4
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getFmFrequency(), Charset.defaultCharset()));    //6 x (10)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSid(), Charset.defaultCharset()));    //8 x (8)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPname(), Charset.defaultCharset()));  //10
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPx(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPy(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSerialNumber(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPeriod(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSamplingTime(), Charset.defaultCharset())); //9 x(1)
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 2, 3, 4}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
 
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSamplerate(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getServerUrl(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getServerPort(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getDbUrl(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getDbPort(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRadioTime(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getBaudrate(), Charset.defaultCharset())); //9 x(1)
-                    ctx.write(Unpooled.copiedBuffer(chkSumData));
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime1(), Charset.defaultCharset()));  //4
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime2(), Charset.defaultCharset()));  //4
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime3(), Charset.defaultCharset()));  //4
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getFmFrequency(), Charset.defaultCharset()));    //6 x (10)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSid(), Charset.defaultCharset()));    //8 x (8)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPname(), Charset.defaultCharset()));  //10
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPx(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPy(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSerialNumber(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getPeriod(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSamplingTime(), Charset.defaultCharset())); //9 x(1)
+
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getSamplerate(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getServerUrl(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getServerPort(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getDbUrl(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getDbPort(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRadioTime(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getBaudrate(), Charset.defaultCharset())); //9 x(1)
+//                    ctx.write(Unpooled.copiedBuffer(chkSumData));
 
                     ctx.flush();
                     mBuf.release();
                 } else {
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
@@ -327,7 +347,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 if (settingDeviceInfos != null) {
-                    ctx.write(Unpooled.copiedBuffer(ack.getBytes()));
+                    ctx.write(Unpooled.copiedBuffer(ack));
                     ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
                     ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime2().getBytes()));
                     ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime3().getBytes()));
@@ -353,7 +373,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.flush();
                     mBuf.release();
                 } else {
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
@@ -445,10 +465,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         System.out.println("[reportFindResults]" + reportFindResults.toString());
                         // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                         if (dataSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
-                            ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
+                            ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
                             mBuf.release();
                         } else {
-                            ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                            ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
                             mBuf.release();
                         }
                     }
@@ -579,13 +599,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                                         System.out.println("[EXIST] : " + filePath + " 경로에 파일이 존재합니다");
 
                                         // 해당경로 파일 존재 시, NAK 처리
-                                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
                                         mBuf.release();
 
                                     } else {
                                         System.out.println("[NOT EXIST] : " + filePath + " 경로에 파일이 존재하지 않습니다. 파일을 생성합니다.");
                                         // 해당경로 파일 없을 경우, ACK 처리
-                                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
+                                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
 
                                         mBuf.release();
 
