@@ -275,13 +275,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-                    byte ack = '8';
+                    byte ack = 8;
                     ctx.write(Unpooled.copiedBuffer(new byte[]{ack}));
                     ctx.flush();
                     mBuf.release();
                     log.info("Report inserted");
                 } else {
-                    byte nak = '9';
+                    byte nak = 9;
                     ctx.write(Unpooled.copiedBuffer(new byte[]{nak}));
                     ctx.flush();
                     mBuf.release();
