@@ -21,9 +21,9 @@ public class PreinstallReportModel {
     @Id
     @Column(name = "cid")
     private int cid;
-    @Column(name = "SERIALNUMBER")
+    @Column(name = "SN")
     private String serialNumber;
-    @Column(name = "REPORTTIME")
+    @Column(name = "DATE")
     private String dateTime;
     @Column(name = "DEBUG")
     private String debugMsg;
@@ -33,39 +33,39 @@ public class PreinstallReportModel {
     private String RecordingTime2;
     @Column(name = "TIME3")
     private String RecordingTime3;
-    @Column(name = "FM_RADIO")
+    @Column(name = "FM")
     private String fmRadio;
     @Column(name = "FVER")
     private String firmWareVersion;
-    @Column(name = "BATTERY")
+    @Column(name = "BATT")
     private String batteryVtg;
     @Column(name = "RSSI")
     private String RSSI;
-    @Column(name = "DEVICE_STATUS")
+    @Column(name = "STATUS")
     private String deviceStatus;
-    @Column(name = "SAMPLINGTIME")
+    @Column(name = "SAMPLE")
     private String samplingTime;
     @Column(name = "PX")
     private String px;
     @Column(name = "PY")
     private String py;
-    @Column(name = "MODEMNUMBER")
+    @Column(name = "PNAME")
     private String modemNumber;
     @Column(name = "SID")
     private String Sid;
     @Column(name = "PERIOD")
     private String Period;
-    @Column(name = "SERVER_URL")
+    @Column(name = "DATA_SERVER")
     private String serverUrl;
-    @Column(name = "SERVER_PORT")
+    @Column(name = "DATA_PORT")
     private String serverPort;
-    @Column(name = "DB_URL")
+    @Column(name = "DB_SERVER")
     private String dbUrl;
     @Column(name = "DB_PORT")
     private String dbPort;
     @Column(name = "BAUDRATE")
     private String baudrate;
-    @Column(name = "PCB_VER")
+    @Column(name = "PCBVERSION")
     private String pcbVersion;
 
 
