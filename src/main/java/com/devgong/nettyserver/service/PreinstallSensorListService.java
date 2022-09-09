@@ -3,8 +3,10 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PreinstallSensorListService {
@@ -27,6 +29,8 @@ public class PreinstallSensorListService {
         PreinstallDeviceSetModel preinstallDeviceSetModel;
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel;
+
+        log.info("flag : {}, modemnum : {}", flag, modemnum);
 
         if (flag.equals("A")) {   // flag =="0" (x)
             preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
