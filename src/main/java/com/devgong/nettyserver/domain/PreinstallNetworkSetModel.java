@@ -26,7 +26,7 @@ public class PreinstallNetworkSetModel {
     @Column(name = "DATA_PORT")
     private String dataPort;
 
-    @Column(name = "DB_URL")
+    @Column(name = "DB_SERVER")
     private String dbUrl;
     @Column(name = "DB_PORT")
     private String dbPort;
