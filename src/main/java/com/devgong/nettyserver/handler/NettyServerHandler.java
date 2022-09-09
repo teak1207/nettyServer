@@ -281,15 +281,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
                     ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
                     mBuf.release();
+                    log.info("Report inserted");
                 } else {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
                     mBuf.release();
+                    log.error("Report insert failed");
                 }
             }
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+
+        log.info("FLAG : {}", flag);
         /*<<< Setting Step >>> ===========================================================================================*/
         try {
             if (flag.equals("6")) {

@@ -77,10 +77,10 @@ public class PreinstallSensorListService {
 
         if (preinstallReportModel != null) {
             reportRepository.save(preinstallReportModel);
-            System.out.println("[INSERT] : SUCCESS ");
+            log.info("[INSERT] : SUCCESS ");
             return true;
         } else {
-            System.out.println("[INSERT] : FAIL");
+            log.error("[INSERT] : FAIL");
             return false;
         }
     }
