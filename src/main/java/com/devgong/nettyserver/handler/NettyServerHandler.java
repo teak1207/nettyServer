@@ -21,15 +21,12 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
@@ -148,7 +145,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         .baudrate(preInstallDeviceInfos.getBaudrate().toCharArray()).build();
 
 
-                int headerLength = flag.length()+serialNumber.length()+datetime.length()+requestType.length()+paraLen.length();
+                int headerLength = flag.length() + serialNumber.length() + datetime.length() + requestType.length() + paraLen.length();
 
 
                 int preinstallLength = preInstallDeviceInfos.getTime1().length() + preInstallDeviceInfos.getTime2().length() + preInstallDeviceInfos.getTime3().length() +
@@ -278,11 +275,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(ack.getBytes()));
+                    byte ack = '8';
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{ack}));
+                    ctx.flush();
                     mBuf.release();
                     log.info("Report inserted");
                 } else {
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak.getBytes()));
+                    byte nak = '9';
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{nak}));
+                    ctx.flush();
                     mBuf.release();
                     log.error("Report insert failed");
                 }
