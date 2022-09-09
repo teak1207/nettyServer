@@ -31,7 +31,7 @@ public class PreInstallSensorListAllModel {
     @Column(name = "MPHONE")
     private String mphone;
 
-    @Column(name = "FRESET")
+    @Column(name = "F_RESET")
     private String freset;
 
 }
