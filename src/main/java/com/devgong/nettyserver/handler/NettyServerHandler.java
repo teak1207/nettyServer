@@ -92,7 +92,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
                 String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();    //number
-                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //number
+                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString().trim(); //number
                 String debugMsg = mBuf.readCharSequence(13, Charset.defaultCharset()).toString(); //number
                 byte chkSum1 = (mBuf.readByte());
                 byte chkSum2 = (mBuf.readByte());
