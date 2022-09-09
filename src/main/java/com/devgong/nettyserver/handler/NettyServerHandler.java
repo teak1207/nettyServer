@@ -27,6 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -246,7 +248,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // 체크썸 기능 빠짐
                 preinstallReportModel.setSerialNumber(serialNum);
-                preinstallReportModel.setDateTime(datetime);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
+                LocalDateTime dateTime = LocalDateTime.parse(datetime, formatter);
+                preinstallReportModel.setDateTime(dateTime);
                 preinstallReportModel.setDebugMsg(debugMessage);
                 preinstallReportModel.setRecordingTime1(recordingTime1);
                 preinstallReportModel.setRecordingTime2(recordingTime2);

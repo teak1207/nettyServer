@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class PreinstallReportModel {
     @Column(name = "SN")
     private String serialNumber;
     @Column(name = "DATE")
-    private String dateTime;
+    private LocalDateTime dateTime;
     @Column(name = "DEBUG")
     private String debugMsg;
     @Column(name = "TIME1")
