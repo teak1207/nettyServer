@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Slf4j
@@ -174,10 +175,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 if (preInstallDeviceInfos != null) {
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{preInstallFlag}));
-                    ctx.write(Unpooled.copiedBuffer(serialNumber.getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(datetime.getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{ServerToDevice}));
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{'A'}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{preInstallFlag}));
+//                    ctx.write(Unpooled.copiedBuffer(serialNumber.getBytes()));
+//                    ctx.write(Unpooled.copiedBuffer(datetime.getBytes()));
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{ServerToDevice}));
 //                    ctx.write(Unpooled.copiedBuffer(intToByte(preInstallFlaginstallLength)));
                     ctx.write(Unpooled.copiedBuffer(intToByte(171)));
 
@@ -222,7 +228,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    ctx.write(Unpooled.copiedBuffer(chkSumData));
 
                     StringBuilder a = new StringBuilder();
-                    ctx.write(calcCheckSum.makeChecksum(a.append("1".repeat(171)).toString()));
+                    byte aa = 'A';
+
+                    byte[] all = new byte[216];
+                    for(int i = 0 ; i< 211; i++) {
+                        all[i] = 1;
+                    }
+                    all[211] = aa;
+                    all[212] = intToByte(171)[0];
+                    all[213] = intToByte(171)[1];
+                    all[214] = intToByte(171)[2];
+                    all[215] = intToByte(171)[3];
+
+                    ctx.write(calcCheckSum.makeChecksum(Arrays.toString(all)));
 
                     ctx.flush();
                     mBuf.release();
