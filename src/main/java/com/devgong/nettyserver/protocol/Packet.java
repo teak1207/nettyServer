@@ -117,9 +117,6 @@ public class Packet<T extends Serializable<T>> {
         byte a = 'A';
         int accumulation = a;
         for (byte b : serializeExceptChecksum()) {
-            if(b =='0') {
-                continue;
-            }
             accumulation += b;
         }
 
