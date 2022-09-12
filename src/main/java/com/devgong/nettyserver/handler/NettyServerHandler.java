@@ -1,6 +1,11 @@
 package com.devgong.nettyserver.handler;
 
 import com.devgong.nettyserver.domain.*;
+import com.devgong.nettyserver.protocol.Packet;
+import com.devgong.nettyserver.protocol.PacketFlag;
+import com.devgong.nettyserver.protocol.RequestType;
+import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
+import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
@@ -88,123 +93,158 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             log.info("FLAG : {}", flag);
 
             if (flag.equals("A")) {
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();    //number
-                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString().trim(); //number
-                String debugMsg = mBuf.readCharSequence(13, Charset.defaultCharset()).toString(); //number
-                byte chkSum1 = (mBuf.readByte());
-                byte chkSum2 = (mBuf.readByte());
+//                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
+//                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
+//                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
+//                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();    //number
+//                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString().trim(); //number
+//                String debugMsg = mBuf.readCharSequence(13, Charset.defaultCharset()).toString(); //number
+//                byte chkSum1 = (mBuf.readByte());
+//                byte chkSum2 = (mBuf.readByte());
 
-                String convertChk = String.format("%x%x", chkSum1, chkSum2);
-                String chkData = flag + serialNumber + datetime + requestType + paraLen + modemNumber + debugMsg;
+//                String convertChk = String.format("%x%x", chkSum1, chkSum2);
+//                String chkData = flag + serialNumber + datetime + requestType + paraLen + modemNumber + debugMsg;
 
-                int convertDecimalSum = 0;
+//                int convertDecimalSum = 0;
 
-                for (int i = 0; i < chkData.length(); i++) {
-                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
-                }
+//                for (int i = 0; i < chkData.length(); i++) {
+//                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+//                }
 
-                int decimal = Integer.parseInt(convertChk, 16);
+//                int decimal = Integer.parseInt(convertChk, 16);
 
-                System.out.println("chkData=" + chkData);
-                System.out.println("=====================");
-                System.out.println("[chkSum1]:" + chkSum1);
-                System.out.println("[chkSum2]:" + chkSum2);
-                System.out.println("[convertDecimalSum]:" + convertDecimalSum);
-                System.out.println("[convertChk]:" + convertChk);
-                System.out.println("[decimal]:" + decimal);
-                System.out.println("=====================");
+//                System.out.println("chkData=" + chkData);
+//                System.out.println("=====================");
+//                System.out.println("[chkSum1]:" + chkSum1);
+//                System.out.println("[chkSum2]:" + chkSum2);
+//                System.out.println("[convertDecimalSum]:" + convertDecimalSum);
+//                System.out.println("[convertChk]:" + convertChk);
+//                System.out.println("[decimal]:" + decimal);
+//                System.out.println("=====================");
 
                 //  convertDecimalSum 와  decimal 이게 같으면 진행하고 아니면 재요청
 //                if (convertDecimalSum == decimal) {
-                if (true) {
-                    System.out.println("[CheckSum] : SUCCESS :)");
-                    preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(flag, modemNumber);
-                    log.info("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
-                }
+//                if (true) {
+//                    System.out.println("[CheckSum] : SUCCESS :)");
+//                    preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(flag, modemNumber);
+//                    log.info("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
+//                }
+                Packet<PreInstallRequest> request = new Packet<>(mBuf.readBytes(76).array(), PreInstallRequest.class);
+                preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
 
-                PreInstallResponseModel preInstallResponseModel = PreInstallResponseModel.builder()
-                        .recordTime1(preInstallDeviceInfos.getTime1().toCharArray())
-                        .recordTime2(preInstallDeviceInfos.getTime2().toCharArray())
-                        .recordTime3(preInstallDeviceInfos.getTime3().toCharArray())
-                        .fmFrequency(preInstallDeviceInfos.getFmFrequency().toCharArray())
-                        .sid(preInstallDeviceInfos.getSid().toCharArray())
-                        .pname(preInstallDeviceInfos.getPname().toCharArray())
-                        .px(preInstallDeviceInfos.getPx().toCharArray())
-                        .py(preInstallDeviceInfos.getPy().toCharArray())
-                        .serialNumber(preInstallDeviceInfos.getSerialNumber().toCharArray())
-                        .period(preInstallDeviceInfos.getPeriod().toCharArray())
-                        .samplingTime(preInstallDeviceInfos.getSamplingTime().toCharArray())
-                        .samplerate(preInstallDeviceInfos.getSampleRate().toCharArray())
-                        .serverUrl(preInstallDeviceInfos.getServerUrl().toCharArray())
-                        .serverPort(preInstallDeviceInfos.getServerPort().toCharArray())
-                        .dbUrl(preInstallDeviceInfos.getDbUrl().toCharArray())
-                        .dbPort(preInstallDeviceInfos.getDbPort().toCharArray())
-                        .radioTime(preInstallDeviceInfos.getRadioTime().toCharArray())
-                        .baudrate(preInstallDeviceInfos.getBaudrate().toCharArray()).build();
+//                PreInstallResponseModel preInstallResponseModel = PreInstallResponseModel.builder()
+//                        .recordTime1(preInstallDeviceInfos.getTime1().toCharArray())
+//                        .recordTime2(preInstallDeviceInfos.getTime2().toCharArray())
+//                        .recordTime3(preInstallDeviceInfos.getTime3().toCharArray())
+//                        .fmFrequency(preInstallDeviceInfos.getFmFrequency().toCharArray())
+//                        .sid(preInstallDeviceInfos.getSid().toCharArray())
+//                        .pname(preInstallDeviceInfos.getPname().toCharArray())
+//                        .px(preInstallDeviceInfos.getPx().toCharArray())
+//                        .py(preInstallDeviceInfos.getPy().toCharArray())
+//                        .serialNumber(preInstallDeviceInfos.getSerialNumber().toCharArray())
+//                        .period(preInstallDeviceInfos.getPeriod().toCharArray())
+//                        .samplingTime(preInstallDeviceInfos.getSamplingTime().toCharArray())
+//                        .samplerate(preInstallDeviceInfos.getSampleRate().toCharArray())
+//                        .serverUrl(preInstallDeviceInfos.getServerUrl().toCharArray())
+//                        .serverPort(preInstallDeviceInfos.getServerPort().toCharArray())
+//                        .dbUrl(preInstallDeviceInfos.getDbUrl().toCharArray())
+//                        .dbPort(preInstallDeviceInfos.getDbPort().toCharArray())
+//                        .radioTime(preInstallDeviceInfos.getRadioTime().toCharArray())
+//                        .baudrate(preInstallDeviceInfos.getBaudrate().toCharArray()).build();
+//
+                PreInstallResponse response = new PreInstallResponse(
+                        preInstallDeviceInfos.getTime1(),
+                        preInstallDeviceInfos.getTime2(),
+                        preInstallDeviceInfos.getTime3(),
+                        preInstallDeviceInfos.getFmFrequency(),
+                        preInstallDeviceInfos.getSid(),
+                        preInstallDeviceInfos.getPname(),
+                        preInstallDeviceInfos.getPx(),
+                        preInstallDeviceInfos.getPy(),
+                        preInstallDeviceInfos.getSerialNumber(),
+                        Integer.parseInt(preInstallDeviceInfos.getPeriod()),
+                        Integer.parseInt(preInstallDeviceInfos.getSamplingTime()),
+                        Integer.parseInt(preInstallDeviceInfos.getSampleRate()),
+                        preInstallDeviceInfos.getServerUrl(),
+                        preInstallDeviceInfos.getServerPort(),
+                        preInstallDeviceInfos.getDbUrl(),
+                        preInstallDeviceInfos.getDbPort(),
+                        Integer.parseInt(preInstallDeviceInfos.getRadioTime()),
+                        Integer.parseInt(preInstallDeviceInfos.getBaudrate())
+                );
 
 
-                int headerLength = flag.length() + serialNumber.length() + datetime.length() + requestType.length() + paraLen.length();
 
 
-                int preinstallLength = preInstallDeviceInfos.getTime1().length() + preInstallDeviceInfos.getTime2().length() + preInstallDeviceInfos.getTime3().length() +
-                        preInstallDeviceInfos.getFmFrequency().length() + preInstallDeviceInfos.getSid().length() + preInstallDeviceInfos.getPname().length() +
-                        preInstallDeviceInfos.getPx().length() + preInstallDeviceInfos.getPy().length() + preInstallDeviceInfos.getSerialNumber().length() +
-                        preInstallDeviceInfos.getPeriod().length() + preInstallDeviceInfos.getSamplingTime().length() + preInstallDeviceInfos.getSampleRate().length() +
-                        preInstallDeviceInfos.getServerUrl().length() + preInstallDeviceInfos.getServerPort().length() + preInstallDeviceInfos.getDbUrl().length() +
-                        preInstallDeviceInfos.getDbPort().length() + preInstallDeviceInfos.getRadioTime().length() + preInstallDeviceInfos.getBaudrate().length() + "tetesttesttesttesttesttesttesttesttesttesttesttestte".length();
 
-                String preInstallReport = preInstallDeviceInfos.getTime1() + preInstallDeviceInfos.getTime2() + preInstallDeviceInfos.getTime3() +
-                        preInstallDeviceInfos.getPx() + preInstallDeviceInfos.getPy() + preInstallDeviceInfos.getSerialNumber() +
-                        preInstallDeviceInfos.getPeriod() + preInstallDeviceInfos.getSamplingTime() + preInstallDeviceInfos.getSampleRate() +
-                        preInstallDeviceInfos.getServerUrl() + preInstallDeviceInfos.getServerPort() + preInstallDeviceInfos.getDbUrl() +
-                        preInstallDeviceInfos.getDbPort() + preInstallDeviceInfos.getRadioTime() + preInstallDeviceInfos.getBaudrate() + "testtestteststtesttesttesttesttesttesttesttesttestte";
+//                int headerLength = flag.length() + serialNumber.length() + datetime.length() + requestType.length() + paraLen.length();
 
 
-                byte[] totalData = preInstallReport.getBytes();
-                byte[] chkSumData = calcCheckSum.makeChecksum(preInstallReport);
-                int arrayLength = totalData.length + chkSumData.length;
+//                int preinstallLength = preInstallDeviceInfos.getTime1().length() + preInstallDeviceInfos.getTime2().length() + preInstallDeviceInfos.getTime3().length() +
+//                        preInstallDeviceInfos.getFmFrequency().length() + preInstallDeviceInfos.getSid().length() + preInstallDeviceInfos.getPname().length() +
+//                        preInstallDeviceInfos.getPx().length() + preInstallDeviceInfos.getPy().length() + preInstallDeviceInfos.getSerialNumber().length() +
+//                        preInstallDeviceInfos.getPeriod().length() + preInstallDeviceInfos.getSamplingTime().length() + preInstallDeviceInfos.getSampleRate().length() +
+//                        preInstallDeviceInfos.getServerUrl().length() + preInstallDeviceInfos.getServerPort().length() + preInstallDeviceInfos.getDbUrl().length() +
+//                        preInstallDeviceInfos.getDbPort().length() + preInstallDeviceInfos.getRadioTime().length() + preInstallDeviceInfos.getBaudrate().length() + "tetesttesttesttesttesttesttesttesttesttesttesttestte".length();
 
-                System.out.println("preinstallLength->" + preinstallLength);
-                System.out.println("preInstallReport->" + preInstallReport);
-                System.out.println("arrayLength->" + arrayLength);
-                System.out.println("chkSumData->" + new String(chkSumData));
-                System.out.println("headerLength->" + headerLength);
+//                String preInstallReport = preInstallDeviceInfos.getTime1() + preInstallDeviceInfos.getTime2() + preInstallDeviceInfos.getTime3() +
+//                        preInstallDeviceInfos.getPx() + preInstallDeviceInfos.getPy() + preInstallDeviceInfos.getSerialNumber() +
+//                        preInstallDeviceInfos.getPeriod() + preInstallDeviceInfos.getSamplingTime() + preInstallDeviceInfos.getSampleRate() +
+//                        preInstallDeviceInfos.getServerUrl() + preInstallDeviceInfos.getServerPort() + preInstallDeviceInfos.getDbUrl() +
+//                        preInstallDeviceInfos.getDbPort() + preInstallDeviceInfos.getRadioTime() + preInstallDeviceInfos.getBaudrate() + "testtestteststtesttesttesttesttesttesttesttesttestte";
+
+
+//                byte[] totalData = preInstallReport.getBytes();
+//                byte[] chkSumData = calcCheckSum.makeChecksum(preInstallReport);
+//                int arrayLength = totalData.length + chkSumData.length;
+
+//                System.out.println("preinstallLength->" + preinstallLength);
+//                System.out.println("preInstallReport->" + preInstallReport);
+//                System.out.println("arrayLength->" + arrayLength);
+//                System.out.println("chkSumData->" + new String(chkSumData));
+//                System.out.println("headerLength->" + headerLength);
 
 
                 if (preInstallDeviceInfos != null) {
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{'A'}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+                    Packet<PreInstallResponse> responsePacket = new Packet<>(
+                            PacketFlag.ACK,
+                            response.getSid(),
+                            LocalDateTime.now(),
+                            RequestType.SERVER,
+                            response.serialize().length + "",
+                            response
+                    );
+
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{'A'}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
 //                    ctx.write(Unpooled.copiedBuffer(new byte[]{preInstallFlag}));
 //                    ctx.write(Unpooled.copiedBuffer(serialNumber.getBytes()));
 //                    ctx.write(Unpooled.copiedBuffer(datetime.getBytes()));
 //                    ctx.write(Unpooled.copiedBuffer(new byte[]{ServerToDevice}));
 //                    ctx.write(Unpooled.copiedBuffer(intToByte(preInstallFlaginstallLength)));
-                    ctx.write(Unpooled.copiedBuffer(intToByte(171)));
+//                    ctx.write(Unpooled.copiedBuffer(intToByte(171)));
 
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1, 1, 1, 1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
+//                    ctx.write(Unpooled.copiedBuffer(new byte[]{1}));  //4
 
 //                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime1(), Charset.defaultCharset()));  //4
 //                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getRecordTime2(), Charset.defaultCharset()));  //4
@@ -227,21 +267,22 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    ctx.write(Unpooled.copiedBuffer(preInstallResponseModel.getBaudrate(), Charset.defaultCharset())); //9 x(1)
 //                    ctx.write(Unpooled.copiedBuffer(chkSumData));
 
-                    StringBuilder a = new StringBuilder();
-                    byte aa = 'A';
+//                    StringBuilder a = new StringBuilder();
+//                    byte aa = 'A';
+//
+//                    byte[] all = new byte[216];
+//                    for(int i = 0 ; i< 211; i++) {
+//                        all[i] = 1;
+//                    }
+//                    all[211] = aa;
+//                    all[212] = intToByte(171)[0];
+//                    all[213] = intToByte(171)[1];
+//                    all[214] = intToByte(171)[2];
+//                    all[215] = intToByte(171)[3];
 
-                    byte[] all = new byte[216];
-                    for(int i = 0 ; i< 211; i++) {
-                        all[i] = 1;
-                    }
-                    all[211] = aa;
-                    all[212] = intToByte(171)[0];
-                    all[213] = intToByte(171)[1];
-                    all[214] = intToByte(171)[2];
-                    all[215] = intToByte(171)[3];
+//                    ctx.write(calcCheckSum.makeChecksum(Arrays.toString(all)));
 
-                    ctx.write(calcCheckSum.makeChecksum(Arrays.toString(all)));
-
+                    ctx.write(responsePacket.serialize());
                     ctx.flush();
                     mBuf.release();
                 } else {

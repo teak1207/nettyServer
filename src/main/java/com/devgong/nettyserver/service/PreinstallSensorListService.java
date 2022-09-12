@@ -1,6 +1,7 @@
 package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.*;
+import com.devgong.nettyserver.protocol.PacketFlag;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ public class PreinstallSensorListService {
     private final PreInstallSensorListRepository preInstallSensorListRepository;
     private final ReportRepository reportRepository;
 
-    public PreInstallSetModel preInstallfindData(String flag, String modemnum) {
+    public PreInstallSetModel preInstallfindData(String modemnum) {
         /*
          * model -> repository 가서 값을 찾기위한 Object Value.
          * totaldata -> 넘어오는 데이터의 길이로 정확한 값이 넘어왔는지를 판단하기 위한 value
@@ -30,9 +31,9 @@ public class PreinstallSensorListService {
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel;
 
-        log.info("flag : {}, modemnum : {}", flag, modemnum);
+        log.info("modemnum : {}", modemnum);
 
-        if (flag.equals("A")) {   // flag =="0" (x)
+//        if (flag.equals("A")) {   // flag =="0" (x)
             preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
 
             System.out.println("test"+preInstallSensorListAllModel.toString());
@@ -66,11 +67,11 @@ public class PreinstallSensorListService {
             preinstallSetModel.setBaudrate(preinstallDeviceSetModel.getBaudrate());//new
 
             return preinstallSetModel;
-        } else {
-            System.out.println("[FAILURE] : FLAG가 0이 아닙니다. :)");
-        }
+//        } else {
+//            System.out.println("[FAILURE] : FLAG가 0이 아닙니다. :)");
+//        }
 
-        return null;
+//        return null;
     }
 
     public boolean insertReport(PreinstallReportModel preinstallReportModel) {
