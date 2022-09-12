@@ -19,6 +19,8 @@ public class NakPacket {
     byte[] checksum; // 2 byte
 
     public NakPacket(String sensorId, LocalDateTime dateTime) {
+        this.sensorId = sensorId;
+        this.dateTime = dateTime;
 
         byte[] serialized = serializeExceptChecksum();
 
@@ -47,8 +49,6 @@ public class NakPacket {
         totalByte[0] = firstByte;
         totalByte[1] = secondByte;
 
-        this.sensorId = sensorId;
-        this.dateTime = dateTime;
         this.checksum = totalByte;
     }
 
