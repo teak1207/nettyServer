@@ -1,6 +1,7 @@
 package com.devgong.nettyserver.handler;
 
 import com.devgong.nettyserver.domain.*;
+import com.devgong.nettyserver.protocol.NakPacket;
 import com.devgong.nettyserver.protocol.Packet;
 import com.devgong.nettyserver.protocol.PacketFlag;
 import com.devgong.nettyserver.protocol.RequestType;
@@ -209,7 +210,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                System.out.println("headerLength->" + headerLength);
 
 
-                if (preInstallDeviceInfos != null) {
+                if (preInstallDeviceInfos == null) {
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             response.getSid(),
                             LocalDateTime.now(),
@@ -295,7 +296,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.flush();
                     mBuf.release();
                 } else {
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
+                    ctx.writeAndFlush(new NakPacket("0".repeat(24), LocalDateTime.now()).serialize());
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }

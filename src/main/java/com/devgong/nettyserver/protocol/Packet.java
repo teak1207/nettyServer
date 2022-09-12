@@ -141,7 +141,7 @@ public class Packet<T extends Serializable<T>> {
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
     }
 
-    private byte stringToByte(String input) {
+    public static byte stringToByte(String input) {
         return input.length() == 1 ? (byte) Character.digit(input.charAt(0), 16)
                 : (byte) ((Character.digit(input.charAt(0), 16) << 4) + Character.digit(input.charAt(1), 16));
     }
@@ -175,7 +175,7 @@ public class Packet<T extends Serializable<T>> {
         return totalByte;
     }
 
-    private byte[] intToByteArray(int value) {
+    public static byte[] intToByteArray(int value) {
         return new byte[]{
                 (byte) (value >>> 24),
                 (byte) (value >>> 16),
@@ -184,7 +184,7 @@ public class Packet<T extends Serializable<T>> {
         };
     }
 
-    private int byteArrayToInt(byte[] bytes) {
+    public static int byteArrayToInt(byte[] bytes) {
         return ((bytes[0] & 0xFF) << 24) |
                 ((bytes[1] & 0xFF) << 16) |
                 ((bytes[2] & 0xFF) << 8 ) |
