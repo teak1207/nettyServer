@@ -123,6 +123,7 @@ public class Packet<T extends Serializable<T>> {
         byte a = 'A';
         int accumulation = a;
         for (byte b : serializeExceptChecksum()) {
+            log.info("accumulation : {} ", accumulation);
             log.info("validateChecksum byte : {}", b);
             log.info("validateChecksum byte(char) : {}", (char) b);
             accumulation += b;
