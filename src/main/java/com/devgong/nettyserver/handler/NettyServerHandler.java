@@ -214,7 +214,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.getSid(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
-                            response.serialize().length + "",
+                            (response.serialize().length + 2) + "",
                             response
                     );
 
@@ -284,6 +284,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    all[215] = intToByte(171)[3];
 
 //                    ctx.write(calcCheckSum.makeChecksum(Arrays.toString(all)));
+
+                    for(byte a : responsePacket.serialize()) {
+                        log.info("responsePacket : {}", a);
+                        log.info("responsePacket(char) : {}", (char)a );
+                    }
 
                     ctx.write(PacketFlag.ACK.getFlag());
                     ctx.write(responsePacket.serialize());
