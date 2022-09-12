@@ -1,6 +1,7 @@
 package com.devgong.nettyserver.protocol;
 
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
+@Slf4j
 @Value
 public class Packet<T extends Serializable<T>> {
 
@@ -71,6 +73,8 @@ public class Packet<T extends Serializable<T>> {
 
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
+        log.info("input checksum : {}, {}", checksum[0], checksum[1]);
+
         if (!validateChecksum()) {
             throw new IllegalStateException("Invalid checksum error!");
         }
@@ -108,6 +112,9 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
         }
+
+        log.info("accumulation : {}", accumulation);
+        log.info("accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));
 
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
     }
