@@ -130,7 +130,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    log.info("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
 //                }
 
-                Packet<PreInstallRequest> request = new Packet<>(mBuf.readBytes(75).array(), PreInstallRequest.class);
+                byte[] bytes = new byte[mBuf.readableBytes()];
+                mBuf.duplicate().readBytes(bytes);
+                Packet<PreInstallRequest> request = new Packet<>(bytes, PreInstallRequest.class);
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
 
 //                PreInstallResponseModel preInstallResponseModel = PreInstallResponseModel.builder()
