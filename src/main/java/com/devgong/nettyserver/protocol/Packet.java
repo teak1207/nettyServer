@@ -83,6 +83,7 @@ public class Packet<T extends Serializable<T>> {
     public byte[] serialize() {
         byte[] serializeExceptChecksum = serializeExceptChecksum();
         byte[] serialized = new byte[2 + serializeExceptChecksum.length];
+        System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
         System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
         return serialized;
     }
