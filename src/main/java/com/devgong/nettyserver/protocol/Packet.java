@@ -17,7 +17,7 @@ public class Packet<T extends Serializable<T>> {
     String sensorId; // 24 byte
     LocalDateTime dateTime; // 15 byte
     RequestType requestType; // 1 byte
-    String parameterLength; // 4 byte
+    int parameterLength; // 4 byte
     T parameter;
     byte[] checksum; // 2 byte
 
@@ -32,7 +32,7 @@ public class Packet<T extends Serializable<T>> {
 //        this.checksum = makeChecksum();
 //    }
 
-    public Packet(String sensorId, LocalDateTime dateTime, RequestType requestType, String parameterLength, T parameter) {
+    public Packet(String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
         this.sensorId = sensorId;
         this.dateTime = dateTime;
         this.requestType = requestType;
@@ -61,7 +61,7 @@ public class Packet<T extends Serializable<T>> {
         dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
         requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[39]).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
-        parameterLength = new String(Arrays.copyOfRange(packet, 40, 44));
+        parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44));
 
 
         try {
@@ -101,7 +101,7 @@ public class Packet<T extends Serializable<T>> {
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(parameterLength.getBytes(), 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 24);
 
         System.arraycopy(sensorIdBytes, 0, serialized, 0, 24);
         System.arraycopy(dateTimeBytes, 0, serialized, 24, 15);
@@ -115,7 +115,7 @@ public class Packet<T extends Serializable<T>> {
         for(byte a : dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes()) {
             log.info("dateTime : {}", (char) a);
         }
-        for(byte a : parameterLength.getBytes()) {
+        for(byte a : intToByteArray(parameterLength)) {
             log.info("parameterLength : {}", (char) a);
         }
         for(byte a : serializedParameter) {
@@ -147,7 +147,7 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private byte[] makeChecksum() {
-        int accumulation = 0;
+        int accumulation = 32;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
         }
@@ -173,5 +173,21 @@ public class Packet<T extends Serializable<T>> {
         totalByte[1] = secondByte;
 
         return totalByte;
+    }
+
+    private byte[] intToByteArray(int value) {
+        return new byte[]{
+                (byte) (value >>> 24),
+                (byte) (value >>> 16),
+                (byte) (value >>> 8),
+                (byte) value
+        };
+    }
+
+    private int byteArrayToInt(byte[] bytes) {
+        return ((bytes[0] & 0xFF) << 24) |
+                ((bytes[1] & 0xFF) << 16) |
+                ((bytes[2] & 0xFF) << 8 ) |
+                ((bytes[3] & 0xFF));
     }
 }
