@@ -103,6 +103,13 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(parameterLength.getBytes(), 0, serialized, 40, 4);
         System.arraycopy(serializedParameter, 0, serialized, 44, serializedParameter.length);
 
+        log.info("sensorId : {}", sensorId.getBytes().length);
+        log.info("dateTime : {}", dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes().length);
+        log.info("requestType : {}", requestType);
+        log.info("parameterLength : {}", parameterLength.getBytes().length);
+        log.info("serializedParmeter : {}", serializedParameter.length);
+
+
         return serialized;
     }
 
