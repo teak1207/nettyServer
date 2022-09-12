@@ -120,7 +120,7 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private boolean validateChecksum() {
-        byte a = 'A';
+        byte a = 'A' + 32;
         int accumulation = a;
         for (byte b : serializeExceptChecksum()) {
             log.info("accumulation : {} ", accumulation);
