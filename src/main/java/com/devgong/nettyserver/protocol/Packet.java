@@ -103,7 +103,8 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private boolean validateChecksum() {
-        int accumulation = 0;
+        byte a = 'A';
+        int accumulation = a;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
         }
