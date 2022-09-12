@@ -59,7 +59,7 @@ public class NakPacket {
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
 
         serialized[0] = flag.getFlag();
-        System.arraycopy(sensorIdBytes, 0, serialized, 1, 25);
+        System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
         System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
         serialized[40] = requestType.getType();
         System.arraycopy(intToByteArray(parameterLength), 0, serialized, 41, 4);
