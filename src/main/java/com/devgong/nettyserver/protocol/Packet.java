@@ -97,10 +97,15 @@ public class Packet<T extends Serializable<T>> {
 //        serialized[40] = requestType.getType();
 //        System.arraycopy(parameterLength.getBytes(), 0, serialized, 41, 4);
 //        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
-        System.arraycopy(sensorId.getBytes(), 0, serialized, 0, 24);
-        System.arraycopy(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, serialized, 24, 15);
+
+        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
+        byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(parameterLength.getBytes(), 0, 24);
+
+        System.arraycopy(sensorIdBytes, 0, serialized, 0, 24);
+        System.arraycopy(dateTimeBytes, 0, serialized, 24, 15);
         serialized[39] = requestType.getType();
-        System.arraycopy(parameterLength.getBytes(), 0, serialized, 40, 4);
+        System.arraycopy(paramterLengthBytes, 0, serialized, 40, 4);
         System.arraycopy(serializedParameter, 0, serialized, 44, serializedParameter.length);
 
         for(byte a : sensorId.getBytes()) {
