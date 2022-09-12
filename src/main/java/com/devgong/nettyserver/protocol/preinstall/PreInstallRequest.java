@@ -2,9 +2,11 @@ package com.devgong.nettyserver.protocol.preinstall;
 
 import com.devgong.nettyserver.protocol.Serializable;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
+@Slf4j
 @Value
 public class PreInstallRequest implements Serializable<PreInstallRequest> {
 
@@ -30,10 +32,16 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
         byte[] serialized = new byte[29];
 
         byte[] modemPhoneNumberBytes = Arrays.copyOfRange(modemPhoneNumber.getBytes(), 0, 16);
+        log.info("modemPhoneNumberBytes length : {}", modemPhoneNumberBytes.length);
         byte[] debugMessageBytes  = Arrays.copyOfRange(debugMessage.getBytes(), 0, 13);
+        log.info("debugMessageBytes length : {}", debugMessageBytes.length);
 
         System.arraycopy(modemPhoneNumberBytes, 0, serialized, 0, 16);
         System.arraycopy(debugMessageBytes, 0, serialized, 16, 13);
+
+        for(byte b : serialized) {
+            log.info("serialized : {}", b);
+        }
 
         return serialized;
     }
