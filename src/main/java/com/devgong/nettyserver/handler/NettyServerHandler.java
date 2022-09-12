@@ -129,7 +129,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(flag, modemNumber);
 //                    log.info("[preInstallDeviceInfos] : " + preInstallDeviceInfos.toString());
 //                }
-                Packet<PreInstallRequest> request = new Packet<>(mBuf.readBytes(76).array(), PreInstallRequest.class);
+
+                Packet<PreInstallRequest> request = new Packet<>(mBuf.readBytes(75).array(), PreInstallRequest.class);
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
 
 //                PreInstallResponseModel preInstallResponseModel = PreInstallResponseModel.builder()
@@ -207,7 +208,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 if (preInstallDeviceInfos != null) {
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
-                            PacketFlag.ACK,
                             response.getSid(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
@@ -282,6 +282,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 //                    ctx.write(calcCheckSum.makeChecksum(Arrays.toString(all)));
 
+                    ctx.write(PacketFlag.ACK.getFlag());
                     ctx.write(responsePacket.serialize());
                     ctx.flush();
                     mBuf.release();
