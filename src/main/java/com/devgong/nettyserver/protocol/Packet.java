@@ -49,15 +49,22 @@ public class Packet<T extends Serializable<T>> {
 
 //        flag = Arrays.stream(PacketFlag.values()).filter(flag -> flag.getFlag() == packet[0]).findAny()
 //                .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + packet[0]));
-        sensorId = new String(Arrays.copyOfRange(packet, 1, 25));
-        dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 25, 40)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
-        requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[40]).findAny()
-                .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[40]));
-        parameterLength = new String(Arrays.copyOfRange(packet, 41, 45));
+//        sensorId = new String(Arrays.copyOfRange(packet, 1, 25));
+//        dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 25, 40)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
+//        requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[40]).findAny()
+//                .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[40]));
+//        parameterLength = new String(Arrays.copyOfRange(packet, 41, 45));
+
+        sensorId = new String(Arrays.copyOfRange(packet, 0, 24));
+        dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
+        requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[39]).findAny()
+                .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
+        parameterLength = new String(Arrays.copyOfRange(packet, 40, 44));
+
 
         try {
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(byte[].class);
-            parameter = declaredConstructor.newInstance((Object) Arrays.copyOfRange(packet, 45, packet.length - 2));
+            parameter = declaredConstructor.newInstance((Object) Arrays.copyOfRange(packet, 44, packet.length - 2));
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid parameter error!");
         }
@@ -78,13 +85,20 @@ public class Packet<T extends Serializable<T>> {
 
     private byte[] serializeExceptChecksum() {
         byte[] serializedParameter = parameter.serialize();
-        byte[] serialized = new byte[45 + serializedParameter.length];
+//        byte[] serialized = new byte[45 + serializedParameter.length];
+        byte[] serialized = new byte[44 + serializedParameter.length];
 //        serialized[0] = flag.getFlag();
-        System.arraycopy(sensorId.getBytes(), 0, serialized, 1, 24);
-        System.arraycopy(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, serialized, 25, 15);
-        serialized[40] = requestType.getType();
-        System.arraycopy(parameterLength.getBytes(), 0, serialized, 41, 4);
-        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
+//        System.arraycopy(sensorId.getBytes(), 0, serialized, 1, 24);
+//        System.arraycopy(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, serialized, 25, 15);
+//        serialized[40] = requestType.getType();
+//        System.arraycopy(parameterLength.getBytes(), 0, serialized, 41, 4);
+//        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
+        System.arraycopy(sensorId.getBytes(), 0, serialized, 0, 24);
+        System.arraycopy(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, serialized, 24, 15);
+        serialized[39] = requestType.getType();
+        System.arraycopy(parameterLength.getBytes(), 0, serialized, 40, 4);
+        System.arraycopy(serializedParameter, 0, serialized, 44, serializedParameter.length);
+
         return serialized;
     }
 
