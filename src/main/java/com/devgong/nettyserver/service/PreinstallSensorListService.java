@@ -31,7 +31,7 @@ public class PreinstallSensorListService {
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel;
 
-        log.info("modemnum : {}", modemnum);
+        log.info("modemnum : {}, byte : {}", modemnum, modemnum.getBytes().length);
 
 //        if (flag.equals("A")) {   // flag =="0" (x)
             preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum.trim());
