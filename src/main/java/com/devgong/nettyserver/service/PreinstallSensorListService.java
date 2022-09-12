@@ -34,7 +34,7 @@ public class PreinstallSensorListService {
         log.info("modemnum : {}", modemnum);
 
 //        if (flag.equals("A")) {   // flag =="0" (x)
-            preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
+            preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum.trim());
 
             System.out.println("test"+preInstallSensorListAllModel.toString());
 
