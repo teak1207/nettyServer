@@ -73,19 +73,19 @@ class PacketTest {
         checksum[0] = 11;
         checksum[1] = 42;
 
-        byte[] inputStream = new byte[76];
-        inputStream[0] = flag;
-        System.arraycopy(sensorId, 0, inputStream, 1, 24);
-        System.arraycopy(dateTime, 0, inputStream, 25, 15);
-        inputStream[40] = requestType;
-        System.arraycopy(parameterLength, 0, inputStream, 41, 4);
-        System.arraycopy(modemPhoneNumber, 0, inputStream, 45, 16);
-        System.arraycopy(debugMessage, 0, inputStream, 61, 13);
-        System.arraycopy(checksum, 0, inputStream, 74, 2);
+        byte[] inputStream = new byte[75];
+//        inputStream[0] = flag;
+        System.arraycopy(sensorId, 0, inputStream, 0, 24);
+        System.arraycopy(dateTime, 0, inputStream, 24, 15);
+        inputStream[39] = requestType;
+        System.arraycopy(parameterLength, 0, inputStream, 40, 4);
+        System.arraycopy(modemPhoneNumber, 0, inputStream, 44, 16);
+        System.arraycopy(debugMessage, 0, inputStream, 60, 13);
+        System.arraycopy(checksum, 0, inputStream, 73, 2);
 
         Packet<PreInstallRequest> packet = new Packet<>(inputStream, PreInstallRequest.class);
         assertThat(packet.getParameter().serialize().length).isEqualTo(29);
-        assertThat(packet.serialize().length).isEqualTo(76);
+        assertThat(packet.serialize().length).isEqualTo(75);
     }
 
     @Test
