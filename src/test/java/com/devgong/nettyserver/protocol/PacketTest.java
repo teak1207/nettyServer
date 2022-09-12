@@ -83,7 +83,7 @@ class PacketTest {
         System.arraycopy(debugMessage, 0, inputStream, 60, 13);
         System.arraycopy(checksum, 0, inputStream, 73, 2);
 
-        Packet<PreInstallRequest> packet = new Packet<>(inputStream, PreInstallRequest.class);
+        Packet<PreInstallRequest> packet = new Packet<>(PacketFlag.PREINSTALL, inputStream, PreInstallRequest.class);
         assertThat(packet.getParameter().serialize().length).isEqualTo(29);
         assertThat(packet.serialize().length).isEqualTo(75);
     }
@@ -293,7 +293,7 @@ class PacketTest {
         inputStream[213] = baudrate;
         System.arraycopy(checksum, 0, inputStream, 214, 2);
 
-        Packet<PreInstallResponse> packet = new Packet<>(inputStream, PreInstallResponse.class);
+        Packet<PreInstallResponse> packet = new Packet<>(PacketFlag.PREINSTALL, inputStream, PreInstallResponse.class);
         assertThat(packet.getParameter().serialize().length).isEqualTo(169);
         assertThat(packet.serialize().length).isEqualTo(216);
     }
@@ -516,7 +516,7 @@ class PacketTest {
         inputStream[218] = pcbVersion;
         System.arraycopy(checksum, 0, inputStream, 219, 2);
 
-        Packet<PreInstallReportRequest> packet = new Packet<>(inputStream, PreInstallReportRequest.class);
+        Packet<PreInstallReportRequest> packet = new Packet<>(PacketFlag.PREINSTALL, inputStream, PreInstallReportRequest.class);
         assertThat(packet.getParameter().serialize().length).isEqualTo(174);
         assertThat(packet.serialize().length).isEqualTo(221);
     }

@@ -13,7 +13,7 @@ import java.util.Arrays;
 @Value
 public class Packet<T extends Serializable<T>> {
 
-//    PacketFlag flag; // 1 byte
+    PacketFlag flag; // 1 byte
     String sensorId; // 24 byte
     LocalDateTime dateTime; // 15 byte
     RequestType requestType; // 1 byte
@@ -21,18 +21,8 @@ public class Packet<T extends Serializable<T>> {
     T parameter;
     byte[] checksum; // 2 byte
 
-//    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, String parameterLength, T parameter) {
-//        this.flag = flag;
-//        this.sensorId = sensorId;
-//        this.dateTime = dateTime;
-//        this.requestType = requestType;
-//        this.parameter = parameter;
-//        // TODO : Parameter Length 어떻게 byte[4] 로 변환?
-//        this.parameterLength = parameterLength;
-//        this.checksum = makeChecksum();
-//    }
-
-    public Packet(String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
+    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
+        this.flag = flag;
         this.sensorId = sensorId;
         this.dateTime = dateTime;
         this.requestType = requestType;
@@ -42,27 +32,18 @@ public class Packet<T extends Serializable<T>> {
         this.checksum = makeChecksum();
     }
 
-
-    public Packet(byte[] packet, Class<T> clazz) {
+    public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
         // TODO : 패킷 길이 제한조건 넣어야 함
         if (packet == null) {
             throw new IllegalArgumentException("Packet error!");
         }
 
-//        flag = Arrays.stream(PacketFlag.values()).filter(flag -> flag.getFlag() == packet[0]).findAny()
-//                .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + packet[0]));
-//        sensorId = new String(Arrays.copyOfRange(packet, 1, 25));
-//        dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 25, 40)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
-//        requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[40]).findAny()
-//                .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[40]));
-//        parameterLength = new String(Arrays.copyOfRange(packet, 41, 45));
-
+        this.flag = flag;
         sensorId = new String(Arrays.copyOfRange(packet, 0, 24));
         dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
         requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[39]).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
         parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44));
-
 
         try {
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(byte[].class);
@@ -90,24 +71,18 @@ public class Packet<T extends Serializable<T>> {
 
     private byte[] serializeExceptChecksum() {
         byte[] serializedParameter = parameter.serialize();
-//        byte[] serialized = new byte[45 + serializedParameter.length];
-        byte[] serialized = new byte[44 + serializedParameter.length];
-//        serialized[0] = flag.getFlag();
-//        System.arraycopy(sensorId.getBytes(), 0, serialized, 1, 24);
-//        System.arraycopy(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, serialized, 25, 15);
-//        serialized[40] = requestType.getType();
-//        System.arraycopy(parameterLength.getBytes(), 0, serialized, 41, 4);
-//        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
+        byte[] serialized = new byte[45 + serializedParameter.length];
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
         byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 24);
 
-        System.arraycopy(sensorIdBytes, 0, serialized, 0, 24);
-        System.arraycopy(dateTimeBytes, 0, serialized, 24, 15);
-        serialized[39] = requestType.getType();
-        System.arraycopy(paramterLengthBytes, 0, serialized, 40, 4);
-        System.arraycopy(serializedParameter, 0, serialized, 44, serializedParameter.length);
+        serialized[0] = flag.getFlag();
+        System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
+        System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
+        serialized[40] = requestType.getType();
+        System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
+        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
 
         for(byte a : sensorId.getBytes()) {
             log.info("sensorId : {}", (char) a);
@@ -126,7 +101,8 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private boolean validateChecksum() {
-        byte a = 'A' + 32;
+        // TODO : 32는 센서랑 실제 차이는 값 ...
+        byte a = 32;
         int accumulation = a;
         for (byte b : serializeExceptChecksum()) {
 //            log.info("accumulation : {} ", accumulation);

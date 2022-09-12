@@ -49,12 +49,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final DataSensorListService dataSensorListService;
     private final RequestSensorListService requestSensorListService;
 
-    CalcCheckSum calcCheckSum = new CalcCheckSum();
     final byte[] ack = {8};
     final byte[] nak = {9};
-    final byte preInstallFlag = 'A';
-
-    final byte ServerToDevice = 'S';
 
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
@@ -78,7 +74,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("Channel Read");
         System.out.println("===================");
 
-        String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+//        String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+        byte readFlag = mBuf.readByte();
+        PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
+                .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + readFlag));
 
         PreInstallSetModel preInstallDeviceInfos = null;
         SettingSetModel settingDeviceInfos = null;
@@ -93,7 +92,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         try {
             log.info("FLAG : {}", flag);
 
-            if (flag.equals("A")) {
+            if (PacketFlag.PREINSTALL.equals(flag)) {
 //                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();   //char
 //                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();   //char
 //                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //char
@@ -134,7 +133,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
                 log.info("readable bytes length : {}", bytes.length);
-                Packet<PreInstallRequest> request = new Packet<>(bytes, PreInstallRequest.class);
+                Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
 
 //                PreInstallResponseModel preInstallResponseModel = PreInstallResponseModel.builder()
@@ -210,8 +209,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                System.out.println("headerLength->" + headerLength);
 
 
-                if (preInstallDeviceInfos == null) {
+                if (preInstallDeviceInfos != null) {
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
+                            PacketFlag.PREINSTALL,
                             response.getSid(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
@@ -291,7 +291,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("responsePacket(char) : {}", (char)a );
                     }
 
-                    ctx.write(PacketFlag.ACK.getFlag());
                     ctx.write(responsePacket.serialize());
                     ctx.flush();
                     mBuf.release();
@@ -301,7 +300,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-            } else if (flag.equals("8") || flag.equals("9")) {
+            } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
@@ -414,7 +413,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
-                    settingDeviceInfos = settingSensorListService.settingFindData(flag, serialNumber);
+                    settingDeviceInfos = settingSensorListService.settingFindData(flag.getFlag() + "", serialNumber);
                     System.out.println("[SettingDeviceInfos] : " + settingDeviceInfos.toString());
                 }
 
@@ -529,7 +528,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     dataInsertModel.setSampleRate(samplerate.trim());
                     dataInsertModel.setRadioTime(radioTime.strip());
 
-                    reportFindResults = dataSensorListService.findDataExistence(flag, serialNumber);
+                    reportFindResults = dataSensorListService.findDataExistence(flag.getFlag() + "", serialNumber);
 
                     if (Objects.isNull(reportFindResults)) {
                         System.out.println("[fail] : 값이 존재하질 않습니다");
@@ -623,7 +622,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 if (convertDecimalSum == decimal) {
                     System.out.println("[CheckSum] : SUCCESS :)");
 
-                    requestFindResults = requestSensorListService.findDataExistence(flag, serialNumber);
+                    requestFindResults = requestSensorListService.findDataExistence(flag.getFlag() + "", serialNumber);
 
                     if (requestFindResults == null) {
                         System.out.println("[fail] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
