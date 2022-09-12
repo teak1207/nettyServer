@@ -16,8 +16,8 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
             throw new IllegalArgumentException("PreInstallRequest payload error!");
         }
 
-        modemPhoneNumber = new String(Arrays.copyOfRange(payload, 0, 16));
-        debugMessage = new String(Arrays.copyOfRange(payload, 16, 29));
+        modemPhoneNumber = new String(Arrays.copyOfRange(payload, 0, 16)).trim();
+        debugMessage = new String(Arrays.copyOfRange(payload, 16, 29)).trim();
     }
 
     @Override
@@ -28,8 +28,13 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
     @Override
     public byte[] serialize() {
         byte[] serialized = new byte[29];
-        System.arraycopy(modemPhoneNumber.getBytes(), 0, serialized, 0, 16);
-        System.arraycopy(debugMessage.getBytes(), 0, serialized, 16, 13);
+
+        byte[] modemPhoneNumberBytes = Arrays.copyOfRange(modemPhoneNumber.getBytes(), 0, 16);
+        byte[] debugMessageBytes  = Arrays.copyOfRange(debugMessage.getBytes(), 0, 13);
+
+        System.arraycopy(modemPhoneNumberBytes, 0, serialized, 0, 16);
+        System.arraycopy(debugMessageBytes, 0, serialized, 0, 13);
+
         return serialized;
     }
 }

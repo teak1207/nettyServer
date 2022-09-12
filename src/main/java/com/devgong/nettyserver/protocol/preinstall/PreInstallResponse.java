@@ -53,23 +53,22 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
             throw new IllegalArgumentException("PreInstallResponse payload error!");
         }
 
-
-        recordTime1 = new String(Arrays.copyOfRange(payload, 0, 4));
-        recordTime2 = new String(Arrays.copyOfRange(payload, 4, 8));
-        recordTime3 = new String(Arrays.copyOfRange(payload, 8, 12));
-        fmRadio = new String(Arrays.copyOfRange(payload, 12, 16));
-        sid = new String(Arrays.copyOfRange(payload, 16, 32));
-        pname = new String(Arrays.copyOfRange(payload, 32, 48));
-        px = new String(Arrays.copyOfRange(payload, 48, 58));
-        py = new String(Arrays.copyOfRange(payload, 58, 68));
-        sn = new String(Arrays.copyOfRange(payload, 68, 92));
+        recordTime1 = new String(Arrays.copyOfRange(payload, 0, 4)).trim();
+        recordTime2 = new String(Arrays.copyOfRange(payload, 4, 8)).trim();
+        recordTime3 = new String(Arrays.copyOfRange(payload, 8, 12)).trim();
+        fmRadio = new String(Arrays.copyOfRange(payload, 12, 16)).trim();
+        sid = new String(Arrays.copyOfRange(payload, 16, 32)).trim();
+        pname = new String(Arrays.copyOfRange(payload, 32, 48)).trim();
+        px = new String(Arrays.copyOfRange(payload, 48, 58)).trim();
+        py = new String(Arrays.copyOfRange(payload, 58, 68)).trim();
+        sn = new String(Arrays.copyOfRange(payload, 68, 92)).trim();
         period = payload[92];
         samplingTime = payload[93];
         sampleRate = payload[94];
-        serverUrl = new String(Arrays.copyOfRange(payload, 95, 127));
-        serverPort = new String(Arrays.copyOfRange(payload, 127, 131));
-        dbUrl = new String(Arrays.copyOfRange(payload, 131, 163));
-        dbPort = new String(Arrays.copyOfRange(payload, 163, 167));
+        serverUrl = new String(Arrays.copyOfRange(payload, 95, 127)).trim();
+        serverPort = new String(Arrays.copyOfRange(payload, 127, 131)).trim();
+        dbUrl = new String(Arrays.copyOfRange(payload, 131, 163)).trim();
+        dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
         radioTime = payload[167];
         baudrate = payload[168];
     }
@@ -82,22 +81,37 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
     @Override
     public byte[] serialize() {
         byte[] serialized = new byte[169];
-        System.arraycopy(recordTime1.getBytes(), 0, serialized, 0, 4);
-        System.arraycopy(recordTime2.getBytes(), 0, serialized, 4, 4);
-        System.arraycopy(recordTime3.getBytes(), 0, serialized, 8, 4);
-        System.arraycopy(fmRadio.getBytes(), 0, serialized, 12, 4);
-        System.arraycopy(sid.getBytes(), 0, serialized, 16, 16);
-        System.arraycopy(pname.getBytes(), 0, serialized, 32, 16);
-        System.arraycopy(px.getBytes(), 0, serialized, 48, 10);
-        System.arraycopy(py.getBytes(), 0, serialized, 58, 10);
-        System.arraycopy(sn.getBytes(), 0, serialized, 68, 24);
+
+        byte[] recordTime1Bytes = Arrays.copyOfRange(recordTime1.getBytes(), 0, 4);
+        byte[] recordTime2Bytes = Arrays.copyOfRange(recordTime2.getBytes(), 0, 4);
+        byte[] recordTime3Bytes = Arrays.copyOfRange(recordTime3.getBytes(), 0, 4);
+        byte[] fmRadioBytes = Arrays.copyOfRange(fmRadio.getBytes(), 0, 4);
+        byte[] sidBytes = Arrays.copyOfRange(sid.getBytes(), 0, 16);
+        byte[] pnameBytes = Arrays.copyOfRange(pname.getBytes(), 0, 16);
+        byte[] pxBytes = Arrays.copyOfRange(px.getBytes(), 0, 10);
+        byte[] pyBytes = Arrays.copyOfRange(py.getBytes(), 0, 10);
+        byte[] snBytes = Arrays.copyOfRange(sn.getBytes(), 0, 24);
+        byte[] serverUrlBytes = Arrays.copyOfRange(serverUrl.getBytes(), 0, 32);
+        byte[] serverPortBytes = Arrays.copyOfRange(serverPort.getBytes(), 0, 4);
+        byte[] dbUrlBytes = Arrays.copyOfRange(dbUrl.getBytes(), 0, 32);
+        byte[] dbPortBytes = Arrays.copyOfRange(dbPort.getBytes(), 0, 4);
+
+        System.arraycopy(recordTime1Bytes, 0, serialized, 0, 4);
+        System.arraycopy(recordTime2Bytes, 0, serialized, 4, 4);
+        System.arraycopy(recordTime3Bytes, 0, serialized, 8, 4);
+        System.arraycopy(fmRadioBytes, 0, serialized, 12, 4);
+        System.arraycopy(sidBytes, 0, serialized, 16, 16);
+        System.arraycopy(pnameBytes, 0, serialized, 32, 16);
+        System.arraycopy(pxBytes, 0, serialized, 48, 10);
+        System.arraycopy(pyBytes, 0, serialized, 58, 10);
+        System.arraycopy(snBytes, 0, serialized, 68, 24);
         serialized[92] = (byte) period;
         serialized[93] = (byte) samplingTime;
         serialized[94] = (byte) sampleRate;
-        System.arraycopy(serverUrl.getBytes(), 0, serialized, 95, 32);
-        System.arraycopy(serverPort.getBytes(), 0, serialized, 127, 4);
-        System.arraycopy(dbUrl.getBytes(), 0, serialized, 131, 32);
-        System.arraycopy(dbPort.getBytes(), 0, serialized, 163, 4);
+        System.arraycopy(serverUrlBytes, 0, serialized, 95, 32);
+        System.arraycopy(serverPortBytes, 0, serialized, 127, 4);
+        System.arraycopy(dbUrlBytes, 0, serialized, 131, 32);
+        System.arraycopy(dbPortBytes, 0, serialized, 163, 4);
         serialized[167] = (byte) radioTime;
         serialized[168] = (byte) baudrate;
         return serialized;
