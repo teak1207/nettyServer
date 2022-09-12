@@ -16,8 +16,8 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
             throw new IllegalArgumentException("PreInstallRequest payload error!");
         }
 
-        modemPhoneNumber = new String(Arrays.copyOfRange(payload, 0, 16)).trim();
-        debugMessage = new String(Arrays.copyOfRange(payload, 16, 29)).trim();
+        modemPhoneNumber = new String(Arrays.copyOfRange(payload, 0, 16));
+        debugMessage = new String(Arrays.copyOfRange(payload, 16, 29));
     }
 
     @Override
