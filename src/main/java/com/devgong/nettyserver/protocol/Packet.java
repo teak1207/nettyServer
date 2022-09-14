@@ -100,7 +100,7 @@ public class Packet<T extends Serializable<T>> {
         }
         */
         for(int i =0; i< serialized.length;i++){
-            log.info("test : {}", serialized[i]);
+            log.info("test : {}", (char)serialized[i]);
         }
 
 
