@@ -122,7 +122,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         Integer.parseInt(preInstallDeviceInfos.getBaudrate())
                 );
 
-                log.info("preInstallDeviceInfos check : {}" ,preInstallDeviceInfos);
                 if (preInstallDeviceInfos != null) {
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
