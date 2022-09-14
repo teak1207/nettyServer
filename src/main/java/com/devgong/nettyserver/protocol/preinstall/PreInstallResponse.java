@@ -1,10 +1,11 @@
 package com.devgong.nettyserver.protocol.preinstall;
 
 import com.devgong.nettyserver.protocol.Serializable;
+import lombok.ToString;
 import lombok.Value;
 
 import java.util.Arrays;
-
+@ToString
 @Value
 public class PreInstallResponse implements Serializable<PreInstallResponse> {
 

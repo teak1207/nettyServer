@@ -34,44 +34,36 @@ public class PreinstallSensorListService {
         log.info("modemnum : {}, byte : {}", modemnum, modemnum.getBytes().length);
 
 //        if (flag.equals("A")) {   // flag =="0" (x)
-            preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
-
-            System.out.println("test"+preInstallSensorListAllModel.toString());
-
-            preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
-            preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
-            preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
+        preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
+        preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
+        preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
+        preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
 
 
-            System.out.println("-------------------------------");
-            System.out.println("PREINSTALL[NETWORK] : " + preinstallNetworkSetModel);
-            System.out.println("PREINSTALL[DEVICE] : " + preinstallDeviceSetModel);
+        System.out.println("-------------------------------");
+        System.out.println("PREINSTALL[NETWORK] : " + preinstallNetworkSetModel);
+        System.out.println("PREINSTALL[DEVICE] : " + preinstallDeviceSetModel);
 
-            preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
-            preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
-            preinstallSetModel.setTime3(preinstallDeviceSetModel.getTime3());
-            preinstallSetModel.setFmFrequency(preinstallDeviceSetModel.getFmPrequency());//new
-            preinstallSetModel.setSid(preinstallNetworkSetModel.getSid()); //new
-            preinstallSetModel.setPname(preinstallNetworkSetModel.getPname());//new
-            preinstallSetModel.setPx(preInstallSensorListModel.getPx());
-            preinstallSetModel.setPy(preInstallSensorListModel.getPy());
-            preinstallSetModel.setSerialNumber(preinstallDeviceSetModel.getSn());
-            preinstallSetModel.setPeriod(preinstallDeviceSetModel.getPreiod());
-            preinstallSetModel.setSamplingTime(preinstallDeviceSetModel.getSampletime());
-            preinstallSetModel.setSampleRate(preinstallDeviceSetModel.getSamplerate());
-            preinstallSetModel.setServerUrl(preinstallNetworkSetModel.getDataServer());
-            preinstallSetModel.setServerPort(preinstallNetworkSetModel.getDataPort());
-            preinstallSetModel.setDbUrl(preinstallNetworkSetModel.getDbUrl());//new
-            preinstallSetModel.setDbPort(preinstallNetworkSetModel.getDbPort());//new
-            preinstallSetModel.setRadioTime(preinstallDeviceSetModel.getRadioTime());//new
-            preinstallSetModel.setBaudrate(preinstallDeviceSetModel.getBaudrate());//new
+        preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
+        preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
+        preinstallSetModel.setTime3(preinstallDeviceSetModel.getTime3());
+        preinstallSetModel.setFmFrequency(preinstallDeviceSetModel.getFmPrequency());//new
+        preinstallSetModel.setSid(preinstallNetworkSetModel.getSid()); //new
+        preinstallSetModel.setPname(preinstallNetworkSetModel.getPname());//new
+        preinstallSetModel.setPx(preInstallSensorListModel.getPx());
+        preinstallSetModel.setPy(preInstallSensorListModel.getPy());
+        preinstallSetModel.setSerialNumber(preinstallDeviceSetModel.getSn());
+        preinstallSetModel.setPeriod(preinstallDeviceSetModel.getPreiod());
+        preinstallSetModel.setSamplingTime(preinstallDeviceSetModel.getSampletime());
+        preinstallSetModel.setSampleRate(preinstallDeviceSetModel.getSamplerate());
+        preinstallSetModel.setServerUrl(preinstallNetworkSetModel.getDataServer());
+        preinstallSetModel.setServerPort(preinstallNetworkSetModel.getDataPort());
+        preinstallSetModel.setDbUrl(preinstallNetworkSetModel.getDbUrl());//new
+        preinstallSetModel.setDbPort(preinstallNetworkSetModel.getDbPort());//new
+        preinstallSetModel.setRadioTime(preinstallDeviceSetModel.getRadioTime());//new
+        preinstallSetModel.setBaudrate(preinstallDeviceSetModel.getBaudrate());//new
 
-            return preinstallSetModel;
-//        } else {
-//            System.out.println("[FAILURE] : FLAG가 0이 아닙니다. :)");
-//        }
-
-//        return null;
+        return preinstallSetModel;
     }
 
     public boolean insertReport(PreinstallReportModel preinstallReportModel) {
