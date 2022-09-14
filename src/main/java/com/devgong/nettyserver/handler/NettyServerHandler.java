@@ -131,9 +131,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("responsePacket(char) : {}", (char) a);
                     }
 
-                    ctx.write(responsePacket.serialize());
+//                    ctx.write(responsePacket.serialize());
+                    ctx.write(response);
                     ctx.flush();
-                    log.info("response finish : {}" ,"please");
                     mBuf.release();
                 } else {
                     ctx.writeAndFlush(new NakPacket("0".repeat(24), LocalDateTime.now()).serialize());
