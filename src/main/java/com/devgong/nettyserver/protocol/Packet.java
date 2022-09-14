@@ -84,6 +84,10 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
         System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
 
+
+        log.info("serializedParameter : {}", serializedParameter);
+        log.info("serialized : {}", serialized);
+
         for(byte a : sensorId.getBytes()) {
             log.info("sensorId : {}", (char) a);
         }

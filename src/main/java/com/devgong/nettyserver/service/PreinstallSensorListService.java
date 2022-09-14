@@ -1,7 +1,6 @@
 package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.*;
-import com.devgong.nettyserver.protocol.PacketFlag;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +31,6 @@ public class PreinstallSensorListService {
         PreInstallSensorListModel preInstallSensorListModel;
 
         log.info("modemnum : {}, byte : {}", modemnum, modemnum.getBytes().length);
-        log.info("test : {}","test1234" );
-
-
 
         preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum);
         preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
