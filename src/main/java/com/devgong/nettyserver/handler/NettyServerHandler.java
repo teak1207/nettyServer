@@ -55,18 +55,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
 
-//    public byte[] intToByte(int value) {
-//        byte[] reValue;
-//        reValue = new byte[4];
-//
-//        reValue[3] = (byte) (value);
-//        reValue[2] = (byte) (value >> 8);
-//        reValue[1] = (byte) (value >> 16);
-//        reValue[0] = (byte) (value >> 24);
-//        return reValue;
-//    }
-
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
@@ -91,14 +79,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
 
-            if (PacketFlag.PREINSTALL.equals(flag)) {
+//            if (PacketFlag.PREINSTALL.equals(flag)) {
+            if (readFlag == (byte)'A') {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
                 log.info("readable bytes length : {}", bytes.length);
 
 
-                log.info("FLAG : {}", flag);
+                log.info("FLAG : {}", readFlag);
                 for(int i =0; i< bytes.length;i++){
                     log.info("bytes : {}", (char)bytes[i]);
                 }
