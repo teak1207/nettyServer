@@ -90,7 +90,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
-            log.info("FLAG : {}", flag);
 
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
@@ -99,6 +98,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("readable bytes length : {}", bytes.length);
 
 
+                log.info("FLAG : {}", flag);
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
