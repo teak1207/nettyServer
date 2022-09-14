@@ -85,9 +85,7 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
 
 
-        log.info("serializedParameter : {}", serializedParameter);
-        log.info("serialized : {}", serialized);
-
+/*
         for(byte a : sensorId.getBytes()) {
             log.info("sensorId : {}", (char) a);
         }
@@ -100,6 +98,12 @@ public class Packet<T extends Serializable<T>> {
         for(byte a : serializedParameter) {
             log.info("serializedParameter : {}", (char) a);
         }
+        */
+        for(int i =0; i< serialized.length;i++){
+            log.info("test : {}", serialized[i]);
+        }
+
+
 
         return serialized;
     }
