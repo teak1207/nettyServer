@@ -5,9 +5,15 @@ import lombok.ToString;
 import lombok.Value;
 
 import java.util.Arrays;
+
 @ToString
 @Value
 public class PreInstallResponse implements Serializable<PreInstallResponse> {
+
+    //TODO
+    // - response total length : 216
+    // - body length : 171
+    // - header length : 45
 
     String recordTime1; // 4 byte
     String recordTime2;  // 4 byte

@@ -122,7 +122,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         Integer.parseInt(preInstallDeviceInfos.getRadioTime()),
                         Integer.parseInt(preInstallDeviceInfos.getBaudrate())
                 );
-                log.info("response_test : {}", response);
 
 
                 if (preInstallDeviceInfos != null) {
@@ -134,6 +133,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.serialize().length + 2,
                             response
                     );
+                    log.info("responsePacket : {}", responsePacket);
 
                     for (byte a : responsePacket.serialize()) {
                         log.info("responsePacket : {}", a);
