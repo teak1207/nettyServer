@@ -79,18 +79,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         /*  <<< Pre-Install Step >>> ===========================================================================================*/
         try {
 
-//            if (PacketFlag.PREINSTALL.equals(flag)) {
-            if (readFlag == (byte)'A') {
+            if (PacketFlag.PREINSTALL.equals(flag)) {
+//            if (readFlag == (byte)'A') {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
                 log.info("readable bytes length : {}", bytes.length);
 
 
-                log.info("FLAG : {}", (char)readFlag);
-                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
-                for(int i =0; i< bytes.length;i++){
-                    log.info("bytes : {}", (char)bytes[i]);
+                log.info("FLAG : {}", (char) readFlag);
+                log.info("bytes.length : {}", bytes.length);
+//                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
+
+                for (int i = 0; i < bytes.length; i++) {
+                    log.info("bytes : {}", (char) bytes[i]);
                 }
 
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
