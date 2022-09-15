@@ -83,19 +83,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //            if (readFlag == (byte)'A') {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
-                mBuf.duplicate().readBytes(bytes);
+                mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
+
+
                 log.info("readable bytes length : {}", bytes.length);
-
-
                 log.info("FLAG : {}", (char) readFlag);
                 log.info("bytes.length : {}", bytes.length);
-//                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
+                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
+
 
                 for (int i = 0; i < bytes.length; i++) {
                     log.info("bytes : {}", (char) bytes[i]);
                 }
 
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
+
+                log.info("request.toString : {} ", request);
+
 
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
