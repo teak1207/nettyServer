@@ -88,6 +88,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 log.info("FLAG : {}", (char)readFlag);
+                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
                 for(int i =0; i< bytes.length;i++){
                     log.info("bytes : {}", (char)bytes[i]);
                 }
@@ -131,8 +132,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("responsePacket(char) : {}", (char) a);
                     }
 
-//                    ctx.write(responsePacket.serialize());
-                    ctx.write(response);
+                    ctx.write(responsePacket.serialize());
+//                    ctx.write(response);
                     ctx.flush();
                     mBuf.release();
                 } else {
