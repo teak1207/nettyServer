@@ -100,15 +100,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("request.toString : {} ", request);
 
-
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
                         preInstallDeviceInfos.getTime1(),
                         preInstallDeviceInfos.getTime2(),
                         preInstallDeviceInfos.getTime3(),
                         preInstallDeviceInfos.getFmFrequency(),
-//                        preInstallDeviceInfos.getSid(),
-                        preInstallDeviceInfos.getSerialNumber(),
+                        preInstallDeviceInfos.getSid(),
                         preInstallDeviceInfos.getPname(),
                         preInstallDeviceInfos.getPx(),
                         preInstallDeviceInfos.getPy(),
@@ -124,11 +122,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         Integer.parseInt(preInstallDeviceInfos.getBaudrate())
                 );
 
-
                 if (preInstallDeviceInfos != null) {
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
-                            response.getSid(),
+                            response.getSn(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
                             response.serialize().length + 2,

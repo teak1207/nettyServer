@@ -84,20 +84,7 @@ public class Packet<T extends Serializable<T>> {
         serialized[40] = requestType.getType();
         System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
         System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
-/*
-        for(byte a : sensorId.getBytes()) {
-            log.info("sensorId : {}", (char) a);
-        }
-        for(byte a : dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes()) {
-            log.info("dateTime : {}", (char) a);
-        }
-        for(byte a : intToByteArray(parameterLength)) {
-            log.info("parameterLength : {}", (char) a);
-        }
-        for(byte a : serializedParameter) {
-            log.info("serializedParameter : {}", (char) a);
-        }
-        */
+
         return serialized;
     }
 
@@ -164,7 +151,7 @@ public class Packet<T extends Serializable<T>> {
     public static int byteArrayToInt(byte[] bytes) {
         return ((bytes[0] & 0xFF) << 24) |
                 ((bytes[1] & 0xFF) << 16) |
-                ((bytes[2] & 0xFF) << 8 ) |
+                ((bytes[2] & 0xFF) << 8) |
                 ((bytes[3] & 0xFF));
     }
 }
