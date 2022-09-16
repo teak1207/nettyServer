@@ -39,7 +39,6 @@ public class Packet<T extends Serializable<T>> {
         if (packet == null) {
             throw new IllegalArgumentException("Packet error!");
         }
-        // TODO : sensorId 24byte 인데 0 to 24???
         this.flag = flag;
         sensorId = new String(Arrays.copyOfRange(packet, 0, 24));
         dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
