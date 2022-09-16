@@ -60,23 +60,23 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
             throw new IllegalArgumentException("PreInstallResponse payload error!");
         }
 
-        recordTime1 = new String(Arrays.copyOfRange(payload, 0, 4));
-        recordTime2 = new String(Arrays.copyOfRange(payload, 4, 8));
-        recordTime3 = new String(Arrays.copyOfRange(payload, 8, 12));
-        fmRadio = new String(Arrays.copyOfRange(payload, 12, 16));
+        recordTime1 = new String(Arrays.copyOfRange(payload, 0, 4)).trim();
+        recordTime2 = new String(Arrays.copyOfRange(payload, 4, 8)).trim();
+        recordTime3 = new String(Arrays.copyOfRange(payload, 8, 12)).trim();
+        fmRadio = new String(Arrays.copyOfRange(payload, 12, 16)).trim();
 
-        sid = new String(Arrays.copyOfRange(payload, 16, 32));
-        pname = new String(Arrays.copyOfRange(payload, 32, 48));
-        px = new String(Arrays.copyOfRange(payload, 48, 58));
-        py = new String(Arrays.copyOfRange(payload, 58, 68));
-        sn = new String(Arrays.copyOfRange(payload, 68, 92));
+        sid = new String(Arrays.copyOfRange(payload, 16, 32)).trim();
+        pname = new String(Arrays.copyOfRange(payload, 32, 48)).trim();
+        px = new String(Arrays.copyOfRange(payload, 48, 58)).trim();
+        py = new String(Arrays.copyOfRange(payload, 58, 68)).trim();
+        sn = new String(Arrays.copyOfRange(payload, 68, 92)).trim();
         period = payload[92];
         samplingTime = payload[93];
         sampleRate = payload[94];
-        serverUrl = new String(Arrays.copyOfRange(payload, 95, 127));
-        serverPort = new String(Arrays.copyOfRange(payload, 127, 131));
-        dbUrl = new String(Arrays.copyOfRange(payload, 131, 163));
-        dbPort = new String(Arrays.copyOfRange(payload, 163, 167));
+        serverUrl = new String(Arrays.copyOfRange(payload, 95, 127)).trim();
+        serverPort = new String(Arrays.copyOfRange(payload, 127, 131)).trim();
+        dbUrl = new String(Arrays.copyOfRange(payload, 131, 163)).trim();
+        dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
         radioTime = payload[167];
         baudrate = payload[168];
 
