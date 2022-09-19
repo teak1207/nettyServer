@@ -43,11 +43,6 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
             log.info("serialized1 : {}", b);
         }
 
-        for(byte b : serialized) {
-            log.info("serialized1 : {}", (char)b);
-        }
-
-
         return serialized;
     }
 }
