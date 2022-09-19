@@ -41,7 +41,7 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
 
         for(byte b : serialized) {
             log.info("serialized1 : {}", b);
-            log.info("serialized2 : {}", (char)b);
+            log.info("serialized test : {}", "test");
         }
 
         return serialized;
