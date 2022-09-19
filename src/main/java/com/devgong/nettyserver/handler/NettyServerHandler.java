@@ -130,10 +130,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.serialize().length + 2,
                             response
                     );
-
+                    int sum = 0;
                     for (byte a : responsePacket.serialize()) {
 //                        log.info("responsePacket : {}", a);
                         log.info("responsePacket(char) : {}", (char) a);
+                        log.info("testsum : {}", sum++);
                     }
                     log.info("responsepacket_length : {}" , responsePacket.serialize().length);
 
