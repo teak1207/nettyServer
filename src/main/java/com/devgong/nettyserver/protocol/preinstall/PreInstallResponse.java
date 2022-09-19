@@ -60,16 +60,16 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
             throw new IllegalArgumentException("PreInstallResponse payload error!");
         }
 
-        recordTime1 = new String(Arrays.copyOfRange(payload, 0, 3)).trim();
-        recordTime2 = new String(Arrays.copyOfRange(payload, 3, 7)).trim();
-        recordTime3 = new String(Arrays.copyOfRange(payload, 7, 11)).trim();
-        fmRadio = new String(Arrays.copyOfRange(payload, 11, 15)).trim();
+        recordTime1 = new String(Arrays.copyOfRange(payload, 0, 4)).trim();
+        recordTime2 = new String(Arrays.copyOfRange(payload, 4, 8)).trim();
+        recordTime3 = new String(Arrays.copyOfRange(payload, 8, 12)).trim();
+        fmRadio = new String(Arrays.copyOfRange(payload, 12, 16)).trim();
 
-        sid = new String(Arrays.copyOfRange(payload, 15, 31)).trim();
-        pname = new String(Arrays.copyOfRange(payload, 31, 47)).trim();
-        px = new String(Arrays.copyOfRange(payload, 47, 57)).trim();
-        py = new String(Arrays.copyOfRange(payload, 57, 67)).trim();
-        sn = new String(Arrays.copyOfRange(payload, 67, 91)).trim();
+        sid = new String(Arrays.copyOfRange(payload, 16, 32)).trim();
+        pname = new String(Arrays.copyOfRange(payload, 32, 48)).trim();
+        px = new String(Arrays.copyOfRange(payload, 48, 58)).trim();
+        py = new String(Arrays.copyOfRange(payload, 58, 68)).trim();
+        sn = new String(Arrays.copyOfRange(payload, 68, 92)).trim();
         period = payload[92];
         samplingTime = payload[93];
         sampleRate = payload[94];
@@ -77,10 +77,25 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
         serverPort = new String(Arrays.copyOfRange(payload, 127, 131)).trim();
         dbUrl = new String(Arrays.copyOfRange(payload, 131, 163)).trim();
         dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
-        radioTime = payload[168];
-        baudrate = payload[169];
+        radioTime = payload[167];
+        baudrate = payload[168];
         //TODO : baudrate 까지 ? -->169 가 맞지않나?
 
+
+//        sid = new String(Arrays.copyOfRange(payload, 16, 32)).trim();
+//        pname = new String(Arrays.copyOfRange(payload, 32, 48)).trim();
+//        px = new String(Arrays.copyOfRange(payload, 48, 58)).trim();
+//        py = new String(Arrays.copyOfRange(payload, 58, 68)).trim();
+//        sn = new String(Arrays.copyOfRange(payload, 68, 92)).trim();
+//        period = payload[92];
+//        samplingTime = payload[93];
+//        sampleRate = payload[94];
+//        serverUrl = new String(Arrays.copyOfRange(payload, 95, 127)).trim();
+//        serverPort = new String(Arrays.copyOfRange(payload, 127, 131)).trim();
+//        dbUrl = new String(Arrays.copyOfRange(payload, 131, 163)).trim();
+//        dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
+//        radioTime = payload[167];
+//        baudrate = payload[168];
     }
 
     @Override
