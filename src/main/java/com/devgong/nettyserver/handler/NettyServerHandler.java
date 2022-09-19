@@ -53,6 +53,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
 
+
+    String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder();
+        for(final byte b: a)
+            sb.append(String.format("%02x ", b&0xff));
+        return sb.toString();
+    }
+
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
@@ -90,9 +99,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
 
 
+
+
+
+
                 for (int i = 0; i < bytes.length; i++) {
                     log.info("bytes : {}", (char) bytes[i]);
+
                 }
+                log.info("bytes2 : {}", byteArrayToHex(bytes));
 
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
 
