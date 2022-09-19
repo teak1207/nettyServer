@@ -4,7 +4,6 @@ import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.protocol.NakPacket;
 import com.devgong.nettyserver.protocol.Packet;
 import com.devgong.nettyserver.protocol.PacketFlag;
-import com.devgong.nettyserver.protocol.RequestType;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.service.DataSensorListService;
@@ -88,7 +87,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("readable bytes length : {}", bytes.length);
                 log.info("FLAG : {}", (char) readFlag);
                 log.info("bytes.length : {}", bytes.length);
-                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
+//                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
 
 
                 for (int i = 0; i < bytes.length; i++) {
@@ -123,30 +122,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 if (preInstallDeviceInfos != null) {
-                    log.info("response length : {}", response);
-                    log.info("response length : {}", response.serialize().length+2);
 
-
-
-                    Packet<PreInstallResponse> responsePacket = new Packet<>(
-                            PacketFlag.PREINSTALL,
-                            response.getSn(),
-                            LocalDateTime.now(),
-                            RequestType.SERVER,
-                            response.serialize().length + 2,
-                            response
-                    );
-                    int sum = 0;
-                    for (byte a : responsePacket.serialize()) {
-//                        log.info("responsePacket : {}", a);
-                        log.info("responsePacket(char) : {}", (char) a);
-                    }
-                    log.info("responsepacket_length : {}" , responsePacket.serialize().length);
-
-                    ctx.write(Unpooled.copiedBuffer(responsePacket.serialize()));
-//                    ctx.write(response);
-                    ctx.flush();
-                    mBuf.release();
                 } else {
                     ctx.writeAndFlush(new NakPacket("0".repeat(24), LocalDateTime.now()).serialize());
                     System.out.println("[CheckSum][FAIL] : Not Accurate");

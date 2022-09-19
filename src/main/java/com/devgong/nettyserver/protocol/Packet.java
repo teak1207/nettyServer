@@ -92,10 +92,11 @@ public class Packet<T extends Serializable<T>> {
         // TODO : 32는 센서랑 실제 차이는 값 ...
         byte a = 32;
         int accumulation = a;
+
         for (byte b : serializeExceptChecksum()) {
-//            log.info("accumulation : {} ", accumulation);
-//            log.info("validateChecksum byte : {}", b);
-//            log.info("validateChecksum byte(char) : {}", (char) b);
+            log.info("accumulation : {} ", accumulation);
+            log.info("validateChecksum byte : {}", b);
+            log.info("validateChecksum byte(char) : {}", (char) b);
             accumulation += b;
         }
 
