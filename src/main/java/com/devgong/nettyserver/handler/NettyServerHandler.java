@@ -11,7 +11,6 @@ import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
-import com.devgong.nettyserver.util.CalcCheckSum;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -209,7 +208,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 preinstallReportModel.setBaudrate(baudrate);
                 preinstallReportModel.setPcbVersion(pcbVersion);
 
-                System.out.println("[DB에 들어갈 값]" + preinstallReportModel.toString());
+                System.out.println("[DB에 들어갈 값]" + preinstallReportModel);
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
