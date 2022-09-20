@@ -61,9 +61,9 @@ public class Packet<T extends Serializable<T>> {
 
         log.info("input checksum : {}, {}", checksum[0], checksum[1]);
 
-        /*if (!validateChecksum()) {
+        if (!validateChecksum()) {
             throw new IllegalStateException("Invalid checksum error!");
-        }*/
+        }
     }
 
     public byte[] serialize() {
@@ -114,7 +114,8 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private byte[] makeChecksum() {
-        int accumulation = 32;
+//        int accumulation = 32;
+        int accumulation = 0;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
         }
