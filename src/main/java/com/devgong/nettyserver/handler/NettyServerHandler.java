@@ -123,7 +123,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     log.info("response.toString() ***: {}", response);
                     log.info("response.serialize() ***: {}", response.serialize());
-                    Packet<PreInstallResponse> responsePacket = new Packet<>(PacketFlag.PREINSTALL, response.getSid(), LocalDateTime.now(), RequestType.SERVER, response.serialize().length + 2, response);
+                    Packet<PreInstallResponse> responsePacket = new Packet<>(
+                            PacketFlag.PREINSTALL,
+                            response.getSn(),
+                            LocalDateTime.now(),
+                            RequestType.SERVER,
+                            response.serialize().length + 2,
+                            response
+                    );
                     log.info("responsePacket.serialize() ***: {}", responsePacket.serialize());
 
                     for (byte a : responsePacket.serialize()) {
@@ -141,6 +148,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
+
+
+
+
+
 
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
