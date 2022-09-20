@@ -10,6 +10,7 @@ import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
+import com.devgong.nettyserver.util.CalcCheckSum;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -54,12 +55,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     static int framesize;
 
 
-    String byteArrayToHex(byte[] a) {
-        StringBuilder sb = new StringBuilder();
-        for(final byte b: a)
-            sb.append(String.format("%02x ", b&0xff));
-        return sb.toString();
-    }
 
 
     @Override
@@ -95,19 +90,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("readable bytes length : {}", bytes.length);
                 log.info("FLAG : {}", (char) readFlag);
-                log.info("bytes.length : {}", bytes.length);
 //                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
-
-
-
-
-
 
                 for (int i = 0; i < bytes.length; i++) {
                     log.info("bytes : {}", (char) bytes[i]);
-
                 }
-                log.info("bytes2 : {}", byteArrayToHex(bytes));
+                log.info("bytes2 : {}", CalcCheckSum.byteArrayToHex(bytes));
 
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
 
