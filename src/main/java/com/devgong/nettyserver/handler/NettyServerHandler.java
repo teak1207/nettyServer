@@ -131,9 +131,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
 
                     log.info("responsepacket_length : {}", responsePacket.serialize().length);
-                    ctx.write(Unpooled.copiedBuffer(responsePacket.serialize()));
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
 //                    ctx.write(response);
-                    ctx.flush();
+//                    ctx.flush();
                     mBuf.release();
 
                 } else {
