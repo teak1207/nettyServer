@@ -19,7 +19,7 @@ public class CalcCheckSum {
     }
 
 
-    public byte[] makeChecksum(String totalData) {
+    /*public byte[] makeChecksum(String totalData) {
         int total = 0;
         for (int i = 0; i < totalData.length(); i++) {
             total += totalData.charAt(i);    // 문자열 10진수로 바꿔서 저장
@@ -49,6 +49,6 @@ public class CalcCheckSum {
 
         return totalByte;
 
-    }
+    }*/
 
 }

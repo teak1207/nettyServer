@@ -90,8 +90,8 @@ public class Packet<T extends Serializable<T>> {
 
     private boolean validateChecksum() {
         // TODO : 32는 센서랑 실제 차이는 값 ...
-        byte a = 32;
-        int accumulation = a;
+//        byte a = 32;
+        int accumulation = 0;
 
         for (byte b : serializeExceptChecksum()) {
             log.info("accumulation : {} ", accumulation);
@@ -100,8 +100,8 @@ public class Packet<T extends Serializable<T>> {
             accumulation += b;
         }
 
-        log.info("accumulation : {}", accumulation);
-        log.info("accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));
+        log.info("accumulation : {}", accumulation); //3295
+        log.info("accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
 
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
     }
