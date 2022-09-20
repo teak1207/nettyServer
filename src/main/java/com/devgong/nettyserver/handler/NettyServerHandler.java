@@ -121,8 +121,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 if (preInstallDeviceInfos != null) {
 
-                    log.info("response.toString() ***: {}", response);
-                    log.info("response.serialize() ***: {}", response.serialize());
+//                    log.info("response.toString() ***: {}", response);
+//                    log.info("response.serialize() ***: {}", response.serialize());
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
                             response.getSn(),
@@ -131,12 +131,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.serialize().length + 2,
                             response
                     );
-                    log.info("responsePacket.serialize() ***: {}", responsePacket.serialize());
 
                     for (byte a : responsePacket.serialize()) {
                         log.info("responsePacket(char) : {}", (char) a);
                     }
 
+                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
                     log.info("responsepacket_length : {}", responsePacket.serialize().length);
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
 //                    ctx.write(response);
