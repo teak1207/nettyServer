@@ -123,17 +123,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     log.info("response.toString() ***: {}", response);
                     log.info("response.serialize() ***: {}", response.serialize());
-                    Packet<PreInstallResponse> responsePacket = new Packet<>(
-                            PacketFlag.PREINSTALL,
-                            response.getSid(),
-                            LocalDateTime.now(),
-                            RequestType.SERVER,
-                            response.serialize().length + 2,
-                            response
-                    );
+                    Packet<PreInstallResponse> responsePacket = new Packet<>(PacketFlag.PREINSTALL, response.getSid(), LocalDateTime.now(), RequestType.SERVER, response.serialize().length + 2, response);
+                    log.info("responsePacket.serialize() ***: {}", responsePacket.serialize());
+
                     for (byte a : responsePacket.serialize()) {
                         log.info("responsePacket(char) : {}", (char) a);
                     }
+
                     log.info("responsepacket_length : {}", responsePacket.serialize().length);
                     ctx.write(Unpooled.copiedBuffer(responsePacket.serialize()));
 //                    ctx.write(response);
