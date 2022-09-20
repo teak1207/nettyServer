@@ -4,6 +4,7 @@ import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.protocol.NakPacket;
 import com.devgong.nettyserver.protocol.Packet;
 import com.devgong.nettyserver.protocol.PacketFlag;
+import com.devgong.nettyserver.protocol.RequestType;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.service.DataSensorListService;
@@ -53,8 +54,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
-
-
 
 
     @Override
@@ -125,6 +124,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 if (preInstallDeviceInfos != null) {
+
+                    Packet<PreInstallResponse> responsePacket = new Packet<>(
+                            PacketFlag.PREINSTALL,
+                            response.getSid(),
+                            LocalDateTime.now(),
+                            RequestType.SERVER,
+                            response.serialize().length + 2,
+                            response
+                    );
+                    for (byte a : responsePacket.serialize()) {
+                        log.info("responsePacket(char) : {}", (char) a);
+                    }
+                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
+                    ctx.write(Unpooled.copiedBuffer(responsePacket.serialize()));
+//                    ctx.write(response);
+                    ctx.flush();
+                    mBuf.release();
 
                 } else {
                     ctx.writeAndFlush(new NakPacket("0".repeat(24), LocalDateTime.now()).serialize());

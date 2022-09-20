@@ -94,8 +94,6 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;
 
         for (byte b : serializeExceptChecksum()) {
-            log.info("accumulation : {} ", accumulation);
-            log.info("validateChecksum byte : {}", b);
             log.info("validateChecksum byte(char) : {}", (char) b);
             accumulation += b;
         }
