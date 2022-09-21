@@ -76,11 +76,11 @@ public class Packet<T extends Serializable<T>> {
 
     private byte[] serializeExceptChecksum() {
         byte[] serializedParameter = parameter.serialize();
-        byte[] serialized = new byte[45 + serializedParameter.length];
+        byte[] serialized = new byte[45 + serializedParameter.length]; // 헤더 +바디 전부 담을 공간
 
-        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
+        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 23);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 3);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
