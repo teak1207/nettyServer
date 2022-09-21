@@ -134,6 +134,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     for (byte a : responsePacket.serialize()) {
                         log.info("responsePacket(char) : {}", (char) a);
+                        log.info("responsePacket(hex) : {}", String.format("%02x", a));
                     }
 
                     log.info("responsePacket.serialize() : {}", responsePacket.serialize());
@@ -148,10 +149,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
-
-
-
-
 
 
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
