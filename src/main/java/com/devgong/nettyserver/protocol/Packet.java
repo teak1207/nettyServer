@@ -127,7 +127,6 @@ public class Packet<T extends Serializable<T>> {
         if (hex.length() == 3) {
             first = hex.substring(0, 1);
             second = hex.substring(1, 3);
-
             log.info("first , second : {} {}",first,second);
         } else if (hex.length() == 4) {
             first = hex.substring(0, 2);
