@@ -83,8 +83,8 @@ public class Packet<T extends Serializable<T>> {
         byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 3);
 
         serialized[0] = flag.getFlag();
-        System.arraycopy(sensorIdBytes, 0, serialized, 1, 23);
-        System.arraycopy(dateTimeBytes, 0, serialized, 25, 14);
+        System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
+        System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
         serialized[40] = requestType.getType();
         System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
         System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
