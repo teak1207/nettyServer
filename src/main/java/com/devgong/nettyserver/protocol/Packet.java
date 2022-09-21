@@ -1,5 +1,6 @@
 package com.devgong.nettyserver.protocol;
 
+import com.devgong.nettyserver.util.CalcCheckSum;
 import lombok.ToString;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class Packet<T extends Serializable<T>> {
     int parameterLength; // 4 byte
     T parameter;
     byte[] checksum; // 2 byte
-
+//TODO : parameterLength에 Unsigned 처리함.
     public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
@@ -30,7 +31,7 @@ public class Packet<T extends Serializable<T>> {
         this.requestType = requestType;
         this.parameter = parameter;
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
-        this.parameterLength = parameterLength;
+        this.parameterLength = (int) CalcCheckSum.unsigned32(parameterLength);
         this.checksum = makeChecksum();
 
         if (!validateChecksum()) {

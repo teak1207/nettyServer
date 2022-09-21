@@ -56,9 +56,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     static int framesize;
 
 
-    public long unsigned32(int n) {
-        return n & 0xFFFFFFFFL;
-    }
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -128,7 +126,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    log.info("response.toString() ***: {}", response);
                     log.info("response.serialize() ***: {}", response.serialize().length);
                     log.info("response.serialize().length + 2: {}", response.serialize().length+2);
-                    log.info("response.serialize().length + 2: {}", unsigned32(response.serialize().length+2));
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
                             response.getSn(),
