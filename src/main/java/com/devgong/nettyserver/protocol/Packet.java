@@ -118,20 +118,21 @@ public class Packet<T extends Serializable<T>> {
 //        int accumulation = 0;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
+            log.info("b(hex) : {}", String.format("%02x", b));
         }
 
         String hex = Integer.toHexString(accumulation);
         String first = "";
         String second = "";
-
+        log.info("hex : {}", hex);
         if (hex.length() == 3) {
             first = hex.substring(0, 1);
             second = hex.substring(1, 3);
-            log.info("first , second : {} {}",first,second);
+            log.info("first , 1 : {} {}", first, second);
         } else if (hex.length() == 4) {
             first = hex.substring(0, 2);
             second = hex.substring(2, 4);
-            log.info("first , second : {} {}",first,second);
+            log.info("first , 2 : {} {}", first, second);
         }
 
         // "c" -> "0x0c" (byte)
