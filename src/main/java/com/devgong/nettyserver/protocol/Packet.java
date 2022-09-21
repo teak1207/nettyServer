@@ -119,11 +119,16 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
             log.info("b(hex) : {}", String.format("%02x", b));
+            log.info("accumulation : {}", accumulation);
         }
 
         String hex = Integer.toHexString(accumulation);
         String first = "";
         String second = "";
+
+        //TODO : 데이터를 일일히 체크했을 시 ,문제 없음, hex를 찍었더니 값 불일치 발생.
+
+
         log.info("hex : {}", hex);
         if (hex.length() == 3) {
             first = hex.substring(0, 1);
