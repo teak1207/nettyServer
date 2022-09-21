@@ -114,7 +114,7 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private byte[] makeChecksum() {
-        int accumulation = 32;   // 32의 차이가 이건가 싶어서 주석처리
+        int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
 //        int accumulation = 0;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
