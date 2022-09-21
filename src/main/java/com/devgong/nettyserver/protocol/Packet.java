@@ -76,11 +76,11 @@ public class Packet<T extends Serializable<T>> {
 
     private byte[] serializeExceptChecksum() {
         byte[] serializedParameter = parameter.serialize();
-        byte[] serialized = new byte[45 + serializedParameter.length]; // 헤더 +바디 전부 담을 공간
+        byte[] serialized = new byte[45 + serializedParameter.length];
 
-        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 23);
-        byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 14);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 3);
+        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
+        byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 24);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
@@ -127,9 +127,12 @@ public class Packet<T extends Serializable<T>> {
         if (hex.length() == 3) {
             first = hex.substring(0, 1);
             second = hex.substring(1, 3);
+
+            log.info("first , second : {} {}",first,second);
         } else if (hex.length() == 4) {
             first = hex.substring(0, 2);
             second = hex.substring(2, 4);
+            log.info("first , second : {} {}",first,second);
         }
 
         // "c" -> "0x0c" (byte)
