@@ -19,11 +19,11 @@ public class Packet<T extends Serializable<T>> {
     String sensorId; // 24 byte
     LocalDateTime dateTime; // 15 byte
     RequestType requestType; // 1 byte
-    int parameterLength; // 4 byte
+    long parameterLength; // 4 byte
     T parameter;
     byte[] checksum; // 2 byte
 
-    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
+    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
         this.dateTime = dateTime;
@@ -80,7 +80,7 @@ public class Packet<T extends Serializable<T>> {
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(longToByteArray(parameterLength), 0, 24);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
@@ -146,6 +146,21 @@ public class Packet<T extends Serializable<T>> {
 
         return totalByte;
     }
+
+    public static byte[] longToByteArray(long data) {
+
+        return new byte[]{
+                (byte) ((data >> 56) & 0xff),
+                (byte) ((data >> 48) & 0xff),
+                (byte) ((data >> 40) & 0xff),
+                (byte) ((data >> 32) & 0xff),
+                (byte) ((data >> 24) & 0xff),
+                (byte) ((data >> 16) & 0xff),
+                (byte) ((data >> 8) & 0xff),
+                (byte) ((data >> 0) & 0xff),
+        };
+    }
+
 
     public static byte[] intToByteArray(int value) {
         return new byte[]{

@@ -39,6 +39,11 @@ dependencies {
     //2022-08-18
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jdbc', version: '2.6.6'
 
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core  2022-09-22, unsigned 처리 위한 라이브러리
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
+
+
+
 }
 
 tasks.named('test') {
