@@ -24,6 +24,12 @@ public class Packet<T extends Serializable<T>> {
     T parameter;
     byte[] checksum; // 2 byte
 
+
+
+    public long unsigned32(int n) {
+        return n & 0xFFFFFFFFL;
+    }
+
     public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
@@ -31,7 +37,10 @@ public class Packet<T extends Serializable<T>> {
         this.requestType = requestType;
         this.parameter = parameter;
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
-        this.parameterLength = parameterLength;
+        this.parameterLength = unsigned32(parameterLength);
+
+
+
         this.checksum = makeChecksum();
 
     }
