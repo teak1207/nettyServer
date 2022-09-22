@@ -93,8 +93,6 @@ public class Packet<T extends Serializable<T>> {
     }
 
     private boolean validateChecksum() {
-        // TODO : 32는 센서랑 실제 차이는 값 ...
-//        byte a = 32;
         int accumulation = 0;
 
         for (byte b : serializeExceptChecksum()) {
@@ -118,8 +116,6 @@ public class Packet<T extends Serializable<T>> {
 //        int accumulation = 0;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
-//            log.info("b(hex) : {}", String.format("%02x", b));
-//            log.info("accumulation : {}", accumulation);
         }
 
         String hex = Integer.toHexString(accumulation);
