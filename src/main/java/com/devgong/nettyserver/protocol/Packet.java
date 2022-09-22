@@ -33,10 +33,6 @@ public class Packet<T extends Serializable<T>> {
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
         this.parameterLength = parameterLength;
         this.checksum = makeChecksum();
-
-        if (!validateChecksum()) {
-            throw new IllegalStateException("Invalid checksum error!");
-        }
     }
 
     public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
@@ -100,12 +96,13 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;
 
         for (byte b : serializeExceptChecksum()) {
-//            log.info("validateChecksum byte(char) : {}", (char) b);
+            log.info("validateChecksum byte(char) : {}", (char) b);
+            log.info("validateChecksum byte(char) : {}",  b);
             accumulation += b;
         }
 
-        log.info("accumulation : {}", accumulation); //3295
-        log.info("accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
+        log.info("validateChecksum accumulation : {}", accumulation); //3295
+        log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
 
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
     }
@@ -117,7 +114,6 @@ public class Packet<T extends Serializable<T>> {
 
     private byte[] makeChecksum() {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
-//        int accumulation = 0;
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
         }

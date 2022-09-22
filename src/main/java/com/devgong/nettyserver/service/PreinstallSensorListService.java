@@ -18,10 +18,6 @@ public class PreinstallSensorListService {
     private final ReportRepository reportRepository;
 
     public PreInstallSetModel preInstallfindData(String modemnum) {
-        /*
-         * model -> repository 가서 값을 찾기위한 Object Value.
-         * totaldata -> 넘어오는 데이터의 길이로 정확한 값이 넘어왔는지를 판단하기 위한 value
-         */
 
         PreInstallSetModel preinstallSetModel = new PreInstallSetModel();
 
