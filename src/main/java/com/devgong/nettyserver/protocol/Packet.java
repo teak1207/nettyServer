@@ -119,6 +119,7 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
+            log.info("accumulation byte(char) : {}", (char) b);
             log.info("accumulation byte(char) : {}",  accumulation);
         }
 
