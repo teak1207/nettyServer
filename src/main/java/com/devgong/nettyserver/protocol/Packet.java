@@ -30,14 +30,14 @@ public class Packet<T extends Serializable<T>> {
         return n & 0xFFFFFFFFL;
     }
 
-    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
+    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
         this.dateTime = dateTime;
         this.requestType = requestType;
         this.parameter = parameter;
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
-        this.parameterLength = unsigned32(parameterLength);
+        this.parameterLength = parameterLength;
 
 
 

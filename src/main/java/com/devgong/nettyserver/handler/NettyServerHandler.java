@@ -55,7 +55,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
 
-
+    public long unsigned32(int n) {
+        return n & 0xFFFFFFFFL;
+    }
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
@@ -129,7 +131,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.getSn(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
-                            response.serialize().length + 2,  //4 byte
+                            unsigned32(response.serialize().length + 2),  //4 byte
 //                            response.serialize().length + 2,  //4 byte
                             response
                     );
