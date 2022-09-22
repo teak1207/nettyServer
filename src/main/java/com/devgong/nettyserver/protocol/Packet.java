@@ -33,7 +33,7 @@ public class Packet<T extends Serializable<T>> {
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
         this.parameterLength = parameterLength;
         this.checksum = makeChecksum();
-        log.info("parameter : {}", parameter);
+        log.info("parameterLength : {}", parameterLength);
     }
 
     public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
