@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -38,9 +39,6 @@ public class Packet<T extends Serializable<T>> {
         this.parameter = parameter;
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
         this.parameterLength = parameterLength;
-
-
-
         this.checksum = makeChecksum();
 
     }
@@ -86,11 +84,15 @@ public class Packet<T extends Serializable<T>> {
         byte[] serialized = new byte[45 + serializedParameter.length];
 
         //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
-        int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
+//        int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
+
+
+        byte[] array = new BigInteger(String.valueOf(parameterLength)).toByteArray();
+
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(test), 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(array, 0, 24);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
