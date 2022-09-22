@@ -89,8 +89,8 @@ public class Packet<T extends Serializable<T>> {
 
         byte[] array = new BigInteger(String.valueOf(parameterLength)).toByteArray();
         for (byte a : array) {
-            log.info("array(char) : {}",  a);
-            log.info("array(hex) : {}",a & 0xff);
+            log.info("qqq(char) : {}",  a);
+            log.info("qqq(hex) : {}",a & 0xff);
         }
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
