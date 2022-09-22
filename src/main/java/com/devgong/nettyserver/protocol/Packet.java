@@ -24,7 +24,7 @@ public class Packet<T extends Serializable<T>> {
     T parameter;
     byte[] checksum; // 2 byte
 
-    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
+    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
         this.dateTime = dateTime;
@@ -33,6 +33,7 @@ public class Packet<T extends Serializable<T>> {
         // TODO : Parameter Length 어떻게 byte[4] 로 변환?
         this.parameterLength = parameterLength;
         this.checksum = makeChecksum();
+        log.info("parameter : {}", parameter);
     }
 
     public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
