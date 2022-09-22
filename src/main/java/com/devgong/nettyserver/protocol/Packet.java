@@ -88,14 +88,15 @@ public class Packet<T extends Serializable<T>> {
 
 
         byte[] array = new BigInteger(String.valueOf(parameterLength)).toByteArray();
-        for (byte a : array) {
-            log.info("qqq(char) : {}",  a);
-            log.info("qqq(hex) : {}",a & 0xff);
+        for (int i  =0 ;i<array.length;i++) {
+
+            array[i] = (byte) (array[i] & 0xff);
+
         }
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(array, 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(array , 0, 24);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
