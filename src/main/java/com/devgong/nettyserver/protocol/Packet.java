@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @Value
@@ -19,11 +20,11 @@ public class Packet<T extends Serializable<T>> {
     String sensorId; // 24 byte
     LocalDateTime dateTime; // 15 byte
     RequestType requestType; // 1 byte
-    int parameterLength; // 4 byte
+    long parameterLength; // 4 byte
     T parameter;
     byte[] checksum; // 2 byte
 
-    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, int parameterLength, T parameter) {
+    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
         this.dateTime = dateTime;
@@ -78,9 +79,12 @@ public class Packet<T extends Serializable<T>> {
         byte[] serializedParameter = parameter.serialize();
         byte[] serialized = new byte[45 + serializedParameter.length];
 
+        //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
+        int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
+
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(parameterLength), 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(test), 0, 24);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
