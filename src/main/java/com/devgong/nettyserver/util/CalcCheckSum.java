@@ -20,7 +20,7 @@ public class CalcCheckSum {
 
 
     public  static long unsigned32(int n) {
-        return n & 0xFFFFFFFFL;
+        return ((long)n & 0xFFFFFFFFL);
     }
 
 }

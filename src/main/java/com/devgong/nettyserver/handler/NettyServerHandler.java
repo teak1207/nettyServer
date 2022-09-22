@@ -131,7 +131,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.getSn(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
-                            response.serialize().length + 2,
+                            response.serialize().length + 2,  //4 byte
                             response
                     );
 
