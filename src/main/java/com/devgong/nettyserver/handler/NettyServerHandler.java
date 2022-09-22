@@ -56,8 +56,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     static int framesize;
 
 
-
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
@@ -125,23 +123,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 //                    log.info("response.toString() ***: {}", response);
                     log.info("response.serialize() ***: {}", response.serialize().length);
-                    log.info("response.serialize().length + 2: {}", response.serialize().length+2);
+                    log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
                             response.getSn(),
                             LocalDateTime.now(),
                             RequestType.SERVER,
-                            response.serialize().length + 2& 0xffffffffL,  //4 byte
+                            response.serialize().length + 2 & 0xffffffffL,  //4 byte
                             response
                     );
 
-//                    for (byte a : responsePacket.serialize()) {
-//                        log.info("responsePacket(char) : {}", (char) a);
-//                        log.info("responsePacket(hex) : {}", String.format("%02x", a));
-//                    }
+                    for (byte a : responsePacket.serialize()) {
+                        log.info("responsePacket(char) : {}", (char) a);
+                        log.info("responsePacket(hex) : {}", String.format("%02x", a));
+                    }
 
-//                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
-//                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
+                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
+                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
