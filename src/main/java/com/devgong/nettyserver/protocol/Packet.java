@@ -69,7 +69,6 @@ public class Packet<T extends Serializable<T>> {
         byte[] serialized = new byte[2 + serializeExceptChecksum.length];
         System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
         System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
-        log.info("parameterLength : {}", parameterLength);
         return serialized;
     }
 
@@ -100,7 +99,9 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             log.info("validateChecksum byte(char) : {}", (char) b);
             log.info("validateChecksum byte(char) : {}",  b);
+
             accumulation += b;
+
         }
 
         log.info("validateChecksum accumulation : {}", accumulation); //3295
@@ -118,6 +119,7 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
         for (byte b : serializeExceptChecksum()) {
             accumulation += b;
+            log.info("accumulation byte(char) : {}",  accumulation);
         }
 
         String hex = Integer.toHexString(accumulation);
