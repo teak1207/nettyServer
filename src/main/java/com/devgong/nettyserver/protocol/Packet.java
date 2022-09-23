@@ -84,6 +84,8 @@ public class Packet<T extends Serializable<T>> {
         //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
         int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
 
+
+
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
         byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(test), 0, 24);
@@ -128,6 +130,8 @@ public class Packet<T extends Serializable<T>> {
             log.info("accumulation byte(char) : {}", (char) b);
             log.info("accumulation byte(char) : {}", accumulation);
         }
+        log.info("test222 : {}", accumulation);
+
 
         String hex = Integer.toHexString(accumulation);
         String first = "";
