@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -24,7 +23,6 @@ public class Packet<T extends Serializable<T>> {
     long parameterLength; // 4 byte
     T parameter;
     byte[] checksum; // 2 byte
-
 
 
     public long unsigned32(int n) {
@@ -84,19 +82,11 @@ public class Packet<T extends Serializable<T>> {
         byte[] serialized = new byte[45 + serializedParameter.length];
 
         //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
-//        int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
-
-
-        byte[] array = new BigInteger(String.valueOf(parameterLength)).toByteArray();
-        for (int i  =0 ;i<array.length;i++) {
-
-            array[i] = (byte) (array[i] & 0xff);
-
-        }
+        int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(array , 0, 24);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(test), 0, 24);
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
@@ -113,7 +103,7 @@ public class Packet<T extends Serializable<T>> {
 
         for (byte b : serializeExceptChecksum()) {
             log.info("validateChecksum byte(char) : {}", (char) b);
-            log.info("validateChecksum byte(char) : {}",  b);
+            log.info("validateChecksum byte(char) : {}", b);
 
             accumulation += b;
 
@@ -133,9 +123,10 @@ public class Packet<T extends Serializable<T>> {
     private byte[] makeChecksum() {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
         for (byte b : serializeExceptChecksum()) {
-            accumulation += b;
+            //todo : b를 unsigned  처리를 해보자
+            accumulation += (long) (b & 0xff);
             log.info("accumulation byte(char) : {}", (char) b);
-            log.info("accumulation byte(char) : {}",  accumulation);
+            log.info("accumulation byte(char) : {}", accumulation);
         }
 
         String hex = Integer.toHexString(accumulation);
