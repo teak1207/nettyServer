@@ -90,6 +90,11 @@ public class Packet<T extends Serializable<T>> {
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
         byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray(test), 0, 24);
 
+        for(byte c : paramterLengthBytes){
+            log.info("test666 : {}", c);
+        }
+
+
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
         System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
