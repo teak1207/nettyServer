@@ -93,6 +93,7 @@ public class Packet<T extends Serializable<T>> {
         for (byte c : paramterLengthBytes) {
             log.info("test666 : {}", c);
         }
+        log.info("paramterLengthBytes.length : {}", paramterLengthBytes.length);
 
 
         serialized[0] = flag.getFlag();
