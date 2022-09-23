@@ -85,6 +85,7 @@ public class Packet<T extends Serializable<T>> {
         int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
 
         log.info("test555 : {}", test);
+        log.info("test555_contrast : {}", parameterLength);
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
