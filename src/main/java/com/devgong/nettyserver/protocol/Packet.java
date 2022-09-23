@@ -89,10 +89,10 @@ public class Packet<T extends Serializable<T>> {
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength & 0xff), 0, 4);
+        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
 
         for (byte c : paramterLengthBytes) {
-            log.info("test666 : {}", c);
+            log.info("test666 : {}", c & 0xff);
         }
         log.info("paramterLengthBytes.length : {}", paramterLengthBytes.length);
 
@@ -100,7 +100,6 @@ public class Packet<T extends Serializable<T>> {
 //        for(int i =0; i< paramterLengthBytes.length;i++){
 //            res = (res*10) + ((paramterLengthBytes[i] & 0xff));
 //        }
-
 
 
         serialized[0] = flag.getFlag();
@@ -139,7 +138,7 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
         for (byte b : serializeExceptChecksum()) {
             //todo : b를 unsigned  처리를 해보자
-            accumulation += b;
+            accumulation += b & 0xff;
             log.info("accumulation byte(char) : {}", (char) b);
             log.info("accumulation byte(char) : {}", accumulation);
         }
