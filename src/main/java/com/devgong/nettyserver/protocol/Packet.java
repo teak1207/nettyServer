@@ -82,9 +82,9 @@ public class Packet<T extends Serializable<T>> {
         byte[] serialized = new byte[45 + serializedParameter.length];
 
         //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
-//        int test = Long.valueOf(Optional.ofNullable(parameterLength).orElse(0L)).intValue();
+        int test = Optional.of(parameterLength).orElse(0L).intValue();
 
-//        log.info("test555 : {}", test);
+        log.info("test555 : {}", test);
         log.info("test555_contrast : {}", parameterLength);
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
