@@ -59,6 +59,8 @@ public class Packet<T extends Serializable<T>> {
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
         log.info("input checksum : {}, {}", checksum[0], checksum[1]);
+        log.info("packet : {}, {}", packet[0], packet[219]);
+
 
         if (!validateChecksum()) {
             throw new IllegalStateException("Invalid checksum error!");
