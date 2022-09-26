@@ -167,6 +167,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 for(byte a : bytes){
                     log.info("PreInstallReportRequest : {}" , a);
+                    log.info("PreInstallReportRequest : {}" , (char)a);
                 }
 
 
