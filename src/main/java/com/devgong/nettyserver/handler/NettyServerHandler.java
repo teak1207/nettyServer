@@ -12,7 +12,6 @@ import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
-import com.devgong.nettyserver.util.CalcCheckSum;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -33,7 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 

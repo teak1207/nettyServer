@@ -25,10 +25,6 @@ public class Packet<T extends Serializable<T>> {
     byte[] checksum; // 2 byte
 
 
-    public long unsigned32(int n) {
-        return n & 0xFFFFFFFFL;
-    }
-
     public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
@@ -51,7 +47,7 @@ public class Packet<T extends Serializable<T>> {
         dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
         requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[39]).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
-        parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44));
+        parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44))& 0xff;
 
         try {
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(byte[].class);
@@ -139,7 +135,7 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             //todo : b를 unsigned  처리를 해보자
             accumulation += b & 0xff;
-            log.info("accumulation byte(char) : {}", (char) b);
+            log.info("accumulation byte(char) : {}", (char) b & 0xff);
             log.info("accumulation byte(char) : {}", accumulation);
         }
         log.info("test222 : {}", accumulation);

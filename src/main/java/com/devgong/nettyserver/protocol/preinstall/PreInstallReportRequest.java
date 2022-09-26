@@ -38,15 +38,15 @@ public class PreInstallReportRequest implements Serializable<PreInstallReportReq
             throw new IllegalArgumentException("PreInstallReportRequest payload error!");
         }
 
-        debugMessage = new String(Arrays.copyOfRange(payload, 0, 13)).trim();
+        debugMessage = new String(Arrays.copyOfRange(payload, 0, 13));
 
-        recordTime1 = new String(Arrays.copyOfRange(payload, 13, 17)).trim();
-        recordTime2 = new String(Arrays.copyOfRange(payload, 17, 21)).trim();
-        recordTime3 = new String(Arrays.copyOfRange(payload, 21, 25)).trim();
-        fmRadio = new String(Arrays.copyOfRange(payload, 25, 29)).trim();
+        recordTime1 = new String(Arrays.copyOfRange(payload, 13, 17));
+        recordTime2 = new String(Arrays.copyOfRange(payload, 17, 21));
+        recordTime3 = new String(Arrays.copyOfRange(payload, 21, 25));
+        fmRadio = new String(Arrays.copyOfRange(payload, 25, 29));
 
-        firmwareVersion = new String(Arrays.copyOfRange(payload, 29, 35)).trim();
-        batteryValue = new String(Arrays.copyOfRange(payload, 35, 41)).trim();
+        firmwareVersion = new String(Arrays.copyOfRange(payload, 29, 35));
+        batteryValue = new String(Arrays.copyOfRange(payload, 35, 41));
 
         modemRssi = payload[41];
 
@@ -54,15 +54,15 @@ public class PreInstallReportRequest implements Serializable<PreInstallReportReq
                 .orElseThrow(() -> new IllegalStateException("Invalid deviceStatus error : " + new String(Arrays.copyOfRange(payload, 42, 44))));
 
         samplingTime = payload[44];
-        px = new String(Arrays.copyOfRange(payload, 45, 55)).trim();
-        py = new String(Arrays.copyOfRange(payload, 55, 65)).trim();
-        pname = new String(Arrays.copyOfRange(payload, 65, 81)).trim();
-        sid = new String(Arrays.copyOfRange(payload, 81, 97)).trim();
+        px = new String(Arrays.copyOfRange(payload, 45, 55));
+        py = new String(Arrays.copyOfRange(payload, 55, 65));
+        pname = new String(Arrays.copyOfRange(payload, 65, 81));
+        sid = new String(Arrays.copyOfRange(payload, 81, 97));
         period = payload[97];
-        serverUrl = new String(Arrays.copyOfRange(payload, 98, 130)).trim();
-        serverPort = new String(Arrays.copyOfRange(payload, 130, 134)).trim();
-        dbUrl = new String(Arrays.copyOfRange(payload, 134, 166)).trim();
-        dbPort = new String(Arrays.copyOfRange(payload, 166, 170)).trim();
+        serverUrl = new String(Arrays.copyOfRange(payload, 98, 130));
+        serverPort = new String(Arrays.copyOfRange(payload, 130, 134));
+        dbUrl = new String(Arrays.copyOfRange(payload, 134, 166));
+        dbPort = new String(Arrays.copyOfRange(payload, 166, 170));
         radioTime = payload[170];
         baudrate = payload[171];
         baudrateNext = payload[172];
