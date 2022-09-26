@@ -135,15 +135,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response
                     );
 
-//                    for (byte a : responsePacket.serialize()) {
-//                        log.info("responsePacket(char) : {}", (char) a);
-//                        log.info("responsePacket(hex) : {}", String.format("%02x", a));
-//                        log.info("test333 : {}", a & 0xff);
-//                    }
-
-//                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
-//                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
-
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
@@ -164,13 +155,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
                 log.info("request : {}", request);
-
-//                preinstallReportModel.setSerialNumber(request.getSensorId());
-//                preinstallReportModel.setDateTime(request.getDateTime());
-//                preinstallReportModel.setDebugMsg(request.getParameter().getDebugMessage());
-//                preinstallReportModel.setRecordingTime1(request.getParameter().getRecordTime1());
-//                preinstallReportModel.setRecordingTime2(request.getParameter().getRecordTime2());
-//                preinstallReportModel.setRecordingTime3(request.getParameter().getRecordTime3());
 
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
