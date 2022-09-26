@@ -118,7 +118,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         preInstallDeviceInfos.getDbUrl(),
                         preInstallDeviceInfos.getDbPort(),
                         Integer.parseInt(preInstallDeviceInfos.getRadioTime()),
-                        Integer.parseInt((preInstallDeviceInfos.getBaudrate()).substring(0,3))
+                        Integer.parseInt((preInstallDeviceInfos.getBaudrate()).substring(0, 3))
                 );
 
                 if (preInstallDeviceInfos != null) {
@@ -162,32 +162,27 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                for(byte a : bytes){
-                    log.info("PreInstallReportRequest : {}" , a);
-                    log.info("PreInstallReportRequest : {}" , (char)a);
+                for (byte a : bytes) {
+                    log.info("PreInstallReportRequest : {}", a);
+                    log.info("PreInstallReportRequest : {}", (char) a);
                 }
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
-                log.info("request : {}" , request);
+                log.info("request : {}", request);
 
-                preinstallReportModel.setSerialNumber(request.getSensorId());
-                preinstallReportModel.setDateTime(request.getDateTime());
-                preinstallReportModel.setDebugMsg(request.getParameter().getDebugMessage());
-                preinstallReportModel.setRecordingTime1(request.getParameter().getRecordTime1());
-                preinstallReportModel.setRecordingTime2(request.getParameter().getRecordTime2());
-                preinstallReportModel.setRecordingTime3(request.getParameter().getRecordTime3());
-
-
-
-
+//                preinstallReportModel.setSerialNumber(request.getSensorId());
+//                preinstallReportModel.setDateTime(request.getDateTime());
+//                preinstallReportModel.setDebugMsg(request.getParameter().getDebugMessage());
+//                preinstallReportModel.setRecordingTime1(request.getParameter().getRecordTime1());
+//                preinstallReportModel.setRecordingTime2(request.getParameter().getRecordTime2());
+//                preinstallReportModel.setRecordingTime3(request.getParameter().getRecordTime3());
 
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
 
-
-
+                //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
                     byte ack = 8;
@@ -210,6 +205,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
                 String pname = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
                 byte chksum1 = (mBuf.readByte());
+
+
                 byte chksum2 = (mBuf.readByte());
 
                 String convertChk = String.format("%x%x", chksum1, chksum2);
