@@ -169,6 +169,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
+                log.info("request : {}" , request);
+
+
+
+
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
