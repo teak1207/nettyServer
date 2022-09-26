@@ -135,8 +135,8 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             //todo : b를 unsigned  처리를 해보자
             accumulation += b & 0xff;
-            log.info("accumulation byte(char) : {}", (char) b & 0xff);
-            log.info("accumulation byte(char) : {}", accumulation);
+//            log.info("accumulation byte(char) : {}", (char) b & 0xff);
+//            log.info("accumulation byte(char) : {}", accumulation);
         }
         log.info("test222 : {}", accumulation);
 
