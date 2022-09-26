@@ -84,17 +84,17 @@ public class Packet<T extends Serializable<T>> {
         //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
         int test = Optional.of(parameterLength).orElse(0L).intValue();
 
-        log.info("test555 : {}", test);
-        log.info("test555_contrast : {}", parameterLength);
+//        log.info("test555 : {}", test);
+//        log.info("test555_contrast : {}", parameterLength);
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
         byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
 
-        for (byte c : paramterLengthBytes) {
-            log.info("test666 : {}", c & 0xff);
-        }
-        log.info("paramterLengthBytes.length : {}", paramterLengthBytes.length);
+//        for (byte c : paramterLengthBytes) {
+//            log.info("test666 : {}", c & 0xff);
+//        }
+//        log.info("paramterLengthBytes.length : {}", paramterLengthBytes.length);
 
 //        int res=0;
 //        for(int i =0; i< paramterLengthBytes.length;i++){

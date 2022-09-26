@@ -5,6 +5,7 @@ import com.devgong.nettyserver.protocol.NakPacket;
 import com.devgong.nettyserver.protocol.Packet;
 import com.devgong.nettyserver.protocol.PacketFlag;
 import com.devgong.nettyserver.protocol.RequestType;
+import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.service.DataSensorListService;
@@ -55,9 +56,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     DataRefModel dataRefModel = new DataRefModel();
     static int framesize;
 
-    public long unsigned32(int n) {
-        return n & 0xFFFFFFFFL;
-    }
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
@@ -136,14 +134,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response
                     );
 
-                    for (byte a : responsePacket.serialize()) {
-                        log.info("responsePacket(char) : {}", (char) a);
-                        log.info("responsePacket(hex) : {}", String.format("%02x", a));
-                        log.info("test333 : {}", a & 0xff);
-                    }
+//                    for (byte a : responsePacket.serialize()) {
+//                        log.info("responsePacket(char) : {}", (char) a);
+//                        log.info("responsePacket(hex) : {}", String.format("%02x", a));
+//                        log.info("test333 : {}", a & 0xff);
+//                    }
 
-                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
-                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
+//                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
+//                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
@@ -157,65 +155,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
-                String serialNum = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                /*==== Body ====*/
-                String debugMessage = mBuf.readCharSequence(13, Charset.defaultCharset()).toString();
-                String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String fmRadio = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String firmWareVersion = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
-                String batteryVtg = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
-                String RSSI = mBuf.readCharSequence(1, Charset.defaultCharset()).toString(); //Number
-                String deviceStatus = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
-                String px = mBuf.readCharSequence(10, Charset.defaultCharset()).toString();
-                String py = mBuf.readCharSequence(10, Charset.defaultCharset()).toString();
-                String modemNumber = mBuf.readCharSequence(12, Charset.defaultCharset()).toString();
-                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //*
-                String period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
-                String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String DBUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
-                String DBPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String radioTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String baudrate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
-                String baudrateNext = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
-                String pcbVersion = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                byte chkSum1 = (mBuf.readByte());
-                byte chkSum2 = (mBuf.readByte());
+                byte[] bytes = new byte[mBuf.readableBytes()];
+                Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
-                // 체크썸 기능 빠짐
-                preinstallReportModel.setSerialNumber(serialNum);
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HHmmss");
-                LocalDateTime dateTime = LocalDateTime.parse(datetime, formatter);
-                preinstallReportModel.setDateTime(dateTime);
-                preinstallReportModel.setDebugMsg(debugMessage);
-                preinstallReportModel.setRecordingTime1(recordingTime1);
-                preinstallReportModel.setRecordingTime2(recordingTime2);
-                preinstallReportModel.setRecordingTime3(recordingTime3);
-                preinstallReportModel.setFmRadio(fmRadio);
-                preinstallReportModel.setFirmWareVersion(firmWareVersion);
-                preinstallReportModel.setBatteryVtg(batteryVtg);
-                preinstallReportModel.setRSSI(RSSI);
-                preinstallReportModel.setDeviceStatus(deviceStatus);
-                preinstallReportModel.setSamplingTime(samplingTime);
-                preinstallReportModel.setPx(px);
-                preinstallReportModel.setPy(py);
-                preinstallReportModel.setModemNumber(modemNumber);
-                preinstallReportModel.setSid(sid);
-                preinstallReportModel.setPeriod(period);
-                preinstallReportModel.setServerUrl(serverUrl);
-                preinstallReportModel.setServerPort(serverPort);
-                preinstallReportModel.setDbUrl(DBUrl);
-                preinstallReportModel.setDbPort(DBPort);
-                preinstallReportModel.setBaudrate(baudrate);
-                preinstallReportModel.setPcbVersion(pcbVersion);
-
-                System.out.println("[DB에 들어갈 값]" + preinstallReportModel);
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
 
