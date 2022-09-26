@@ -144,7 +144,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
 //                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
 
-
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
@@ -161,6 +160,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
+                log.info("test : {}", bytes.length);
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
                 log.info("request : {}", request);
