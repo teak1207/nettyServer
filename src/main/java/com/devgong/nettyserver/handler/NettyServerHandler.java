@@ -84,6 +84,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //            if (readFlag == (byte)'A') {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
+                for(byte a : bytes){
+                    log.info("bytes check : {}", a);
+                }
+
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
 
