@@ -47,7 +47,7 @@ public class Packet<T extends Serializable<T>> {
         dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
         requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[39]).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
-        parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44)) & 0xff;
+        parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44));
 
         try {
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(byte[].class);
@@ -118,7 +118,7 @@ public class Packet<T extends Serializable<T>> {
             log.info("validateChecksum byte : {}", b);
 
 //            accumulation += b& 0xff;
-            accumulation += b;
+            accumulation += b & 0xff;
             log.info("validateChecksum sum : {}", accumulation);
 
         }
