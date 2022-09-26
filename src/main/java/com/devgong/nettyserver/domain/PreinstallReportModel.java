@@ -24,8 +24,10 @@ public class PreinstallReportModel {
     private int cid;
     @Column(name = "SN")
     private String serialNumber;
+
     @Column(name = "DATE")
     private LocalDateTime dateTime;
+
     @Column(name = "DEBUG")
     private String debugMsg;
     @Column(name = "TIME1")
@@ -68,6 +70,5 @@ public class PreinstallReportModel {
     private String baudrate;
     @Column(name = "PCBVERSION")
     private String pcbVersion;
-
 
 }

@@ -171,11 +171,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("request : {}" , request);
 
+                preinstallReportModel.setSerialNumber(request.getSensorId());
+                preinstallReportModel.setDateTime(request.getDateTime());
+                preinstallReportModel.setDebugMsg(request.getParameter().getDebugMessage());
+                preinstallReportModel.setRecordingTime1(request.getParameter().getRecordTime1());
+                preinstallReportModel.setRecordingTime2(request.getParameter().getRecordTime2());
+                preinstallReportModel.setRecordingTime3(request.getParameter().getRecordTime3());
+
+
 
 
 
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
+
+
+
+
 
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
                     byte ack = 8;
