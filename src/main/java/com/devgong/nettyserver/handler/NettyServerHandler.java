@@ -130,7 +130,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             LocalDateTime.now(),
                             RequestType.SERVER,
                             response.serialize().length + 2,  //4 byte
-//                            response.serialize().length + 2,  //4 byte
                             response
                     );
 
@@ -142,6 +141,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 //                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
 //                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
+
+                    log.info("baudrate : {}", response.getBaudrate());
+
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
