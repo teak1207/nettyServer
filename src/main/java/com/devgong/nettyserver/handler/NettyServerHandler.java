@@ -116,7 +116,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         preInstallDeviceInfos.getDbUrl(),
                         preInstallDeviceInfos.getDbPort(),
                         Integer.parseInt(preInstallDeviceInfos.getRadioTime()),
-                        Integer.parseInt(preInstallDeviceInfos.getBaudrate())
+                        Integer.parseInt((preInstallDeviceInfos.getBaudrate()).substring(0,2))
                 );
 
                 if (preInstallDeviceInfos != null) {
