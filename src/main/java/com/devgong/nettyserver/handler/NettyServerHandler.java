@@ -84,9 +84,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //            if (readFlag == (byte)'A') {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
-                for(byte a : bytes){
-                    log.info("bytes check : {}", a);
-                }
+//                for(byte a : bytes){
+//                    log.info("bytes check : {}", a);
+//                }
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
@@ -162,6 +162,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 /*==== Header ====*/
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 byte[] bytes = new byte[mBuf.readableBytes()];
+                mBuf.duplicate().readBytes(bytes);
+
 
                 for(byte a : bytes){
                     log.info("PreInstallReportRequest : {}" , a);
