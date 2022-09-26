@@ -164,12 +164,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-
                 for(byte a : bytes){
                     log.info("PreInstallReportRequest : {}" , a);
                     log.info("PreInstallReportRequest : {}" , (char)a);
                 }
-
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
