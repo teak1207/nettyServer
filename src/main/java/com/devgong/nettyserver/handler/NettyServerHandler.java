@@ -144,7 +144,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    log.info("responsePacket.serialize() : {}", responsePacket.serialize());
 //                    log.info("responsepacket_length : {}", responsePacket.serialize().length);
 
-                    log.info("baudrate : {}", response.getBaudrate());
 
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
@@ -162,11 +161,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                for (byte a : bytes) {
-                    log.info("PreInstallReportRequest : {}", a);
-                    log.info("PreInstallReportRequest : {}", (char) a);
-                }
-
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
                 log.info("request : {}", request);
@@ -180,7 +174,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
-
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
 
