@@ -149,6 +149,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
+
                 log.info("flag check : {}",flag);
                 log.info("preinstall report byte length : {}", bytes.length);
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
@@ -156,7 +157,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("request : {}", request);
 
 
-                boolean reportResult = preinstallSensorListService.insertReport(preinstallReportModel);
+
+                boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
 

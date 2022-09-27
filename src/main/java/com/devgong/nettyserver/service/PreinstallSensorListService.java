@@ -60,17 +60,19 @@ public class PreinstallSensorListService {
         return preinstallSetModel;
     }
 
-    public boolean insertReport(PreinstallReportModel preinstallReportModel) {
+    public boolean insertReport(byte[]  bytes) {
 
-        if (preinstallReportModel != null) {
-
-
-            log.info("preinstallReportModel : {}" , preinstallReportModel);
+        if (bytes != null) {
 
 
-            reportRepository.save(preinstallReportModel);
+            log.info("preinstallReportModel : {}" , bytes
+            );
+//            reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
-            return true;
+            return false;
+
+
+
         } else {
             log.error("[INSERT] : FAIL");
             return false;
