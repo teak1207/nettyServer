@@ -57,9 +57,9 @@ public class Packet<T extends Serializable<T>> {
         }
         log.info("report packet : {}", packet);
         log.info("report packet length : {}", packet.length);
-        //
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
+        log.info("input checksum length: {}",checksum.length );
         log.info("input checksum : {}, {}", checksum[0], checksum[1]);
         log.info("packet : {}, {}, {}", packet[0], packet[1] ,packet.length );
 
