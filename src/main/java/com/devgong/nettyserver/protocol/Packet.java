@@ -55,10 +55,10 @@ public class Packet<T extends Serializable<T>> {
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid parameter error!");
         }
-        log.info("report packet : {}", packet);
-        log.info("report packet length : {}", packet.length);
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
+        log.info("report packet : {}", packet);
+        log.info("report packet length : {}", packet.length);
         log.info("input checksum length: {}", checksum.length);
         log.info("input checksum : {}, {}", checksum[0], checksum[1]);
         log.info("packet : {}, {}, {}", packet[0], packet[1], packet.length);
@@ -126,7 +126,7 @@ public class Packet<T extends Serializable<T>> {
 
         }
 
-        log.info("validateChecksum accumulation : {}", accumulation); //3295
+        log.info("validateChecksum accumulation : {}", accumulation);
         log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
 
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
