@@ -42,7 +42,8 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
         System.arraycopy(debugMessageBytes, 0, serialized, 16, 13);
 
         for(byte b : serialized) {
-            log.info("serialized1 : {}", b);
+            log.info("serialized : {}", b);
+            log.info("serialized(char) : {}", (char)b);
         }
 
         return serialized;

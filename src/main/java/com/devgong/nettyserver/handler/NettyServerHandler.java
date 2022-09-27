@@ -91,7 +91,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("readable bytes length : {}", bytes.length);
                 log.info("FLAG : {}", (char) readFlag);
-//                log.info("PacketFlag.PREINSTALL.equals(flag) : {}", PacketFlag.PREINSTALL.equals(flag));
 
                 for (int i = 0; i < bytes.length; i++) {
                     log.info("bytes : {}", (char) bytes[i]);
