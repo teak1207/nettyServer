@@ -59,9 +59,9 @@ public class Packet<T extends Serializable<T>> {
         log.info("report packet length : {}", packet.length);
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
-        log.info("input checksum length: {}",checksum.length );
+        log.info("input checksum length: {}", checksum.length);
         log.info("input checksum : {}, {}", checksum[0], checksum[1]);
-        log.info("packet : {}, {}, {}", packet[0], packet[1] ,packet.length );
+        log.info("packet : {}, {}, {}", packet[0], packet[1], packet.length);
 
 
         if (!validateChecksum()) {
@@ -116,13 +116,9 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;
 
         for (byte b : serializeExceptChecksum()) {
-//            log.info("validateChecksum byte(char) : {}", (char) b);
-//            log.info("validateChecksum byte : {}", b);
-
-//            accumulation += b& 0xff;
+            log.info("validateChecksum byte(char) : {}", (char) b);
+            log.info("validateChecksum byte : {}", b);
             accumulation += b & 0xff;
-//            log.info("validateChecksum sum : {}", accumulation);
-
         }
 
         log.info("validateChecksum accumulation : {}", accumulation); //3295
