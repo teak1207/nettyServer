@@ -56,6 +56,7 @@ public class Packet<T extends Serializable<T>> {
             throw new IllegalStateException("Invalid parameter error!");
         }
         log.info("report packet : {}", packet);
+        log.info("report packet length : {}", packet.length);
         //
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
