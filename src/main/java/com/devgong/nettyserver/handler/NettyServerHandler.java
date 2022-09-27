@@ -123,7 +123,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 if (preInstallDeviceInfos != null) {
 
 //                    log.info("response.toString() ***: {}", response);
-                    log.info("response.serialize() ***: {}", response.serialize().length);
+                    log.info("response.serialize() : {}", response.serialize().length);
                     log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
@@ -150,7 +150,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("test : {}", bytes.length);
+                log.info("preinstall report byte length : {}", bytes.length);
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
                 log.info("request : {}", request);
