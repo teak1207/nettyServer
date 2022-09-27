@@ -63,6 +63,11 @@ public class PreinstallSensorListService {
     public boolean insertReport(PreinstallReportModel preinstallReportModel) {
 
         if (preinstallReportModel != null) {
+
+
+            log.info("preinstallReportModel : {}" , preinstallReportModel);
+
+
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return true;
