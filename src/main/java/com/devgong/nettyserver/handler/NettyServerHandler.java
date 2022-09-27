@@ -149,7 +149,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
-
+                log.info("flag check : {}",flag);
                 log.info("preinstall report byte length : {}", bytes.length);
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
