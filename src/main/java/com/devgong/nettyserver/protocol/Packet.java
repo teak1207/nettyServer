@@ -142,7 +142,7 @@ public class Packet<T extends Serializable<T>> {
 //            log.info("accumulation byte(char) : {}", (char) b & 0xff);
 //            log.info("accumulation byte(char) : {}", accumulation);
         }
-        log.info("test222 : {}", accumulation);
+        log.info("accumulation : {}", accumulation);
 
 
         String hex = Integer.toHexString(accumulation);
