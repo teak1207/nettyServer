@@ -55,7 +55,8 @@ public class Packet<T extends Serializable<T>> {
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid parameter error!");
         }
-
+        log.info("report packet : {}", packet);
+        //
         checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
         log.info("input checksum : {}, {}", checksum[0], checksum[1]);
