@@ -119,7 +119,7 @@ public class Packet<T extends Serializable<T>> {
 
             accumulation += b & 0xff;
             log.info("validateChecksum byte(char) : {}", (char) b);
-            log.info("validateChecksum byte : {}", b);
+            log.info("validateChecksum byte : {}", b & 0xff);
             log.info("validateChecksum byte sum: {}", accumulation);
             log.info("--------------------------------------------");
 
