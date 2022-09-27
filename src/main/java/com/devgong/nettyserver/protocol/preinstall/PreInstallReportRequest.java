@@ -38,7 +38,8 @@ public class PreInstallReportRequest implements Serializable<PreInstallReportReq
             throw new IllegalArgumentException("PreInstallReportRequest payload error!");
         }
 
-        debugMessage = new String(Arrays.copyOfRange(payload, 0, 13)).trim();
+//        debugMessage = new String(Arrays.copyOfRange(payload, 0, 13)).trim();
+        debugMessage = new String(Arrays.copyOfRange(payload, 0, 13));
 
         recordTime1 = new String(Arrays.copyOfRange(payload, 13, 17)).trim();
         recordTime2 = new String(Arrays.copyOfRange(payload, 17, 21)).trim();
