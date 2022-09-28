@@ -91,11 +91,10 @@ public class PreinstallSensorListService {
             preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 73, 79)));
             preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 79, 85)));
 
-            preinstallReportModel.setRSSI(String.valueOf(bytes[86]));
+            preinstallReportModel.setRSSI(String.valueOf(bytes[85] & 0xff));
             preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 88)));
 
-            preinstallReportModel.setSamplingTime(String.valueOf(bytes[89]));
-
+            preinstallReportModel.setSamplingTime(String.valueOf(bytes[89] & 0xff));
 
 
             preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 99)));
@@ -111,7 +110,6 @@ public class PreinstallSensorListService {
             preinstallReportModel.setBaudrate(String.valueOf(bytes[216]));
             preinstallReportModel.setBaudrate(String.valueOf(bytes[217]));
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
-
 
 
             log.info("preinstallReportModel : {}", bytes);
