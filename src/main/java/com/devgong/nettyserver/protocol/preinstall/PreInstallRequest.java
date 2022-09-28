@@ -13,7 +13,7 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
     String modemPhoneNumber; // 16 byte
     String debugMessage; // 13 byte
 
-    public PreInstallRequest(byte[] bytes) {
+    public PreInstallRequest(byte[] payload) {
         if (payload == null || payload.length != 29) {
             throw new IllegalArgumentException("PreInstallRequest payload error!");
         }
