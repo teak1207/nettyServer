@@ -158,7 +158,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-                boolean reportResult = preinstallSensorListService.insertReport(bytes);
+                boolean reportResult = preinstallSensorListService.insertReport(request);
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
 

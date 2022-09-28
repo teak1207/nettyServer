@@ -2,11 +2,14 @@ package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.protocol.DeviceStatus;
+import com.devgong.nettyserver.protocol.Packet;
+import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Slf4j
@@ -64,14 +67,14 @@ public class PreinstallSensorListService {
         return preinstallSetModel;
     }
 
-    public boolean insertReport(byte[] bytes) {
+    public boolean insertReport(Packet<PreInstallReportRequest> test) {
 
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
+        if (test != null) {
 
-        if (bytes != null) {
 
-            int baudrateNext; // 1 byte
-
+            log.info("test :{}", test);
+           /* preinstallReportModel.setDateTime(LocalDateTime.now());
             preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 0, 13)));
 
             preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 13, 17)).trim());
@@ -101,12 +104,11 @@ public class PreinstallSensorListService {
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[173]));
 
 
-            baudrateNext = bytes[172];
-
+*/
 
 //            log.info("preinstallReportModel : {}", bytes);
-            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
-            log.info("preinstallReportModel : {}", preinstallReportModel);
+//            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
+//            log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return false;
