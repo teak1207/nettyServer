@@ -75,6 +75,7 @@ public class PreinstallSensorListService {
             int i = 0;
             for (byte a : bytes) {
                 log.info("test : {}", (char) a);
+                log.info("test : {}", a);
                 log.info("test : {}", i++);
                 log.info("-----------------------");
 
@@ -94,6 +95,9 @@ public class PreinstallSensorListService {
             preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 88)));
 
             preinstallReportModel.setSamplingTime(String.valueOf(bytes[89]));
+
+
+
             preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 99)));
             preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 99, 109)));
             preinstallReportModel.setModemNumber(new String(Arrays.copyOfRange(bytes, 109, 125)));
@@ -115,7 +119,6 @@ public class PreinstallSensorListService {
             log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime2());
             log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime3());
             log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
-            log.info("preinstallReportModel : {}", preinstallReportModel.toString());
             log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
