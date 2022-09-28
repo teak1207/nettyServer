@@ -111,8 +111,10 @@ public class PreinstallSensorListService {
             baudrateNext = bytes[172];
 
             log.info("preinstallReportModel : {}", bytes);
+            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime1());
+            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime2());
+            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime3());
             log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
-            log.info("preinstallReportModel : {}", preinstallReportModel.toString());
             log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
