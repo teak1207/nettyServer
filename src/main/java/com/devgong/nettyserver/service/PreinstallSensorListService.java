@@ -77,6 +77,7 @@ public class PreinstallSensorListService {
             for (byte a : bytes) {
                 log.info("test : {}", (char) a);
                 log.info("test : {}", i++);
+                log.info("-----------------------");
 
             }
 
