@@ -101,11 +101,11 @@ public class PreinstallSensorListService {
             preinstallReportModel.setServerUrl(new String(Arrays.copyOfRange(bytes, 142, 173)));
             preinstallReportModel.setServerPort(new String(Arrays.copyOfRange(bytes, 174, 177)));
             preinstallReportModel.setDbUrl(new String(Arrays.copyOfRange(bytes, 178, 209)));
-            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 213)));
-            preinstallReportModel.setFmTime(String.valueOf(bytes[214]));
-            preinstallReportModel.setBaudrate(String.valueOf(bytes[215]));
+            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 214)));
+            preinstallReportModel.setFmTime(String.valueOf(bytes[215]));
             preinstallReportModel.setBaudrate(String.valueOf(bytes[216]));
-            preinstallReportModel.setPcbVersion(String.valueOf(bytes[217]));
+            preinstallReportModel.setBaudrate(String.valueOf(bytes[217]));
+            preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
 
 
             baudrateNext = bytes[172];
