@@ -80,31 +80,31 @@ public class PreinstallSensorListService {
 
             }
 
-            preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 23)));
+            preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 24)));
             preinstallReportModel.setDateTime(LocalDateTime.now());
             preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)));
-            preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 57, 60)));
-            preinstallReportModel.setRecordingTime2(new String(Arrays.copyOfRange(bytes, 61, 64)));
-            preinstallReportModel.setRecordingTime3(new String(Arrays.copyOfRange(bytes, 65, 68)));
-            preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 69, 72)));
-            preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 73, 78)));
-            preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 79, 84)));
+            preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 57, 61)));
+            preinstallReportModel.setRecordingTime2(new String(Arrays.copyOfRange(bytes, 61, 65)));
+            preinstallReportModel.setRecordingTime3(new String(Arrays.copyOfRange(bytes, 65, 69)));
+            preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 69, 73)));
+            preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 73, 79)));
+            preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 79, 85)));
             preinstallReportModel.setRSSI(String.valueOf(bytes[85]));
-            preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 87)));
-            preinstallReportModel.setSamplingTime(String.valueOf(bytes[88]));
-            preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 98)));
-            preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 99, 108)));
-            preinstallReportModel.setModemNumber(new String(Arrays.copyOfRange(bytes, 109, 124)));
-            preinstallReportModel.setSid(new String(Arrays.copyOfRange(bytes, 125, 140)));
+            preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 88)));
+            preinstallReportModel.setSamplingTime(String.valueOf(bytes[89]));
+            preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 99)));
+            preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 99, 109)));
+            preinstallReportModel.setModemNumber(new String(Arrays.copyOfRange(bytes, 109, 125)));
+            preinstallReportModel.setSid(new String(Arrays.copyOfRange(bytes, 125, 141)));
             preinstallReportModel.setPeriod(String.valueOf(bytes[141]));
-            preinstallReportModel.setServerUrl(new String(Arrays.copyOfRange(bytes, 142, 173)));
-            preinstallReportModel.setServerPort(new String(Arrays.copyOfRange(bytes, 174, 177)));
-            preinstallReportModel.setDbUrl(new String(Arrays.copyOfRange(bytes, 178, 209)));
-            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 213)));
-            preinstallReportModel.setFmTime(String.valueOf(bytes[214]));
-            preinstallReportModel.setBaudrate(String.valueOf(bytes[215]));
+            preinstallReportModel.setServerUrl(new String(Arrays.copyOfRange(bytes, 142, 174)));
+            preinstallReportModel.setServerPort(new String(Arrays.copyOfRange(bytes, 174, 178)));
+            preinstallReportModel.setDbUrl(new String(Arrays.copyOfRange(bytes, 178, 210)));
+            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 214)));
+            preinstallReportModel.setFmTime(String.valueOf(bytes[215]));
             preinstallReportModel.setBaudrate(String.valueOf(bytes[216]));
-            preinstallReportModel.setPcbVersion(String.valueOf(bytes[217]));
+            preinstallReportModel.setBaudrate(String.valueOf(bytes[217]));
+            preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
 
 
 
