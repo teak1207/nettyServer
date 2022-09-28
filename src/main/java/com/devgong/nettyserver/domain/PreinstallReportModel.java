@@ -66,6 +66,12 @@ public class PreinstallReportModel {
     private String dbUrl;
     @Column(name = "DB_PORT")
     private String dbPort;
+
+    @Column(name = "fmtime")
+    private String fmTime;
+
+
+
     @Column(name = "BAUDRATE")
     private String baudrate;
     @Column(name = "PCBVERSION")
