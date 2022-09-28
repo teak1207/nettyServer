@@ -105,7 +105,7 @@ public class PreinstallSensorListService {
 
 
 //            log.info("preinstallReportModel : {}", bytes);
-            log.info("preinstallReportModel : {}", preinstallReportModel);
+            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return false;
