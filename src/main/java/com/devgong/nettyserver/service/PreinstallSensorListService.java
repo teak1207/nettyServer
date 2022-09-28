@@ -73,9 +73,11 @@ public class PreinstallSensorListService {
         if (bytes != null) {
 
             int baudrateNext; // 1 byte
+            int i = 0;
+            for (byte a : bytes) {
+                log.info("test : {}", (char) a);
+                log.info("test : {}", i++);
 
-            for(byte a : bytes){
-                log.info("test : {}" , (char)a);
             }
 
             preinstallReportModel.setSerialNumber(request.getSensorId());
