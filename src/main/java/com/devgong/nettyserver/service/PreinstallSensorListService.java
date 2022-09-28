@@ -67,14 +67,15 @@ public class PreinstallSensorListService {
         return preinstallSetModel;
     }
 
-    public boolean insertReport(Packet<PreInstallReportRequest> test) {
+    public boolean insertReport(Packet<PreInstallReportRequest> request, byte[] bytes) {
 
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
-        if (test != null) {
+        if (bytes != null) {
 
+            int baudrateNext; // 1 byte
 
-            log.info("test :{}", test);
-           /* preinstallReportModel.setDateTime(LocalDateTime.now());
+            preinstallReportModel.setSerialNumber(request.getSensorId());
+            preinstallReportModel.setDateTime(LocalDateTime.now());
             preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 0, 13)));
 
             preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 13, 17)).trim());
@@ -104,7 +105,7 @@ public class PreinstallSensorListService {
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[173]));
 
 
-*/
+            baudrateNext = bytes[172];
 
 //            log.info("preinstallReportModel : {}", bytes);
 //            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
