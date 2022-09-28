@@ -66,7 +66,7 @@ public class PreinstallSensorListService {
 
     public boolean insertReport(byte[] bytes) {
 
-        PreinstallReportModel preinstallReportModel = null;
+        PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
 
         if (bytes != null) {
 
@@ -106,6 +106,7 @@ public class PreinstallSensorListService {
 
 //            log.info("preinstallReportModel : {}", bytes);
             log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
+            log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return false;
