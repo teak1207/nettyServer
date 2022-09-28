@@ -72,7 +72,6 @@ public class PreinstallSensorListService {
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
         if (bytes != null) {
 
-            int baudrateNext; // 1 byte
             int i = 0;
             for (byte a : bytes) {
                 log.info("test : {}", (char) a);
@@ -81,10 +80,10 @@ public class PreinstallSensorListService {
 
             }
 
-            preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 24)));
+            preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 23)));
             preinstallReportModel.setDateTime(LocalDateTime.now());
-            preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)).trim());
-            preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 57, 61)));
+            preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)));
+            preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 57, 60)));
             preinstallReportModel.setRecordingTime2(new String(Arrays.copyOfRange(bytes, 61, 64)));
             preinstallReportModel.setRecordingTime3(new String(Arrays.copyOfRange(bytes, 65, 68)));
             preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 69, 72)));
@@ -101,20 +100,20 @@ public class PreinstallSensorListService {
             preinstallReportModel.setServerUrl(new String(Arrays.copyOfRange(bytes, 142, 173)));
             preinstallReportModel.setServerPort(new String(Arrays.copyOfRange(bytes, 174, 177)));
             preinstallReportModel.setDbUrl(new String(Arrays.copyOfRange(bytes, 178, 209)));
-            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 214)));
-            preinstallReportModel.setFmTime(String.valueOf(bytes[215]));
+            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 213)));
+            preinstallReportModel.setFmTime(String.valueOf(bytes[214]));
+            preinstallReportModel.setBaudrate(String.valueOf(bytes[215]));
             preinstallReportModel.setBaudrate(String.valueOf(bytes[216]));
-            preinstallReportModel.setBaudrate(String.valueOf(bytes[217]));
-            preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
+            preinstallReportModel.setPcbVersion(String.valueOf(bytes[217]));
 
 
-            baudrateNext = bytes[172];
 
             log.info("preinstallReportModel : {}", bytes);
             log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime1());
             log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime2());
             log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime3());
             log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
+            log.info("preinstallReportModel : {}", preinstallReportModel.toString());
             log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
