@@ -81,35 +81,43 @@ public class PreinstallSensorListService {
 
             }
 
-            preinstallReportModel.setSerialNumber(request.getSensorId());
+            preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 23)));
             preinstallReportModel.setDateTime(LocalDateTime.now());
-            preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 0, 13)));
+            preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)));
+            preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 57, 60)).trim());
+            preinstallReportModel.setRecordingTime2(new String(Arrays.copyOfRange(bytes, 61, 64)).trim());
+            preinstallReportModel.setRecordingTime3(new String(Arrays.copyOfRange(bytes, 65, 68)).trim());
+            preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 69, 72)).trim());
+            preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 73, 78)).trim());
+            preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 79, 84)).trim());
+            preinstallReportModel.setRSSI(String.valueOf(bytes[85]));
+            preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 87)));
+            preinstallReportModel.setSamplingTime(String.valueOf(bytes[88]));
+            preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 98)).trim());
+            preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 99, 108)).trim());
 
-            preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 13, 17)).trim());
-            preinstallReportModel.setRecordingTime2(new String(Arrays.copyOfRange(bytes, 17, 21)).trim());
-            preinstallReportModel.setRecordingTime3(new String(Arrays.copyOfRange(bytes, 21, 25)).trim());
 
-            preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 25, 29)).trim());
-            preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 29, 35)).trim());
-            preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 35, 41)).trim());
-            // TODO : casting check1
-            preinstallReportModel.setRSSI(String.valueOf(bytes[41]));
-            preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 42, 44)));
 
-            preinstallReportModel.setSamplingTime(String.valueOf(bytes[44]));
-            preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 45, 55)).trim());
-            preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 55, 65)).trim());
-            preinstallReportModel.setModemNumber(new String(Arrays.copyOfRange(bytes, 65, 81)).trim());
-            preinstallReportModel.setSid(new String(Arrays.copyOfRange(bytes, 81, 97)).trim());
-            preinstallReportModel.setPeriod(String.valueOf(bytes[97]));
-            preinstallReportModel.setServerUrl(new String(Arrays.copyOfRange(bytes, 98, 130)).trim());
-            preinstallReportModel.setServerPort(new String(Arrays.copyOfRange(bytes, 130, 134)).trim());
-            preinstallReportModel.setDbUrl(new String(Arrays.copyOfRange(bytes, 134, 166)).trim());
-            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 166, 170)).trim());
-            preinstallReportModel.setFmTime(String.valueOf(bytes[170]));
-            preinstallReportModel.setBaudrate(String.valueOf(bytes[171]));
-            preinstallReportModel.setBaudrate(String.valueOf(bytes[171]));
-            preinstallReportModel.setPcbVersion(String.valueOf(bytes[173]));
+
+            preinstallReportModel.setModemNumber(new String(Arrays.copyOfRange(bytes, 109, 124)).trim());
+
+
+
+            preinstallReportModel.setSid(new String(Arrays.copyOfRange(bytes, 125, 140)).trim());
+            preinstallReportModel.setPeriod(String.valueOf(bytes[141]));
+            preinstallReportModel.setServerUrl(new String(Arrays.copyOfRange(bytes, 142, 173)).trim());
+
+
+
+            preinstallReportModel.setServerPort(new String(Arrays.copyOfRange(bytes, 174, 177)).trim());
+
+
+            preinstallReportModel.setDbUrl(new String(Arrays.copyOfRange(bytes, 178, 209)).trim());
+            preinstallReportModel.setDbPort(new String(Arrays.copyOfRange(bytes, 210, 213)).trim());
+            preinstallReportModel.setFmTime(String.valueOf(bytes[214]));
+            preinstallReportModel.setBaudrate(String.valueOf(bytes[215]));
+            preinstallReportModel.setBaudrate(String.valueOf(bytes[216]));
+            preinstallReportModel.setPcbVersion(String.valueOf(bytes[217]));
 
 
             baudrateNext = bytes[172];
