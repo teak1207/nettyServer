@@ -89,8 +89,10 @@ public class PreinstallSensorListService {
             preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 69, 73)));
             preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 73, 79)));
             preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 79, 85)));
-            preinstallReportModel.setRSSI(String.valueOf(bytes[85]));
+
+            preinstallReportModel.setRSSI(String.valueOf(bytes[86]));
             preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 88)));
+
             preinstallReportModel.setSamplingTime(String.valueOf(bytes[89]));
             preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 99)));
             preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 99, 109)));
