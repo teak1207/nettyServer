@@ -83,7 +83,7 @@ public class PreinstallSensorListService {
 
             preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 24)));
             preinstallReportModel.setDateTime(LocalDateTime.now());
-            preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)));
+            preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)).trim());
             preinstallReportModel.setRecordingTime1(new String(Arrays.copyOfRange(bytes, 57, 60)));
             preinstallReportModel.setRecordingTime2(new String(Arrays.copyOfRange(bytes, 61, 64)));
             preinstallReportModel.setRecordingTime3(new String(Arrays.copyOfRange(bytes, 65, 68)));
