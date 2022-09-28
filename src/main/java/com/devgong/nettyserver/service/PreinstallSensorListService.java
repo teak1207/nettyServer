@@ -107,9 +107,9 @@ public class PreinstallSensorListService {
 
             baudrateNext = bytes[172];
 
-//            log.info("preinstallReportModel : {}", bytes);
-//            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
-//            log.info("preinstallReportModel : {}", preinstallReportModel);
+            log.info("preinstallReportModel : {}", bytes);
+            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
+            log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return false;
