@@ -88,14 +88,6 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
     }
 
 
-    @Override
-    public byte[] reportSerialize(){
-        byte[] serialized = new byte[169];
-
-
-        return serialized;
-    }
-
 
     @Override
     public byte[] serialize() {

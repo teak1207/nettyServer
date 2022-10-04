@@ -165,13 +165,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-                    Packet<PreInstallResponse> responsePacket = new Packet<>(
-                            PacketFlag.ACK,
-                            new String(Arrays.copyOfRange(bytes, 0, 24)),
-                            LocalDateTime.now(),
-                            RequestType.SERVER,
-                            test
-                    );
+
 
 
                     ctx.flush();

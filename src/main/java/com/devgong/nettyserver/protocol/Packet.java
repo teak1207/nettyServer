@@ -24,16 +24,16 @@ public class Packet<T extends Serializable<T>> {
     T parameter;
     byte[] checksum; // 2 byte
 
-
-    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength) {
-        this.flag = flag;
-        this.sensorId = sensorId;
-        this.dateTime = dateTime;
-        this.requestType = requestType;
-        this.parameterLength = parameterLength;
-        this.checksum = makeChecksum();
-        parameter = null;
-    }
+//
+//    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength) {
+//        this.flag = flag;
+//        this.sensorId = sensorId;
+//        this.dateTime = dateTime;
+//        this.requestType = requestType;
+//        this.parameterLength = parameterLength;
+//        this.checksum = makeChecksum();
+//
+//    }
 
 
     public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
