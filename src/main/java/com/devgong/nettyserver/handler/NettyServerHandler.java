@@ -133,7 +133,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.serialize().length + 2,  //4 byte
                             response
                     );
-
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
@@ -142,8 +141,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
-
-
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -152,21 +149,28 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
-//                log.info("request : {}", request);
+                boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
-                boolean reportResult = preinstallSensorListService.insertReport(request,bytes);
+
+                for(byte a : bytes){
+                    log.info("(char)a : {}", (char)a);
+                }
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
-
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-                    byte ack = 8;
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{ack}));
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{ack}));
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{ack}));
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{ack}));
+//                    Packet<PreInstallResponse> responsePacket = new Packet<>(
+//                            PacketFlag.PREINSTALL,
+//                            response.getSn(),
+//                            LocalDateTime.now(),
+//                            RequestType.SERVER,
+//                            response.serialize().length + 2
+//                    );
+
+
                     ctx.flush();
                     mBuf.release();
-                    log.info("Report inserted");
+                    log.info("Report Response Success");
+
                 } else {
                     byte nak = 9;
                     ctx.write(Unpooled.copiedBuffer(new byte[]{nak}));
