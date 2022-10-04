@@ -154,8 +154,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 int i =0;
                 for(byte a : bytes){
                     log.info("(char)a : {}", (char)a);
-                    i++;
                     log.info("byte length : {}", i);
+                    i++;
                     log.info("-----------------------");
                 }
 
