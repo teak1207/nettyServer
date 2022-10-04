@@ -1,7 +1,6 @@
 package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.*;
-import com.devgong.nettyserver.protocol.DeviceStatus;
 import com.devgong.nettyserver.protocol.Packet;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.repository.*;
