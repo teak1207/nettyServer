@@ -70,17 +70,16 @@ public class PreinstallSensorListService {
     public boolean insertReport(Packet<PreInstallReportRequest> request, byte[] bytes) {
 
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
+
         if (bytes != null) {
 
-            int i = 0;
-            for (byte a : bytes) {
-                log.info("test : {}", (char) a);
-                log.info("test : {}", a);
-                log.info("test : {}", i++);
-                log.info("-----------------------");
-
-            }
-
+//            int i = 0;
+//            for (byte a : bytes) {
+//                log.info("test : {}", (char) a);
+//                log.info("test : {}", a);
+//                log.info("test : {}", i++);
+//                log.info("-----------------------");
+//            }
             preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 24)));
             preinstallReportModel.setDateTime(LocalDateTime.now());
             preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)));
