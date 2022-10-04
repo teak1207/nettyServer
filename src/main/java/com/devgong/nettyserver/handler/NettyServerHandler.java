@@ -151,9 +151,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
-
+                int i =0;
                 for(byte a : bytes){
                     log.info("(char)a : {}", (char)a);
+                    i++;
+                    log.info("byte length : {}", i);
+                    log.info("-----------------------");
                 }
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
