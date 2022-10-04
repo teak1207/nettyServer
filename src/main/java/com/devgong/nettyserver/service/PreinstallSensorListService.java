@@ -112,15 +112,15 @@ public class PreinstallSensorListService {
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
 
 
-            log.info("preinstallReportModel : {}", bytes);
-            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime1());
-            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime2());
-            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime3());
-            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
+//            log.info("preinstallReportModel : {}", bytes);
+//            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime1());
+//            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime2());
+//            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime3());
+//            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
             log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
-            return false;
+            return true;
 
 
         } else {
