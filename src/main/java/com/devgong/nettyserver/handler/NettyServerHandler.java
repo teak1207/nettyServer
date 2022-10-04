@@ -177,7 +177,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.error("Report insert failed");
                 }
-            } else if (flag.equals("6")) {
+            } else if (PacketFlag.SETTING.equals(flag)) {
+
+                log.info("shit");
+
+
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
