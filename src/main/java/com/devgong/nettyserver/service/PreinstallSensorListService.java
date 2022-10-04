@@ -123,6 +123,7 @@ public class PreinstallSensorListService {
             return true;
 
 
+
         } else {
             log.error("[INSERT] : FAIL");
             return false;
