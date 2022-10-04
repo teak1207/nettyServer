@@ -79,29 +79,23 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
         dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
         radioTime = payload[167];
         baudrate = payload[168];
-        //TODO : baudrate 까지 ? -->169 가 맞지않나?
 
-
-//        sid = new String(Arrays.copyOfRange(payload, 16, 32)).trim();
-//        pname = new String(Arrays.copyOfRange(payload, 32, 48)).trim();
-//        px = new String(Arrays.copyOfRange(payload, 48, 58)).trim();
-//        py = new String(Arrays.copyOfRange(payload, 58, 68)).trim();
-//        sn = new String(Arrays.copyOfRange(payload, 68, 92)).trim();
-//        period = payload[92];
-//        samplingTime = payload[93];
-//        sampleRate = payload[94];
-//        serverUrl = new String(Arrays.copyOfRange(payload, 95, 127)).trim();
-//        serverPort = new String(Arrays.copyOfRange(payload, 127, 131)).trim();
-//        dbUrl = new String(Arrays.copyOfRange(payload, 131, 163)).trim();
-//        dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
-//        radioTime = payload[167];
-//        baudrate = payload[168];
     }
 
     @Override
     public PreInstallResponse deserialize(byte[] byteArray) {
         return new PreInstallResponse(byteArray);
     }
+
+
+    @Override
+    public byte[] reportSerialize(){
+        byte[] serialized = new byte[169];
+
+
+        return serialized;
+    }
+
 
     @Override
     public byte[] serialize() {

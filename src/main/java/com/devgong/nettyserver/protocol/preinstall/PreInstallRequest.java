@@ -48,4 +48,9 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
 
         return serialized;
     }
+
+    @Override
+    public byte[] reportSerialize() {
+        return new byte[0];
+    }
 }

@@ -151,23 +151,27 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
-                int i =0;
-                for(byte a : bytes){
-                    log.info("(char)a : {}", (char)a);
+                int i = 0;
+                for (byte a : bytes) {
+                    log.info("(char)a : {}", (char) a);
                     log.info("byte length : {}", i);
                     i++;
                     log.info("-----------------------");
                 }
 
+                int test = Integer.parseInt(new String(String.valueOf(Arrays.copyOfRange(bytes, 0, 44).length)));
+                log.info("test ssival : {}", test);
+
+
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-//                    Packet<PreInstallResponse> responsePacket = new Packet<>(
-//                            PacketFlag.PREINSTALL,
-//                            response.getSn(),
-//                            LocalDateTime.now(),
-//                            RequestType.SERVER,
-//                            response.serialize().length + 2
-//                    );
+                    Packet<PreInstallResponse> responsePacket = new Packet<>(
+                            PacketFlag.ACK,
+                            new String(Arrays.copyOfRange(bytes, 0, 24)),
+                            LocalDateTime.now(),
+                            RequestType.SERVER,
+                            test
+                    );
 
 
                     ctx.flush();

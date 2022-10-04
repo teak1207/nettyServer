@@ -121,4 +121,9 @@ public class PreInstallReportRequest implements Serializable<PreInstallReportReq
         serialized[173] = (byte) pcbVersion;
         return serialized;
     }
+
+    @Override
+    public byte[] reportSerialize() {
+        return new byte[0];
+    }
 }
