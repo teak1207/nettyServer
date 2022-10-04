@@ -164,7 +164,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
                 if (reportResult) {  // 체크썸 값이 맞다면 buff에 write
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
+                    ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.NAK.getFlag()}));
                     ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
                     ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
                     ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
