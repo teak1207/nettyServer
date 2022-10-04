@@ -160,7 +160,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 int test = Integer.parseInt(new String(String.valueOf(Arrays.copyOfRange(bytes, 0, 44).length)));
-                log.info("test ssival : {}", test);
 
 
                 //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
@@ -209,7 +208,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
                     ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
                     ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.ACK.getFlag()}));
+
+
+
                     ctx.flush();
                     mBuf.release();
                     log.info("Report Response Success");
