@@ -6,6 +6,7 @@ import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -18,7 +19,7 @@ public class SettingSensorListService {
     private final SettingFactoryLeakprojectRepository settingFactoryLeakprojectRepository;
     private final SettingLeakProjectRepository settingLeakProjectRepository;
 
-    public SettingSetModel settingFindData( String sereialNumber) {
+    public SettingSetModel settingFindData(String sereialNumber) {
 
 
         SettingSetModel settingSetModel = new SettingSetModel();
@@ -37,24 +38,22 @@ public class SettingSensorListService {
         SettingFactorySensorListModel settingFactorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject(), settingSensorListAllModel.getSsn());
 
 
-
-
         log.info("settingFactorySensorListModel : {}", settingFactorySensorListModel);
 
-//        if (settingFactorySensorListModel.getFactorypname() == null) {
+        if (settingFactorySensorListModel.getFactorypname() == null) {
 
 //                System.out.println("[leak_project URL/PORT 정보를 가져옵니다]");
             log.info("1 : {}", 1);
             settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
             log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
 
-//        } else {
+        } else {
             log.info("2 : {}", 2);
             settingFactoryLeakprojectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(settingFactorySensorListModel.getFactorypname());
             log.info("settingFactoryLeakprojectModel : {}", settingFactoryLeakprojectModel);
 
 
-//        }
+        }
 //            System.out.println("[SensorListAll] : " + settingSensorListAllModel);
 //            System.out.println("[SensorList] : " + settingSensorListModel);
 //            System.out.println("[LeakSet] : " + settingLeaksetModel);
