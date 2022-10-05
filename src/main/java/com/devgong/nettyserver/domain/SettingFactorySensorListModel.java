@@ -21,15 +21,23 @@ public class SettingFactorySensorListModel {
     @Column(name = "cid")
     int cid;
 
+    @Column(name = "sn")
+    private String sn;
+
+    @Column(name = "id")
+    private String id;
+
+    @Column(name = "ip")
+    private String ip;
+
     @Column(name = "sid")
     private String sid;
 
     @Column(name = "pname")
     private String pname;
 
-    @Column(name = "sn")
-    private String sn;
-
+    @Column(name = "v_no")
+    private String v_no;
 
     @Column(name = "factorypname")
     private String factorypname;
