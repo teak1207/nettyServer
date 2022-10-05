@@ -176,7 +176,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-
                 log.info("FLAG : {}", (char) readFlag);
                 for (byte a : bytes) {
                     log.info("bytes check : {}", a);
@@ -189,6 +188,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("request check : {}", request);
 
+                String test="";
+
+                log.info(request.getSensorId());
+
+                settingDeviceInfos = settingSensorListService.settingFindData(request.getSensorId());
 
                 if (true) {
 //                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));

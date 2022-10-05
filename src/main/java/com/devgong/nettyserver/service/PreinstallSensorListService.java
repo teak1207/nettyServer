@@ -1,8 +1,6 @@
 package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.*;
-import com.devgong.nettyserver.protocol.Packet;
-import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,16 +31,17 @@ public class PreinstallSensorListService {
 
 
 //        log.info("modemnum : {}, byte : {}", modemnum, modemnum.getBytes().length);
-
         preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum.trim());
         preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
         preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
 
 
-        System.out.println("-------------------------------");
-        System.out.println("PREINSTALL[NETWORK] : " + preinstallNetworkSetModel);
-        System.out.println("PREINSTALL[DEVICE] : " + preinstallDeviceSetModel);
+        log.info("-------------------------------");
+        log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);
+        log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
+        log.info("-------------------------------");
+
 
         preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
         preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
