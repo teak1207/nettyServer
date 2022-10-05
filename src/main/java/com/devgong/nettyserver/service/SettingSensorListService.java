@@ -77,7 +77,8 @@ public class SettingSensorListService {
         settingSetModel.setSampleRate(settingLeaksetModel.getSamplerate());
         settingSetModel.setRadioTime(settingLeaksetModel.getFmtime());
 
-        if (settingFactorySensorListModel.getFactorypname().equals("")) {
+        if (true) {
+
             settingSetModel.setServerUrl(settingLeakProjectModel.getData_URL());
             settingSetModel.setServerPort(settingLeakProjectModel.getData_PORT());
             settingSetModel.setDbUrl(settingLeakProjectModel.getDb_URL());
