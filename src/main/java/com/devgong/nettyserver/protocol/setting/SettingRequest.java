@@ -43,7 +43,7 @@ public class SettingRequest implements Serializable<SettingRequest> {
         }
 
 
-        byte[] pnameBytes = Arrays.copyOfRange(sid.getBytes(), 16, 32);
+        byte[] pnameBytes = Arrays.copyOfRange(pname.getBytes(), 0, 16);
 
         int j = 0;
         for (byte a : pnameBytes) {
