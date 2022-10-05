@@ -23,6 +23,8 @@ public class SettingRequest implements Serializable<SettingRequest> {
         sid = new String(Arrays.copyOfRange(payload, 0, 16));
         pname = new String(Arrays.copyOfRange(payload, 16, 32));
 
+        log.info("sid : {} ", sid);
+        log.info("pname : {} ", pname);
     }
 
     @Override
@@ -32,12 +34,30 @@ public class SettingRequest implements Serializable<SettingRequest> {
         byte[] sidBytes = Arrays.copyOfRange(sid.getBytes(), 0, 16);
         log.info("sidBytes : {}", sidBytes);
         log.info("sidBytes.length : {}", sidBytes.length);
+
+
+        int i = 0;
+        for (byte a : sidBytes) {
+            log.info("sid chk : {} ", (char) a);
+            i++;
+        }
+
+
         byte[] pnameBytes = Arrays.copyOfRange(sid.getBytes(), 0, 16);
+
+        int j = 0;
+        for (byte a : pnameBytes) {
+            log.info("pnameBytes chk : {} ", (char) a);
+            j++;
+        }
+
+
         log.info("pnameBytes : {}", pnameBytes);
         log.info("pnameBytes.length : {}", pnameBytes.length);
 
-        System.arraycopy(sidBytes,0,serialized,0,16);
-        System.arraycopy(pnameBytes,0,serialized,16,16);
+
+        System.arraycopy(sidBytes, 0, serialized, 0, 16);
+        System.arraycopy(pnameBytes, 0, serialized, 16, 16);
 
         return serialized;
     }
