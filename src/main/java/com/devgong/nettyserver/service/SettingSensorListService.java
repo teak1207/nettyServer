@@ -39,7 +39,7 @@ public class SettingSensorListService {
 
         log.info("여기까지2");
 
-        if (settingFactorySensorListModel.getFactorypname().equals("")) {
+        if (settingFactorySensorListModel.getFactorypname() == null) {
 
 //                System.out.println("[leak_project URL/PORT 정보를 가져옵니다]");
             log.info("1 : {}", 1);
