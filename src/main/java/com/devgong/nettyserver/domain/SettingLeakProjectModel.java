@@ -28,16 +28,16 @@ public class SettingLeakProjectModel {
     @Column(name = "PNAME")
     private String factorypPname;
 
-    @Column(name = "data_URL")
+    @Column(name = "data_server")
     private String data_URL;
 
-    @Column(name = "data_PORT")
+    @Column(name = "data_port")
     private String data_PORT;
 
-    @Column(name = "db_URL")
+    @Column(name = "db_server")
     private String db_URL;
 
-    @Column(name = "db_PORT")
+    @Column(name = "db_port")
     private String db_PORT;
 
 
