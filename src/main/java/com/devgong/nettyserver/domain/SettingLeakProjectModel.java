@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @ToString
 @Entity
 @NoArgsConstructor
-@Table(name = "leak_proejct")
+@Table(name = "leak_project ")
 public class SettingLeakProjectModel {
 
     @Id
