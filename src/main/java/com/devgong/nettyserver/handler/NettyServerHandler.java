@@ -88,16 +88,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-
                 log.info("readable bytes length : {}", bytes.length);
                 log.info("FLAG : {}", (char) readFlag);
 
                 for (int i = 0; i < bytes.length; i++) {
                     log.info("bytes : {}", (char) bytes[i]);
                 }
-//                log.info("bytes2 : {}", CalcCheckSum.byteArrayToHex(bytes));
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
-
                 preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
                         preInstallDeviceInfos.getTime1(),
@@ -159,92 +156,55 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("-----------------------");
                 }
 
-                int test = Integer.parseInt(new String(String.valueOf(Arrays.copyOfRange(bytes, 0, 44).length)));
-
-
-                //TODO : FLAG만 보내는게 아니고, HEADER를 보내야함
-                if (reportResult) {  // 체크썸 값이 맞다면 buff에 wctx.write(Unpooled.copiedBuffer(new byte[]{PacketFlag.NAK.getFlag()}));
-
-
+                byte [] result  = new byte[45];
+                //TODO : Header 값이 아닌 flag+null 45byte 만 보내고 있음!!! 수정해야함.
+                if (reportResult) {
+                    result[0] =PacketFlag.ACK.getFlag();
+                    ctx.write(Unpooled.copiedBuffer(result));
                     ctx.flush();
                     mBuf.release();
                     log.info("Report Response Success");
 
                 } else {
-                    byte nak = 9;
-                    ctx.write(Unpooled.copiedBuffer(new byte[]{nak}));
+                    result[0] =PacketFlag.NAK.getFlag();
+                    ctx.write(Unpooled.copiedBuffer(result));
                     ctx.flush();
                     mBuf.release();
-                    log.error("Report insert failed");
+                    log.error("Report Insert Failed");
                 }
+
+
             } else if (PacketFlag.SETTING.equals(flag)) {
 
-                log.info("shit");
+                byte[] bytes = new byte[mBuf.readableBytes()];
+                mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
 
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
-                String pname = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
-                byte chksum1 = (mBuf.readByte());
-
-
-                byte chksum2 = (mBuf.readByte());
-
-                String convertChk = String.format("%x%x", chksum1, chksum2);
-                String chkData = flag + serialNumber + datetime + requestType + paraLen + sid + pname;
-
-                int convertDecimalSum = 0;
-
-                for (int i = 0; i < chkData.length(); i++) {
-                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                for (byte a : bytes) {
+                    log.info("bytes check : {}", a);
+                    log.info("bytes : {}", (char)a);
+                    log.info("-----------------------");
                 }
-                System.out.println("[flag] " + flag);
-                System.out.println("[serialNumber] " + serialNumber);
-                System.out.println("[datetime] " + datetime);
-                System.out.println("[requestType] " + requestType);
-                System.out.println("[paraLen] " + paraLen);
-                System.out.println("[sid] " + sid);
-                System.out.println("[pname] " + pname);
-                System.out.println("[chksum1] " + chksum1);
-                System.out.println("[chksum2] " + chksum2);
-                System.out.println("[convertChk] " + convertChk);
-                int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[decimal] " + decimal);
-                System.out.println("[convertDecimalSum] " + convertDecimalSum);
-                System.out.println("=====================");
+                log.info("readable bytes length : {}", bytes.length);
+                log.info("FLAG : {}", (char) readFlag);
 
-                if (convertDecimalSum == decimal) {
-                    System.out.println("[CheckSum] : SUCCESS :)");
-                    settingDeviceInfos = settingSensorListService.settingFindData(flag.getFlag() + "", serialNumber);
-                    System.out.println("[SettingDeviceInfos] : " + settingDeviceInfos.toString());
-                }
+
+
+//                for (int i = 0; i < chkData.length(); i++) {
+//                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+//                }
+//                int decimal = Integer.parseInt(convertChk, 16);
+
+//                if (convertDecimalSum == decimal) {
+//                    System.out.println("[CheckSum] : SUCCESS :)");
+//                    settingDeviceInfos = settingSensorListService.settingFindData(flag.getFlag() + "", serialNumber);
+//                    System.out.println("[SettingDeviceInfos] : " + settingDeviceInfos.toString());
+//                }
 
                 if (settingDeviceInfos != null) {
-                    ctx.write(Unpooled.copiedBuffer(ack));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime2().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime3().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getFmFrequency().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSid().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPname().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSleep().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getReset().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPeriod().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSamplingTime().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getFReset().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPx().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getPy().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getActive().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getActive().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getSampleRate().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getServerUrl().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getServerPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getDbUrl().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getDbPort().getBytes()));
-                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getRadioTime().getBytes()));
+//                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
+
+
 
                     ctx.flush();
                     mBuf.release();
