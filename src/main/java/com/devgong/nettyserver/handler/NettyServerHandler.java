@@ -8,6 +8,7 @@ import com.devgong.nettyserver.protocol.RequestType;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
+import com.devgong.nettyserver.protocol.setting.SettingRequest;
 import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
@@ -79,12 +80,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         try {
 
             if (PacketFlag.PREINSTALL.equals(flag)) {
-//            if (readFlag == (byte)'A') {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
-//                for(byte a : bytes){
-//                    log.info("bytes check : {}", a);
-//                }
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
@@ -156,17 +153,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("-----------------------");
                 }
 
-                byte [] result  = new byte[45];
+                byte[] result = new byte[45];
                 //TODO : Header 값이 아닌 flag+null 45byte 만 보내고 있음!!! 수정해야함.
                 if (reportResult) {
-                    result[0] =PacketFlag.ACK.getFlag();
+                    result[0] = PacketFlag.ACK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(result));
                     ctx.flush();
                     mBuf.release();
                     log.info("Report Response Success");
 
                 } else {
-                    result[0] =PacketFlag.NAK.getFlag();
+                    result[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(result));
                     ctx.flush();
                     mBuf.release();
@@ -180,39 +177,38 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
 
+                log.info("FLAG : {}", (char) readFlag);
                 for (byte a : bytes) {
                     log.info("bytes check : {}", a);
-                    log.info("bytes : {}", (char)a);
+                    log.info("bytes : {}", (char) a);
                     log.info("-----------------------");
                 }
                 log.info("readable bytes length : {}", bytes.length);
-                log.info("FLAG : {}", (char) readFlag);
+
+                Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
+
+                log.info("request check : {}", request);
 
 
-
-//                for (int i = 0; i < chkData.length(); i++) {
-//                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
-//                }
-//                int decimal = Integer.parseInt(convertChk, 16);
-
-//                if (convertDecimalSum == decimal) {
-//                    System.out.println("[CheckSum] : SUCCESS :)");
-//                    settingDeviceInfos = settingSensorListService.settingFindData(flag.getFlag() + "", serialNumber);
-//                    System.out.println("[SettingDeviceInfos] : " + settingDeviceInfos.toString());
-//                }
-
-                if (settingDeviceInfos != null) {
+                if (true) {
 //                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
+                    log.info("여기까지");
+//                    settingDeviceInfos = settingSensorListService.settingFindData();
 
-
-
-                    ctx.flush();
-                    mBuf.release();
+//                    ctx.flush();
+//                    mBuf.release();
                 } else {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
                     System.out.println("[CheckSum][FAIL] : Not Accurate");
                     mBuf.release();
                 }
+
+
+
+
+
+
+
             } else if (flag.equals("7")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
