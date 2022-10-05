@@ -4,8 +4,9 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SettingSensorListService {
@@ -27,6 +28,8 @@ public class SettingSensorListService {
 
 
         settingSensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(sereialNumber);
+
+        log.info("leakset : {}", settingSensorListAllModel);
 
         SettingSensorListModel settingSensorListModel = settingSensorListRepository.findAllBySidAndPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
         SettingLeaksetModel settingLeaksetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject(), settingSensorListAllModel.getFreset());
