@@ -31,7 +31,7 @@ public class SettingLeaksetModel {
     @Column(name = "time3")
     private String time3;
 
-    @Column(name = "fm_frequency")
+    @Column(name = "fm")
     private String fmFrequency;
 
     @Column(name = "sid")
