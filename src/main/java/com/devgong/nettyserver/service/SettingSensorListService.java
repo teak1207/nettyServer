@@ -37,7 +37,9 @@ public class SettingSensorListService {
         SettingFactorySensorListModel settingFactorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject(), settingSensorListAllModel.getSsn());
 
 
-        log.info("여기까지2");
+
+
+        log.info("settingFactorySensorListModel : {}", settingFactorySensorListModel);
 
 //        if (settingFactorySensorListModel.getFactorypname() == null) {
 
