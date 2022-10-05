@@ -49,7 +49,7 @@ public class SettingLeaksetModel {
     @Column(name = "period")
     private String period;
 
-    @Column(name = "sampletime")
+    @Column(name = "sample")
     private String sampletime;
 
     @Column(name = "active")
@@ -60,4 +60,11 @@ public class SettingLeaksetModel {
 
     @Column(name = "fmtime")
     private String fmtime;
+
+    @Column(name = "tdate")
+    private String tdate;
+
+
+
+
 }
