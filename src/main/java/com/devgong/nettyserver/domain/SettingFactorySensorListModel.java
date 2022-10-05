@@ -39,7 +39,7 @@ public class SettingFactorySensorListModel {
     @Column(name = "v_no")
     private String v_no;
 
-    @Column(name = "factorypname")
+    @Column(name = "factory_pname")
     private String factorypname;
 
 }
