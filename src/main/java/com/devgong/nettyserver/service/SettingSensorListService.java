@@ -40,18 +40,18 @@ public class SettingSensorListService {
 
         log.info("settingFactorySensorListModel : {}", settingFactorySensorListModel);
 
-        if (settingFactorySensorListModel.getFactorypname() == null) {
-
-//                System.out.println("[leak_project URL/PORT 정보를 가져옵니다]");
-            log.info("1 : {}", 1);
-            settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
-            log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
-
-        } else {
+        if (settingFactorySensorListModel.getFactorypname() != null) {
             log.info("2 : {}", 2);
             settingFactoryLeakprojectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(settingFactorySensorListModel.getFactorypname());
             log.info("settingFactoryLeakprojectModel : {}", settingFactoryLeakprojectModel);
 
+//                System.out.println("[leak_project URL/PORT 정보를 가져옵니다]");
+
+        } else {
+
+            log.info("1 : {}", 1);
+            settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
+            log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
 
         }
 //            System.out.println("[SensorListAll] : " + settingSensorListAllModel);
