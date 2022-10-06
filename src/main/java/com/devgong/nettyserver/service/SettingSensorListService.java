@@ -19,19 +19,19 @@ public class SettingSensorListService {
     private final SettingFactoryLeakprojectRepository settingFactoryLeakprojectRepository;
     private final SettingLeakProjectRepository settingLeakProjectRepository;
 
-    public SettingResponseModel settingRequestData(String sereialNumber) {
+    public SettingResponseModel settingRequestData(String serialNumber) {
 
-
+        //memo : 마지막에 response 하기 위한 객체
         SettingResponseModel SettingResponse = new SettingResponseModel();
 
         SettingSensorListAllModel settingSensorListAllModel;
         SettingLeakProjectModel settingLeakProjectModel = null;
         SettingFactoryLeakprojectModel settingFactoryLeakprojectModel = null;
 
+        //memo : sensorListAll 에서 serialNumber 값으로 찾아옴
+        settingSensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
 
-        settingSensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(sereialNumber);
-
-        log.info("leakset : {}", settingSensorListAllModel);
+        log.info("sensor list All check : {}", settingSensorListAllModel);
 
         SettingSensorListModel settingSensorListModel = settingSensorListRepository.findAllBySidAndPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
         SettingLeaksetModel settingLeaksetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject(), settingSensorListAllModel.getFreset());
