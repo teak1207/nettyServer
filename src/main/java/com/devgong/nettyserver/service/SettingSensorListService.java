@@ -44,17 +44,15 @@ public class SettingSensorListService {
 
 
         //check : if 조건문제1
-//        if (settingFactorySensorListModel == null) {
-        if (true) {
+        if (factorySensorListModel == null) {
 
-//                System.out.println("[leak_project URL/PORT 정보를 가져옵니다]");
-            log.info("1 : {}", 1);
+            log.info("chk1 : {}", 1);
             settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
             log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
 
 
         } else {
-            log.info("2 : {}", 2);
+            log.info("chk2 : {}", 2);
             settingFactoryLeakprojectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
             log.info("settingFactoryLeakprojectModel : {}", settingFactoryLeakprojectModel);
 
