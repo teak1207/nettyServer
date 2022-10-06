@@ -25,8 +25,8 @@ public class SettingSensorListService {
         SettingResponseModel SettingResponse = new SettingResponseModel();
 
         SettingSensorListAllModel sensorListAllModel;
-        SettingLeakProjectModel settingLeakProjectModel = null;
-        SettingFactoryLeakprojectModel settingFactoryLeakprojectModel = null;
+        SettingLeakProjectModel leakProjectModel = null;
+        SettingFactoryLeakprojectModel factoryLeakProjectModel = null;
 
         //memo : sensorListAll 에서 serialNumber 값으로 찾아옴
         sensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
@@ -40,25 +40,20 @@ public class SettingSensorListService {
         log.info("FactorySensorListModel check : {}", factorySensorListModel);
 
 
-
-
-
         //check : if 조건문제1
-        if (factorySensorListModel == null) {
+//        if (factorySensorListModel == null) {
+        if (false) {
 
-            log.info("chk1 : {}", 1);
-            settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
-            log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
+            leakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
+            log.info("leakProjectModel check : {}", leakProjectModel);
 
 
         } else {
-            log.info("chk2 : {}", 2);
-            settingFactoryLeakprojectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
-            log.info("settingFactoryLeakprojectModel : {}", settingFactoryLeakprojectModel);
+            factoryLeakProjectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
+            log.info("factoryLeakProjectModel  check: {}", factoryLeakProjectModel);
 
 
         }
-
 
 
         SettingResponse.setTime1(leakSetModel.getTime1());
@@ -77,19 +72,20 @@ public class SettingSensorListService {
         SettingResponse.setActive(leakSetModel.getActive());
         SettingResponse.setSampleRate(leakSetModel.getSamplerate());
         SettingResponse.setRadioTime(leakSetModel.getFmtime());
+
         //check : if 조건문제2
         if (true) {
 
-            SettingResponse.setServerUrl(settingLeakProjectModel.getData_URL());
-            SettingResponse.setServerPort(settingLeakProjectModel.getData_PORT());
-            SettingResponse.setDbUrl(settingLeakProjectModel.getDb_URL());
-            SettingResponse.setDbPort(settingLeakProjectModel.getDb_PORT());
+            SettingResponse.setServerUrl(leakProjectModel.getData_URL());
+            SettingResponse.setServerPort(leakProjectModel.getData_PORT());
+            SettingResponse.setDbUrl(leakProjectModel.getDb_URL());
+            SettingResponse.setDbPort(leakProjectModel.getDb_PORT());
 
         } else {
-            SettingResponse.setServerUrl(settingFactoryLeakprojectModel.getDataURL());
-            SettingResponse.setServerPort(settingFactoryLeakprojectModel.getDataPORT());
-            SettingResponse.setDbUrl(settingFactoryLeakprojectModel.getDbURL());
-            SettingResponse.setDbPort(settingFactoryLeakprojectModel.getDbPORT());
+            SettingResponse.setServerUrl(factoryLeakProjectModel.getDataURL());
+            SettingResponse.setServerPort(factoryLeakProjectModel.getDataPORT());
+            SettingResponse.setDbUrl(factoryLeakProjectModel.getDbURL());
+            SettingResponse.setDbPort(factoryLeakProjectModel.getDbPORT());
         }
         return SettingResponse;
     }
