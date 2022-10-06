@@ -194,8 +194,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
-                if (true) {
-//                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
+                if (settingDeviceInfos != null) {
                     log.info("여기까지");
 //                    settingDeviceInfos = settingSensorListService.settingFindData();
 
