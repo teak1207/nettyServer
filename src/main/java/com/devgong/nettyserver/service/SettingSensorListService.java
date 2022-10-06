@@ -76,18 +76,21 @@ public class SettingSensorListService {
         log.info("SettingResponse check : {}" , SettingResponse);
 
         //check : if 조건문제2
-        if (true) {
+        if (Objects.isNull(factorySensorListModel)) {
 
             SettingResponse.setServerUrl(leakProjectModel.getData_URL());
             SettingResponse.setServerPort(leakProjectModel.getData_PORT());
             SettingResponse.setDbUrl(leakProjectModel.getDb_URL());
             SettingResponse.setDbPort(leakProjectModel.getDb_PORT());
 
+            log.info("SettingResponse check1 : {} ", SettingResponse);
+
         } else {
             SettingResponse.setServerUrl(factoryLeakProjectModel.getDataURL());
             SettingResponse.setServerPort(factoryLeakProjectModel.getDataPORT());
             SettingResponse.setDbUrl(factoryLeakProjectModel.getDbURL());
             SettingResponse.setDbPort(factoryLeakProjectModel.getDbPORT());
+            log.info("SettingResponse check2 : {} ", SettingResponse);
         }
         return SettingResponse;
     }
