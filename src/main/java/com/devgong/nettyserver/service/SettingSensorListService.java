@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -41,17 +43,15 @@ public class SettingSensorListService {
 
 
         //check : if 조건문제1
-//        if (factorySensorListModel == null) {
-        if (false) {
+        if (Objects.isNull(factorySensorListModel)) {
 
             leakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
             log.info("leakProjectModel check : {}", leakProjectModel);
 
-
+        //memo : 여기서  java.lang.NullPointerException 발생함.
         } else {
             factoryLeakProjectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
             log.info("factoryLeakProjectModel  check: {}", factoryLeakProjectModel);
-
 
         }
 
@@ -72,6 +72,8 @@ public class SettingSensorListService {
         SettingResponse.setActive(leakSetModel.getActive());
         SettingResponse.setSampleRate(leakSetModel.getSamplerate());
         SettingResponse.setRadioTime(leakSetModel.getFmtime());
+
+        log.info("SettingResponse check : {}" , SettingResponse);
 
         //check : if 조건문제2
         if (true) {
