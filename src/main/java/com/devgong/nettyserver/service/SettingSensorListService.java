@@ -24,37 +24,38 @@ public class SettingSensorListService {
         //memo : 마지막에 response 하기 위한 객체
         SettingResponseModel SettingResponse = new SettingResponseModel();
 
-        SettingSensorListAllModel settingSensorListAllModel;
+        SettingSensorListAllModel sensorListAllModel;
         SettingLeakProjectModel settingLeakProjectModel = null;
         SettingFactoryLeakprojectModel settingFactoryLeakprojectModel = null;
 
         //memo : sensorListAll 에서 serialNumber 값으로 찾아옴
-        settingSensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
+        sensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
 
-        log.info("sensorListAll check : {}", settingSensorListAllModel);
+        log.info("sensorListAll check : {}", sensorListAllModel);
+        SettingSensorListModel sensorListModel = settingSensorListRepository.findAllBySidAndPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
+        log.info("sensorList check : {}", sensorListAllModel);
+        SettingLeaksetModel leakSetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getFreset());
+        log.info("leakSet check : {}", leakSetModel);
+        SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
+        log.info("FactorySensorListModel check : {}", factorySensorListModel);
 
-        SettingSensorListModel settingSensorListModel = settingSensorListRepository.findAllBySidAndPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
-        log.info("sensorList check : {}", settingSensorListAllModel);
-
-        SettingLeaksetModel settingLeaksetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject(), settingSensorListAllModel.getFreset());
-
-        SettingFactorySensorListModel settingFactorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject(), settingSensorListAllModel.getSsn());
 
 
-        log.info("settingFactorySensorListModel : {}", settingFactorySensorListModel);
+
+
         //check : if 조건문제1
 //        if (settingFactorySensorListModel == null) {
         if (true) {
 
 //                System.out.println("[leak_project URL/PORT 정보를 가져옵니다]");
             log.info("1 : {}", 1);
-            settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
+            settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
             log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
 
 
         } else {
             log.info("2 : {}", 2);
-            settingFactoryLeakprojectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(settingFactorySensorListModel.getFactorypname());
+            settingFactoryLeakprojectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
             log.info("settingFactoryLeakprojectModel : {}", settingFactoryLeakprojectModel);
 
 
@@ -62,22 +63,22 @@ public class SettingSensorListService {
 
 
 
-        SettingResponse.setTime1(settingLeaksetModel.getTime1());
-        SettingResponse.setTime2(settingLeaksetModel.getTime2());
-        SettingResponse.setTime3(settingLeaksetModel.getTime3());
-        SettingResponse.setFmFrequency(settingLeaksetModel.getFmFrequency());
-        SettingResponse.setSid(settingSensorListAllModel.getAsid());
-        SettingResponse.setPname(settingSensorListAllModel.getAproject());
-        SettingResponse.setSleep(settingLeaksetModel.getSleep());
-        SettingResponse.setReset(settingLeaksetModel.getReset());
-        SettingResponse.setPeriod(settingLeaksetModel.getPeriod());
-        SettingResponse.setSamplingTime(settingLeaksetModel.getSampletime());
-        SettingResponse.setFReset(settingSensorListAllModel.getFreset());
-        SettingResponse.setPx(settingSensorListModel.getPx());
-        SettingResponse.setPy(settingSensorListModel.getPy());
-        SettingResponse.setActive(settingLeaksetModel.getActive());
-        SettingResponse.setSampleRate(settingLeaksetModel.getSamplerate());
-        SettingResponse.setRadioTime(settingLeaksetModel.getFmtime());
+        SettingResponse.setTime1(leakSetModel.getTime1());
+        SettingResponse.setTime2(leakSetModel.getTime2());
+        SettingResponse.setTime3(leakSetModel.getTime3());
+        SettingResponse.setFmFrequency(leakSetModel.getFmFrequency());
+        SettingResponse.setSid(sensorListAllModel.getAsid());
+        SettingResponse.setPname(sensorListAllModel.getAproject());
+        SettingResponse.setSleep(leakSetModel.getSleep());
+        SettingResponse.setReset(leakSetModel.getReset());
+        SettingResponse.setPeriod(leakSetModel.getPeriod());
+        SettingResponse.setSamplingTime(leakSetModel.getSampletime());
+        SettingResponse.setFReset(sensorListAllModel.getFreset());
+        SettingResponse.setPx(sensorListModel.getPx());
+        SettingResponse.setPy(sensorListModel.getPy());
+        SettingResponse.setActive(leakSetModel.getActive());
+        SettingResponse.setSampleRate(leakSetModel.getSamplerate());
+        SettingResponse.setRadioTime(leakSetModel.getFmtime());
         //check : if 조건문제2
         if (true) {
 
