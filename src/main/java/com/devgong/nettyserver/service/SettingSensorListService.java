@@ -19,10 +19,11 @@ public class SettingSensorListService {
     private final SettingFactoryLeakprojectRepository settingFactoryLeakprojectRepository;
     private final SettingLeakProjectRepository settingLeakProjectRepository;
 
-    public SettingSetModel settingFindData(String sereialNumber) {
+    public SettingResponseModel settingRequestData(String sereialNumber) {
 
 
-        SettingSetModel settingSetModel = new SettingSetModel();
+        SettingResponseModel SettingResponse = new SettingResponseModel();
+
         SettingSensorListAllModel settingSensorListAllModel;
         SettingLeakProjectModel settingLeakProjectModel = null;
         SettingFactoryLeakprojectModel settingFactoryLeakprojectModel = null;
@@ -39,7 +40,7 @@ public class SettingSensorListService {
 
 
         log.info("settingFactorySensorListModel : {}", settingFactorySensorListModel);
-
+        //check : if 조건문제1
 //        if (settingFactorySensorListModel == null) {
         if (true) {
 
@@ -47,7 +48,6 @@ public class SettingSensorListService {
             log.info("1 : {}", 1);
             settingLeakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(settingSensorListAllModel.getAsid(), settingSensorListAllModel.getAproject());
             log.info("settingLeakProjectModel : {}", settingLeakProjectModel);
-            log.info("sival : {}", "sibal");
 
 
         } else {
@@ -60,36 +60,36 @@ public class SettingSensorListService {
 
 
 
-        settingSetModel.setTime1(settingLeaksetModel.getTime1());
-        settingSetModel.setTime2(settingLeaksetModel.getTime2());
-        settingSetModel.setTime3(settingLeaksetModel.getTime3());
-        settingSetModel.setFmFrequency(settingLeaksetModel.getFmFrequency());
-        settingSetModel.setSid(settingSensorListAllModel.getAsid());
-        settingSetModel.setPname(settingSensorListAllModel.getAproject());
-        settingSetModel.setSleep(settingLeaksetModel.getSleep());
-        settingSetModel.setReset(settingLeaksetModel.getReset());
-        settingSetModel.setPeriod(settingLeaksetModel.getPeriod());
-        settingSetModel.setSamplingTime(settingLeaksetModel.getSampletime());
-        settingSetModel.setFReset(settingSensorListAllModel.getFreset());
-        settingSetModel.setPx(settingSensorListModel.getPx());
-        settingSetModel.setPy(settingSensorListModel.getPy());
-        settingSetModel.setActive(settingLeaksetModel.getActive());
-        settingSetModel.setSampleRate(settingLeaksetModel.getSamplerate());
-        settingSetModel.setRadioTime(settingLeaksetModel.getFmtime());
-
+        SettingResponse.setTime1(settingLeaksetModel.getTime1());
+        SettingResponse.setTime2(settingLeaksetModel.getTime2());
+        SettingResponse.setTime3(settingLeaksetModel.getTime3());
+        SettingResponse.setFmFrequency(settingLeaksetModel.getFmFrequency());
+        SettingResponse.setSid(settingSensorListAllModel.getAsid());
+        SettingResponse.setPname(settingSensorListAllModel.getAproject());
+        SettingResponse.setSleep(settingLeaksetModel.getSleep());
+        SettingResponse.setReset(settingLeaksetModel.getReset());
+        SettingResponse.setPeriod(settingLeaksetModel.getPeriod());
+        SettingResponse.setSamplingTime(settingLeaksetModel.getSampletime());
+        SettingResponse.setFReset(settingSensorListAllModel.getFreset());
+        SettingResponse.setPx(settingSensorListModel.getPx());
+        SettingResponse.setPy(settingSensorListModel.getPy());
+        SettingResponse.setActive(settingLeaksetModel.getActive());
+        SettingResponse.setSampleRate(settingLeaksetModel.getSamplerate());
+        SettingResponse.setRadioTime(settingLeaksetModel.getFmtime());
+        //check : if 조건문제2
         if (true) {
 
-            settingSetModel.setServerUrl(settingLeakProjectModel.getData_URL());
-            settingSetModel.setServerPort(settingLeakProjectModel.getData_PORT());
-            settingSetModel.setDbUrl(settingLeakProjectModel.getDb_URL());
-            settingSetModel.setDbPort(settingLeakProjectModel.getDb_PORT());
+            SettingResponse.setServerUrl(settingLeakProjectModel.getData_URL());
+            SettingResponse.setServerPort(settingLeakProjectModel.getData_PORT());
+            SettingResponse.setDbUrl(settingLeakProjectModel.getDb_URL());
+            SettingResponse.setDbPort(settingLeakProjectModel.getDb_PORT());
 
         } else {
-            settingSetModel.setServerUrl(settingFactoryLeakprojectModel.getDataURL());
-            settingSetModel.setServerPort(settingFactoryLeakprojectModel.getDataPORT());
-            settingSetModel.setDbUrl(settingFactoryLeakprojectModel.getDbURL());
-            settingSetModel.setDbPort(settingFactoryLeakprojectModel.getDbPORT());
+            SettingResponse.setServerUrl(settingFactoryLeakprojectModel.getDataURL());
+            SettingResponse.setServerPort(settingFactoryLeakprojectModel.getDataPORT());
+            SettingResponse.setDbUrl(settingFactoryLeakprojectModel.getDbURL());
+            SettingResponse.setDbPort(settingFactoryLeakprojectModel.getDbPORT());
         }
-        return settingSetModel;
+        return SettingResponse;
     }
 }

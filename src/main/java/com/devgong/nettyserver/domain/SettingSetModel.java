@@ -10,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class SettingSetModel {
+public class SettingResponseModel {
 
     private String time1;
     private String time2;

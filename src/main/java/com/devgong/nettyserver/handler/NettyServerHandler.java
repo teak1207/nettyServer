@@ -62,14 +62,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("Channel Read");
         System.out.println("===================");
 
-//        String flag = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
         byte readFlag = mBuf.readByte();
         PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + readFlag));
 
         PreInstallSetModel preInstallDeviceInfos = null;
-        SettingSetModel settingDeviceInfos = null;
-        PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
+
+
+        SettingResponseModel settingDeviceInfos = null;
+
+
+//        PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
 
         DataInsertModel dataInsertModel = new DataInsertModel();
         PreInstallSensorListAllModel reportFindResults = new PreInstallSensorListAllModel();
@@ -116,7 +119,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 if (preInstallDeviceInfos != null) {
 
-//                    log.info("response.toString() ***: {}", response);
                     log.info("response.serialize() : {}", response.serialize().length);
                     log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
@@ -188,12 +190,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("request check : {}", request);
 
-                String test="";
+                settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
 
-                log.info(request.getSensorId());
-
-                settingDeviceInfos = settingSensorListService.settingFindData(request.getSensorId());
-
+                log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
                 if (true) {
 //                    ctx.write(Unpooled.copiedBuffer(settingDeviceInfos.getTime1().getBytes()));
@@ -203,8 +202,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                    ctx.flush();
 //                    mBuf.release();
                 } else {
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                    System.out.println("[CheckSum][FAIL] : Not Accurate");
+//                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
+                   log.info("settingDeviceInfos ");
+
                     mBuf.release();
                 }
 
