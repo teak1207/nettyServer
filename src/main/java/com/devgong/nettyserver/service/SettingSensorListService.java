@@ -24,7 +24,7 @@ public class SettingSensorListService {
     public SettingResponseModel settingRequestData(String serialNumber) {
 
         //memo : 마지막에 response 하기 위한 객체
-        SettingResponseModel SettingResponse = new SettingResponseModel();
+        SettingResponseModel settingResponse = new SettingResponseModel();
 
         SettingSensorListAllModel sensorListAllModel;
         SettingLeakProjectModel leakProjectModel = null;
@@ -56,42 +56,41 @@ public class SettingSensorListService {
         }
 
 
-        SettingResponse.setTime1(leakSetModel.getTime1());
-        SettingResponse.setTime2(leakSetModel.getTime2());
-        SettingResponse.setTime3(leakSetModel.getTime3());
-        SettingResponse.setFmFrequency(leakSetModel.getFmFrequency());
-        SettingResponse.setSid(sensorListAllModel.getAsid());
-        SettingResponse.setPname(sensorListAllModel.getAproject());
-        SettingResponse.setSleep(leakSetModel.getSleep());
-        SettingResponse.setReset(leakSetModel.getReset());
-        SettingResponse.setPeriod(leakSetModel.getPeriod());
-        SettingResponse.setSamplingTime(leakSetModel.getSampletime());
-        SettingResponse.setFReset(sensorListAllModel.getFreset());
-        SettingResponse.setPx(sensorListModel.getPx());
-        SettingResponse.setPy(sensorListModel.getPy());
-        SettingResponse.setActive(leakSetModel.getActive());
-        SettingResponse.setSampleRate(leakSetModel.getSamplerate());
-        SettingResponse.setRadioTime(leakSetModel.getFmtime());
+        settingResponse.setTime1(leakSetModel.getTime1());
+        settingResponse.setTime2(leakSetModel.getTime2());
+        settingResponse.setTime3(leakSetModel.getTime3());
+        settingResponse.setFmFrequency(leakSetModel.getFmFrequency());
+        settingResponse.setSid(sensorListAllModel.getAsid());
+        settingResponse.setPname(sensorListAllModel.getAproject());
+        settingResponse.setSleep(leakSetModel.getSleep());
+        settingResponse.setReset(leakSetModel.getReset());
+        settingResponse.setPeriod(leakSetModel.getPeriod());
+        settingResponse.setSamplingTime(leakSetModel.getSampletime());
+        settingResponse.setFReset(sensorListAllModel.getFreset());
+        settingResponse.setPx(sensorListModel.getPx());
+        settingResponse.setPy(sensorListModel.getPy());
+        settingResponse.setActive(leakSetModel.getActive());
+        settingResponse.setSampleRate(leakSetModel.getSamplerate());
+        settingResponse.setRadioTime(leakSetModel.getFmtime());
 
-        log.info("SettingResponse check : {}" , SettingResponse);
+        log.info("SettingResponse check : {}" , settingResponse);
 
-        //check : if 조건문제2
         if (Objects.isNull(factorySensorListModel)) {
 
-            SettingResponse.setServerUrl(leakProjectModel.getData_URL());
-            SettingResponse.setServerPort(leakProjectModel.getData_PORT());
-            SettingResponse.setDbUrl(leakProjectModel.getDb_URL());
-            SettingResponse.setDbPort(leakProjectModel.getDb_PORT());
+            settingResponse.setServerUrl(leakProjectModel.getData_URL());
+            settingResponse.setServerPort(leakProjectModel.getData_PORT());
+            settingResponse.setDbUrl(leakProjectModel.getDb_URL());
+            settingResponse.setDbPort(leakProjectModel.getDb_PORT());
 
-            log.info("SettingResponse check1 : {} ", SettingResponse);
+            log.info("settingResponse check1 : {} ", settingResponse);
 
         } else {
-            SettingResponse.setServerUrl(factoryLeakProjectModel.getDataURL());
-            SettingResponse.setServerPort(factoryLeakProjectModel.getDataPORT());
-            SettingResponse.setDbUrl(factoryLeakProjectModel.getDbURL());
-            SettingResponse.setDbPort(factoryLeakProjectModel.getDbPORT());
-            log.info("SettingResponse check2 : {} ", SettingResponse);
+            settingResponse.setServerUrl(factoryLeakProjectModel.getDataURL());
+            settingResponse.setServerPort(factoryLeakProjectModel.getDataPORT());
+            settingResponse.setDbUrl(factoryLeakProjectModel.getDbURL());
+            settingResponse.setDbPort(factoryLeakProjectModel.getDbPORT());
+            log.info("settingResponse check2 : {} ", settingResponse);
         }
-        return SettingResponse;
+        return settingResponse;
     }
 }

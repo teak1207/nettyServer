@@ -79,14 +79,12 @@ public class PreInstallResponse implements Serializable<PreInstallResponse> {
         dbPort = new String(Arrays.copyOfRange(payload, 163, 167)).trim();
         radioTime = payload[167];
         baudrate = payload[168];
-
     }
 
     @Override
     public PreInstallResponse deserialize(byte[] byteArray) {
         return new PreInstallResponse(byteArray);
     }
-
 
 
     @Override

@@ -15,7 +15,7 @@ public class SettingResponseModel {
     private String time1;
     private String time2;
     private String time3;
-    private String fmFrequency;
+    private String fmRadio;
     private String sid;
     private String pname;
     private String sleep;

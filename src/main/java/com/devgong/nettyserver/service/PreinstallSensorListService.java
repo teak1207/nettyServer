@@ -20,7 +20,7 @@ public class PreinstallSensorListService {
     private final PreInstallSensorListRepository preInstallSensorListRepository;
     private final ReportRepository reportRepository;
 
-    public PreInstallSetModel preInstallfindData(String modemnum) {
+    public PreInstallSetModel preInstallFindData(String modemnum) {
 
         PreInstallSetModel preinstallSetModel = new PreInstallSetModel();
 
@@ -29,19 +29,15 @@ public class PreinstallSensorListService {
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel;
 
-
-//        log.info("modemnum : {}, byte : {}", modemnum, modemnum.getBytes().length);
         preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum.trim());
         preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
         preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
 
-
         log.info("-------------------------------");
         log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);
         log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
         log.info("-------------------------------");
-
 
         preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
         preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
@@ -65,7 +61,7 @@ public class PreinstallSensorListService {
         return preinstallSetModel;
     }
 
-    public boolean insertReport( byte[] bytes) {
+    public boolean insertReport(byte[] bytes) {
 
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
 
@@ -111,7 +107,6 @@ public class PreinstallSensorListService {
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return true;
-
 
 
         } else {

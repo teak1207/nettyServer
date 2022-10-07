@@ -9,6 +9,7 @@ import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.protocol.setting.SettingRequest;
+import com.devgong.nettyserver.protocol.setting.SettingResponse;
 import com.devgong.nettyserver.service.DataSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
@@ -66,9 +67,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + readFlag));
 
+        //memo : preinstall response 담을 객체 생성
         PreInstallSetModel preInstallDeviceInfos = null;
-
-
+        //memo : setting response 담을 객체 생성
         SettingResponseModel settingDeviceInfos = null;
 
 
@@ -79,7 +80,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         RequestListAllModel requestFindResults;
 
         /* 플래그에 값에 따라 분기*/
-        /*  <<< Pre-Install Step >>> ===========================================================================================*/
+        /*  <<< Pre-Install  >>> ===========================================================================================*/
         try {
 
             if (PacketFlag.PREINSTALL.equals(flag)) {
@@ -95,7 +96,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("bytes : {}", (char) bytes[i]);
                 }
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
-                preInstallDeviceInfos = preinstallSensorListService.preInstallfindData(request.getParameter().getModemPhoneNumber());
+                preInstallDeviceInfos = preinstallSensorListService.preInstallFindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
                         preInstallDeviceInfos.getTime1(),
                         preInstallDeviceInfos.getTime2(),
@@ -190,27 +191,55 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("request check : {}", request);
 
-                settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
 
+                settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
-                if (settingDeviceInfos != null) {
-                    log.info("여기까지");
-//                    settingDeviceInfos = settingSensorListService.settingFindData();
 
-//                    ctx.flush();
-//                    mBuf.release();
+                // memo : 첵첵첵
+                if (settingDeviceInfos != null) {
+
+                    SettingResponse response = new SettingResponse(
+                            settingDeviceInfos.getTime1(),
+                            settingDeviceInfos.getTime2(),
+                            settingDeviceInfos.getTime3(),
+                            settingDeviceInfos.getFmRadio(),
+                            settingDeviceInfos.getSid(),
+                            settingDeviceInfos.getPname(),
+                            settingDeviceInfos.getSleep(),
+                            settingDeviceInfos.getReset(),
+                            Integer.parseInt(settingDeviceInfos.getPeriod()),
+                            Integer.parseInt(settingDeviceInfos.getSamplingTime()),
+                            settingDeviceInfos.getFReset(),
+                            settingDeviceInfos.getPx(),
+                            settingDeviceInfos.getPy(),
+                            settingDeviceInfos.getActive(),
+                            Integer.parseInt(settingDeviceInfos.getSampleRate()),
+                            settingDeviceInfos.getServerUrl(),
+                            settingDeviceInfos.getServerPort(),
+                            settingDeviceInfos.getDbUrl(),
+                            settingDeviceInfos.getDbPort(),
+                            Integer.parseInt(settingDeviceInfos.getRadioTime())
+                    );
+
+                    Packet<SettingResponse> responsePacket = new Packet<>(
+                            PacketFlag.SETTING,
+                            response.getSid(),
+                            LocalDateTime.now(),
+                            RequestType.SERVER,
+                            response.serialize().length + 2,  //4 byte
+                            response
+                    );
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
+                    mBuf.release();
+
+
                 } else {
 //                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                   log.info("settingDeviceInfos ");
+                    log.info("fail ");
 
                     mBuf.release();
                 }
-
-
-
-
-
 
 
             } else if (flag.equals("7")) {
