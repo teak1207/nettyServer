@@ -137,7 +137,7 @@ public class SettingResponse implements Serializable<SettingResponse> {
         System.arraycopy(serverPortBytes, 0, serialized, 107, 4);
         System.arraycopy(dbUrlBytes, 0, serialized, 111, 32);
         System.arraycopy(dbPortBytes, 0, serialized, 143, 4);
-        serialized[148] = (byte) radioTime;
+        serialized[147] = (byte) radioTime;
         return serialized;
     }
 }
