@@ -59,7 +59,7 @@ public class SettingSensorListService {
         settingResponse.setTime1(leakSetModel.getTime1());
         settingResponse.setTime2(leakSetModel.getTime2());
         settingResponse.setTime3(leakSetModel.getTime3());
-        settingResponse.setFmFrequency(leakSetModel.getFmFrequency());
+        settingResponse.setFmRadio(leakSetModel.getFmFrequency());
         settingResponse.setSid(sensorListAllModel.getAsid());
         settingResponse.setPname(sensorListAllModel.getAproject());
         settingResponse.setSleep(leakSetModel.getSleep());
