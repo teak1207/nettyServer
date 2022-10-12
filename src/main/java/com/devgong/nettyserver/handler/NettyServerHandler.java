@@ -238,8 +238,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Report Readable bytes length : {}", bytes.length);
                 log.info("Report flag : {}", flag);
 
+
+                int x= 1;
                 for (int i = 0; i < bytes.length; i++) {
                     log.info("report bytes : {}", (char) bytes[i]);
+                    log.info("report bytes : {}", bytes[i]);
+                    log.info("--------------------------");
+                    x++;
                 }
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
