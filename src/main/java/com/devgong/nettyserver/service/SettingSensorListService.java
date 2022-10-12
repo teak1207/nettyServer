@@ -32,29 +32,28 @@ public class SettingSensorListService {
 
         //memo : sensorListAll 에서 serialNumber 값으로 찾아옴
         sensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
-        log.info("sensorListAll check : {}", sensorListAllModel);
+//        log.info("sensorListAll check : {}", sensorListAllModel);
 
         SettingSensorListModel sensorListModel = settingSensorListRepository.findAllBySidAndPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
-        log.info("sensorList check : {}", sensorListAllModel);
+//        log.info("sensorList check : {}", sensorListAllModel);
 
         SettingLeaksetModel leakSetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getFreset());
-        log.info("leakSet check : {}", leakSetModel);
+//        log.info("leakSet check : {}", leakSetModel);
 
         SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
-        log.info("FactorySensorListModel check : {}", factorySensorListModel);
+//        log.info("FactorySensorListModel check : {}", factorySensorListModel);
 
-        log.info("leakSetModel test : {}",leakSetModel.getTime1());
 
         //check : if 조건문제1
         if (Objects.isNull(factorySensorListModel)) {
 
             leakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
-            log.info("leakProjectModel check : {}", leakProjectModel);
+//            log.info("leakProjectModel check : {}", leakProjectModel);
 
             //memo : 여기서  java.lang.NullPointerException 발생함.
         } else {
             factoryLeakProjectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
-            log.info("factoryLeakProjectModel  check: {}", factoryLeakProjectModel);
+//            log.info("factoryLeakProjectModel  check: {}", factoryLeakProjectModel);
 
         }
 
