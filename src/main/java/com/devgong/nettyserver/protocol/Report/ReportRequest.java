@@ -17,11 +17,14 @@ public class ReportRequest implements Serializable<ReportRequest> {
 
     @Override
     public byte[] serialize() {
-        return new byte[0];
+
+        byte[] serialized = new byte[0];
+
+        return serialized;
     }
 
     @Override
     public ReportRequest deserialize(byte[] byteArray) {
-        return null;
+        return new ReportRequest(byteArray);
     }
 }
