@@ -137,6 +137,7 @@ public class ReportRequest implements Serializable<ReportRequest> {
         System.arraycopy(cregCountBytes, 0, serialized, 176, 1);
         System.arraycopy(sleepCountBytes, 0, serialized, 177, 1);
 
+        log.info("serialized check : {}",serialized);
 
         return serialized;
     }
