@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReportRequest implements Serializable<ReportRequest> {
 
     public ReportRequest(byte[] payload) {
-        if (payload == null) {
+        if (payload == null || payload.length != 180) {
             throw new IllegalArgumentException("Setting Request payload error!");
         }
     }
@@ -18,9 +18,7 @@ public class ReportRequest implements Serializable<ReportRequest> {
     @Override
     public byte[] serialize() {
 
-        byte[] serialized = new byte[0];
-
-        return serialized;
+        return new byte[180];
     }
 
     @Override

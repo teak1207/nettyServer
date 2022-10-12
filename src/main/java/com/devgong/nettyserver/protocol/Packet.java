@@ -31,7 +31,6 @@ public class Packet<T extends Serializable<T>> {
         this.dateTime = dateTime;
         this.requestType = requestType;
         this.parameter = parameter;
-        // TODO : Parameter Length 어떻게 byte[4] 로 변환?
         this.parameterLength = parameterLength;
         this.checksum = makeChecksum();
     }
