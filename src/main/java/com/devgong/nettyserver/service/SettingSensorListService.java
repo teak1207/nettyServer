@@ -43,6 +43,7 @@ public class SettingSensorListService {
         SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
         log.info("FactorySensorListModel check : {}", factorySensorListModel);
 
+        log.info("leakSetModel test : {}",leakSetModel.getTime1());
 
         //check : if 조건문제1
         if (Objects.isNull(factorySensorListModel)) {
@@ -50,14 +51,13 @@ public class SettingSensorListService {
             leakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
             log.info("leakProjectModel check : {}", leakProjectModel);
 
-        //memo : 여기서  java.lang.NullPointerException 발생함.
+            //memo : 여기서  java.lang.NullPointerException 발생함.
         } else {
             factoryLeakProjectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
             log.info("factoryLeakProjectModel  check: {}", factoryLeakProjectModel);
 
         }
 
-        log.info("leakSetModel test : {}",leakSetModel.getTime1());
 
         settingResponse.setTime1(leakSetModel.getTime1());
         settingResponse.setTime2(leakSetModel.getTime2());
