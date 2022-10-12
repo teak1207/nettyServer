@@ -41,10 +41,10 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
         System.arraycopy(modemPhoneNumberBytes, 0, serialized, 0, 16);
         System.arraycopy(debugMessageBytes, 0, serialized, 16, 13);
 
-        for(byte b : serialized) {
-            log.info("serialized : {}", b);
-            log.info("serialized(char) : {}", (char)b);
-        }
+//        for(byte b : serialized) {
+//            log.info("serialized : {}", b);
+//            log.info("serialized(char) : {}", (char)b);
+//        }
 
         return serialized;
     }

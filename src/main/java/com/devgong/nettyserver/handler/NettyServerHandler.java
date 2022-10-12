@@ -4,13 +4,14 @@ import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.protocol.NakPacket;
 import com.devgong.nettyserver.protocol.Packet;
 import com.devgong.nettyserver.protocol.PacketFlag;
+import com.devgong.nettyserver.protocol.Report.ReportRequest;
 import com.devgong.nettyserver.protocol.RequestType;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.protocol.setting.SettingRequest;
 import com.devgong.nettyserver.protocol.setting.SettingResponse;
-import com.devgong.nettyserver.service.DataSensorListService;
+import com.devgong.nettyserver.service.ReportSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
@@ -47,7 +48,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final PreinstallSensorListService preinstallSensorListService;
     private final SettingSensorListService settingSensorListService;
-    private final DataSensorListService dataSensorListService;
+    private final ReportSensorListService reportSensorListService;
     private final RequestSensorListService requestSensorListService;
 
     final byte[] ack = {8};
@@ -68,9 +69,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + readFlag));
 
         //memo : preinstall response 담을 객체 생성
-        PreInstallSetModel preInstallDeviceInfos = null;
+        PreInstallSetModel preInstallDeviceInfos;
         //memo : setting response 담을 객체 생성
-        SettingResponseModel settingDeviceInfos = null;
+        SettingResponseModel settingDeviceInfos;
 
 
 //        PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
@@ -89,12 +90,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-                log.info("readable bytes length : {}", bytes.length);
-                log.info("FLAG : {}", (char) readFlag);
+                log.info("PreInstall  readable bytes length : {}", bytes.length);
+                log.info("PreInstall FLAG : {}", (char) readFlag);
 
-                for (int i = 0; i < bytes.length; i++) {
-                    log.info("bytes : {}", (char) bytes[i]);
-                }
+//                for (int i = 0; i < bytes.length; i++) {
+//                    log.info("bytes : {}", (char) bytes[i]);
+//                }
+
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
                 preInstallDeviceInfos = preinstallSensorListService.preInstallFindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
@@ -144,19 +146,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
+                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
+                log.info("ACK/NAK FLAG : {}", (char) readFlag);
+
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
-                int i = 0;
-                for (byte a : bytes) {
-                    log.info("(char)a : {}", (char) a);
-                    log.info("byte length : {}", i);
-                    i++;
-                    log.info("-----------------------");
-                }
-
                 byte[] result = new byte[45];
+
                 //TODO : Header 값이 아닌 flag+null 45byte 만 보내고 있음!!! 수정해야함.
                 if (reportResult) {
                     result[0] = PacketFlag.ACK.getFlag();
@@ -173,32 +171,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.error("Report Insert Failed");
                 }
 
-
             } else if (PacketFlag.SETTING.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-                log.info("FLAG : {}", (char) readFlag);
-                for (byte a : bytes) {
-                    log.info("bytes check : {}", a);
-                    log.info("bytes : {}", (char) a);
-                    log.info("-----------------------");
-                }
-                log.info("readable bytes length : {}", bytes.length);
-
                 Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
 
-                log.info("request check : {}", request);
-
+                log.info("Setting Readable bytes length : {}", bytes.length);
+                log.info("Setting Request check : {}", request);
 
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
-
-                // memo : 첵첵첵
                 if (settingDeviceInfos != null) {
-
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
                             settingDeviceInfos.getTime2(),
@@ -235,107 +221,56 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 } else {
-//                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                    log.info("fail ");
+
+                    //memo : nak 45 byte 처리하기
+                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
+                    log.info("setting response fail ");
 
                     mBuf.release();
                 }
 
 
-            } else if (flag.equals("7")) {
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String endRecordingTime = mBuf.readCharSequence(13, Charset.defaultCharset()).toString();
-                String recordingTime1 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String recordingTime2 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String recordingTime3 = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String fmRadio = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String firmWareVersion = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
-                String batteryVtg = mBuf.readCharSequence(6, Charset.defaultCharset()).toString();
-                String RSSI = mBuf.readCharSequence(3, Charset.defaultCharset()).toString(); //Number
-                String deviceStatus = mBuf.readCharSequence(2, Charset.defaultCharset()).toString();
-                String samplingTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();//Number
-                String px = mBuf.readCharSequence(10, Charset.defaultCharset()).toString();
-                String py = mBuf.readCharSequence(10, Charset.defaultCharset()).toString();
-                String modemNumber = mBuf.readCharSequence(16, Charset.defaultCharset()).toString();
-                String sid = mBuf.readCharSequence(16, Charset.defaultCharset()).toString(); //*
-                String period = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String serverUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
-                String serverPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String DBUrl = mBuf.readCharSequence(32, Charset.defaultCharset()).toString(); //*
-                String DBPort = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String sleep = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String active = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String fReset = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String reset = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String samplerate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String radioTime = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String cregCnt = mBuf.readCharSequence(3, Charset.defaultCharset()).toString();
-                String sleepCnt = mBuf.readCharSequence(3, Charset.defaultCharset()).toString();
-                byte chksum1 = (mBuf.readByte());
-                byte chksum2 = (mBuf.readByte());
+            } else if (PacketFlag.REPORT.equals(flag)) {
 
-                String convertChk = String.format("%x%x", chksum1, chksum2);
-                String chkData = flag + serialNumber + endRecordingTime + requestType + paraLen + sid + recordingTime1 + recordingTime2 + recordingTime3 +
-                        fmRadio + firmWareVersion + batteryVtg + RSSI + deviceStatus + samplingTime + px + py + modemNumber + period + serverUrl + serverPort +
-                        DBUrl + DBPort + sleep + active + fReset + reset + samplerate + radioTime + cregCnt + sleepCnt;
+                byte[] bytes = new byte[mBuf.readableBytes()];
+                mBuf.duplicate().readBytes(bytes);
 
-                int convertDecimalSum = 0;
+                log.info("Report Readable bytes length : {}", bytes.length);
+                log.info("Report flag : {}", flag);
 
-                for (int i = 0; i < chkData.length(); i++) {
-                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                for (int i = 0; i < bytes.length; i++) {
+                    log.info("report bytes : {}", (char) bytes[i]);
                 }
 
-                System.out.println("===========data process (D-->S)==========");
-                System.out.println("[convertChk] " + convertChk);
-                int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[decimal] " + decimal);
-                System.out.println("[convertDecimalSum] " + convertDecimalSum);
-                System.out.println("=================================");
+                Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 
-                if (convertDecimalSum == decimal) {
-                    System.out.println("[CheckSum] : SUCCESS :)");
-                    dataInsertModel.setEndRecordTime(endRecordingTime.trim());
-                    dataInsertModel.setTime1(recordingTime1.trim());
-                    dataInsertModel.setTime2(recordingTime2.trim());
-                    dataInsertModel.setTime3(recordingTime3.trim());
-                    dataInsertModel.setFmFrequency(fmRadio.trim());
-                    dataInsertModel.setFirmwareVersion(firmWareVersion.trim());
-                    dataInsertModel.setBatteryVtg(batteryVtg.trim());
-                    dataInsertModel.setRSSI(RSSI.trim());
-                    dataInsertModel.setDeviceStatus(deviceStatus.trim());
-                    dataInsertModel.setSamplingTime(samplingTime.trim());
-                    dataInsertModel.setPx(px.trim());
-                    dataInsertModel.setPy(py.trim());
-                    dataInsertModel.setModemNumber(modemNumber.trim());
-                    dataInsertModel.setSid(sid.trim());
-                    dataInsertModel.setPeriod(period.trim());
-                    dataInsertModel.setServerUrl(serverUrl.trim());
-                    dataInsertModel.setServerPort(serverPort.trim());
-                    dataInsertModel.setDbUrl(DBUrl.trim());
-                    dataInsertModel.setDbPort(DBPort.trim());
-                    dataInsertModel.setSleep(sleep.trim());
-                    dataInsertModel.setActive(active.trim());
-                    dataInsertModel.setFReset(fReset.trim());
-                    dataInsertModel.setReset(reset.trim());
-                    dataInsertModel.setSampleRate(samplerate.trim());
-                    dataInsertModel.setRadioTime(radioTime.strip());
 
-                    reportFindResults = dataSensorListService.findDataExistence(flag.getFlag() + "", serialNumber);
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
 
-                    if (Objects.isNull(reportFindResults)) {
-                        System.out.println("[fail] : 값이 존재하질 않습니다");
+
+                log.info("serialNum check : {}", serialNumber);
+
+
+                reportFindResults = reportSensorListService.findDataExistence(serialNumber);
+
+
+
+                log.info("여기");
+
+
+
+
+                if (Objects.isNull(reportFindResults)) {
+                    System.out.println("[fail] : 값이 존재하질 않습니다");
+                } else {
+                    System.out.println("[reportFindResults]" + reportFindResults.toString());
+                    // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        mBuf.release();
                     } else {
-                        System.out.println("[reportFindResults]" + reportFindResults.toString());
-                        // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-                        if (dataSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
-                            ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                            mBuf.release();
-                        } else {
-                            ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                            mBuf.release();
-                        }
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
+                        mBuf.release();
                     }
                 }
             } else if (flag.equals("5")) {
