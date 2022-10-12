@@ -32,12 +32,14 @@ public class SettingSensorListService {
 
         //memo : sensorListAll 에서 serialNumber 값으로 찾아옴
         sensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
-
         log.info("sensorListAll check : {}", sensorListAllModel);
+
         SettingSensorListModel sensorListModel = settingSensorListRepository.findAllBySidAndPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
         log.info("sensorList check : {}", sensorListAllModel);
+
         SettingLeaksetModel leakSetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getFreset());
         log.info("leakSet check : {}", leakSetModel);
+
         SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
         log.info("FactorySensorListModel check : {}", factorySensorListModel);
 
@@ -55,6 +57,7 @@ public class SettingSensorListService {
 
         }
 
+        log.info("leakSetModel test : {}",leakSetModel.getTime1());
 
         settingResponse.setTime1(leakSetModel.getTime1());
         settingResponse.setTime2(leakSetModel.getTime2());

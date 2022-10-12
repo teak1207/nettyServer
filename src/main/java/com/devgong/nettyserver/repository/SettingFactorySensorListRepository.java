@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SettingFactorySensorListRepository extends JpaRepository<SettingFactorySensorListModel, Integer> {
 
-    SettingFactorySensorListModel findAllBySidAndPnameAndSn(String x, String y, String z);
+    SettingFactorySensorListModel findAllBySidAndPnameAndSn(String sid, String aProject, String ssn);
 }

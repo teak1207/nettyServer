@@ -15,7 +15,8 @@ import javax.persistence.Table;
 @Entity
 @ToString
 @Table(name = "factory_sensor_list")
-public class SettingFactorySensorListModel {
+public class
+SettingFactorySensorListModel {
 
     @Id
     @Column(name = "cid")
