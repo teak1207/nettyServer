@@ -42,7 +42,7 @@ public class ReportRequest implements Serializable<ReportRequest> {
 
 
     public ReportRequest(byte[] payload) {
-        if (payload == null || payload.length != 178) {
+        if (payload == null || payload.length != 177) {
             throw new IllegalArgumentException("Setting Request payload error!");
         }
         endRecordTime = new String(Arrays.copyOfRange(payload, 0, 13));
