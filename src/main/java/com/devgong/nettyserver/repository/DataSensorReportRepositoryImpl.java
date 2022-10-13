@@ -28,18 +28,18 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         String convertedSerialNum = "_" + serialNumber + "`";
 
 //        String mix = convertedSid + convertedSerialNum.toLowerCase();
-        String mix = convertedSid + convertedSerialNum;
-        simpleJdbcInsert.withTableName(mix).usingGeneratedKeyColumns("cid");
+        String mixTableName = convertedSid + convertedSerialNum;
+        simpleJdbcInsert.withTableName(mixTableName).usingGeneratedKeyColumns("cid");
 
-        log.info(dataInsertModel.toString());
-        log.info(sid);
-        log.info(project);
-        log.info(serialNumber);
-        log.info(mix);
+        log.info("dataInsertModel: {}", dataInsertModel);
+        log.info("sid : {}", sid);
+        log.info("sid : {}", project);
+        log.info("sid : {}", serialNumber);
+        log.info("mixTableName : {}", mixTableName);
 
         Map<String, Object> parameters = new HashMap<>();
 
-        Date now  = new Date();
+        Date now = new Date();
 
         parameters.put("cid", 1);
         parameters.put("serialNumber", serialNumber);
