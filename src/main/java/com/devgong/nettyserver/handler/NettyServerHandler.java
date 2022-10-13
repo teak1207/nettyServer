@@ -243,9 +243,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 findResult = reportSensorListService.findDataExistence(serialNumber);
 
-//                log.info("findResult : {}", findResult);
-//                log.info("request check : {}", request);
-
 
                 if (Objects.isNull(findResult)) {
                     log.info("[FAIL] : 값이 존재하질 않습니다");
