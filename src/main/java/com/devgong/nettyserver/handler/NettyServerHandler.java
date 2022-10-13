@@ -265,19 +265,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-                if (Objects.isNull(reportFindResults)) {
-                    System.out.println("[fail] : 값이 존재하질 않습니다");
-                } else {
-                    System.out.println("[reportFindResults]" + reportFindResults.toString());
-                    // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        mBuf.release();
-                    } else {
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                        mBuf.release();
-                    }
-                }
+//                if (Objects.isNull(reportFindResults)) {
+//                    System.out.println("[fail] : 값이 존재하질 않습니다");
+//                } else {
+//                    System.out.println("[reportFindResults]" + reportFindResults.toString());
+//                    // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+//                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, reportFindResults.getAsid(), reportFindResults.getAproject(), reportFindResults.getSsn())) {
+//                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+//                        mBuf.release();
+//                    } else {
+//                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
+//                        mBuf.release();
+//                    }
+//                }
             } else if (flag.equals("5")) {
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
