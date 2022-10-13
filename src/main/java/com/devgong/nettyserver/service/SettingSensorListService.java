@@ -41,7 +41,7 @@ public class SettingSensorListService {
 //        log.info("sensorList check : {}", sensorListAllModel);
 
 
-        SettingLeaksetModel leakSetModel = settingLeaksetRepository.findAllBySidAndPnameAndReset(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getFreset());
+        SettingLeaksetModel leakSetModel = settingLeaksetRepository.findAllBySidAndPnameAndResetOrderByCidDesc(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getFreset());
 //        log.info("leakSet check : {}", leakSetModel);
 
         SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
