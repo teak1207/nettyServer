@@ -3,8 +3,11 @@ package com.devgong.nettyserver.service;
 
 import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
+import com.devgong.nettyserver.protocol.Packet;
+import com.devgong.nettyserver.protocol.Report.ReportRequest;
 import com.devgong.nettyserver.repository.DataSensorListAllRepository;
 import com.devgong.nettyserver.repository.DataSensorReportRepository;
+import com.sun.xml.bind.v2.runtime.reflect.Lister;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,11 +46,11 @@ public class ReportSensorListService {
     }
 
 
-    public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber) {
+    public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
         if (dataInsertModel != null) {
 
-            dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
+//            dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
             log.info("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
 
         } else {

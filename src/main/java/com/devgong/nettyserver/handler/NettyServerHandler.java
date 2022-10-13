@@ -234,21 +234,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
-
-                log.info("Report Readable bytes length : {}", bytes.length);
-                log.info("Report flag : {}", flag);
+//                log.info("Report Readable bytes length : {}", bytes.length);
+//                log.info("Report flag : {}", flag);
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
-
 
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
 
                 findResult = reportSensorListService.findDataExistence(serialNumber);
 
-                log.info("findResult : {}", findResult);
-                log.info("request check : {}", request);
-
-
+//                log.info("findResult : {}", findResult);
+//                log.info("request check : {}", request);
 
 
                 if (Objects.isNull(findResult)) {
@@ -258,7 +254,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[reportFindResults]" + findResult.toString());
 
                     // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn())) {
+                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(),request)) {
 
                         log.info("야호");
 //                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
