@@ -50,26 +50,26 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
 
         parameters.put("py", dataInsertModel.getPy());
 
-        parameters.put("pname", dataInsertModel.getModemNumber());
+        parameters.put("pname", dataInsertModel.getPname());
 
-        parameters.put("time1", dataInsertModel.getTime1());
-        parameters.put("time2", dataInsertModel.getTime2());
-        parameters.put("time3", dataInsertModel.getTime3());
+        parameters.put("time1", dataInsertModel.getRecordTime1());
+        parameters.put("time2", dataInsertModel.getRecordTime2());
+        parameters.put("time3", dataInsertModel.getRecordTime3());
 
         parameters.put("end_record_time", dataInsertModel.getEndRecordTime());
 
-        parameters.put("fm", dataInsertModel.getFmFrequency());
+        parameters.put("fm", dataInsertModel.getFmRadio());
 
         parameters.put("firmwareVersion", dataInsertModel.getFirmwareVersion());
 
-        parameters.put("rssi", dataInsertModel.getRSSI());
+        parameters.put("rssi", dataInsertModel.getModernRssi());
 
         parameters.put("status", dataInsertModel.getDeviceStatus());
 
         parameters.put("sample", dataInsertModel.getSamplingTime());
 
         parameters.put("period", dataInsertModel.getPeriod());
-        parameters.put("battery", dataInsertModel.getBatteryVtg());
+        parameters.put("battery", dataInsertModel.getBatteryValue());
         parameters.put("project", project);
         parameters.put("server_url", dataInsertModel.getServerUrl());
         parameters.put("server_port", dataInsertModel.getServerPort());
