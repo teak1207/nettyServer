@@ -9,6 +9,7 @@ import javax.persistence.*;
 public class DataInsertModel {
 
     private int cid;
+    private String sn;
     private String endRecordTime;
     private String recordTime1;
     private String recordTime2;

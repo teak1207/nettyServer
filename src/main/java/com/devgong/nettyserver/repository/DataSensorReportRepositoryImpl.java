@@ -27,7 +27,6 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         String convertedSid = "`" + "sensor_report_" + sid;
         String convertedSerialNum = "_" + serialNumber + "`";
 
-//        String mix = convertedSid + convertedSerialNum.toLowerCase();
         String mixTableName = convertedSid + convertedSerialNum;
         simpleJdbcInsert.withTableName(mixTableName).usingGeneratedKeyColumns("cid");
 
