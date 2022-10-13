@@ -30,7 +30,7 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         String mixTableName = convertedSid + convertedSerialNum;
         simpleJdbcInsert.withTableName(mixTableName).usingGeneratedKeyColumns("cid");
 
-        log.info("dataInsertModel: {}", dataInsertModel);
+        log.info("dataInsertModel222: {}", dataInsertModel);
         log.info("mixTableName : {}", mixTableName);
 
         Map<String, Object> parameters = new HashMap<>();

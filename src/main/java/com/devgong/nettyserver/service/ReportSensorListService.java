@@ -49,6 +49,8 @@ public class ReportSensorListService {
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
 
+        log.info("request check : {}", request);
+
         dataInsertModel.setSn(request.getSensorId());
         dataInsertModel.setEndRecordTime(request.getParameter().getEndRecordTime());
         dataInsertModel.setRecordTime1(request.getParameter().getRecordTime1());
