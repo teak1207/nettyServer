@@ -34,7 +34,9 @@ public class SettingSensorListService {
         sensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
 //        log.info("sensorListAll check : {}", sensorListAllModel);
 
-        log.info("test: {}",sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
+        log.info("test: {}", sensorListAllModel.getAsid());
+        log.info("test: {}", sensorListAllModel.getAproject());
+
         SettingSensorListModel sensorListModel = settingSensorListRepository.findAllBySidAndPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
 //        log.info("sensorList check : {}", sensorListAllModel);
 
@@ -77,7 +79,7 @@ public class SettingSensorListService {
         settingResponse.setSampleRate(leakSetModel.getSamplerate());
         settingResponse.setRadioTime(leakSetModel.getFmtime());
 
-        log.info("SettingResponse check : {}" , settingResponse);
+        log.info("SettingResponse check : {}", settingResponse);
 
         if (Objects.isNull(factorySensorListModel)) {
 
