@@ -48,9 +48,40 @@ public class ReportSensorListService {
 
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
+
+        dataInsertModel.setEndRecordTime(request.getParameter().getEndRecordTime());
+        dataInsertModel.setRecordTime1(request.getParameter().getRecordTime1());
+        dataInsertModel.setRecordTime2(request.getParameter().getRecordTime2());
+        dataInsertModel.setRecordTime3(request.getParameter().getRecordTime3());
+        dataInsertModel.setFmRadio(request.getParameter().getFmRadio());
+        dataInsertModel.setFirmwareVersion(request.getParameter().getFirmWareVersion());
+        dataInsertModel.setBatteryValue(request.getParameter().getBatteryValue());
+        dataInsertModel.setModernRssi(request.getParameter().getRssi());
+        dataInsertModel.setDeviceStatus(request.getParameter().getDeviceStatus());
+        dataInsertModel.setSamplingTime(request.getParameter().getSamplingTime());
+        dataInsertModel.setPx(request.getParameter().getPx());
+        dataInsertModel.setPy(request.getParameter().getPy());
+        dataInsertModel.setPname(request.getParameter().getPname());
+        dataInsertModel.setSid(request.getParameter().getSid());
+        dataInsertModel.setPeriod(request.getParameter().getPeriod());
+        dataInsertModel.setServerUrl(request.getParameter().getServerUrl());
+        dataInsertModel.setServerPort(request.getParameter().getServerPort());
+        dataInsertModel.setDbUrl(request.getParameter().getDbUrl());
+        dataInsertModel.setDbPort(request.getParameter().getDbPort());
+        dataInsertModel.setSleep(request.getParameter().getSleep());
+        dataInsertModel.setActive(request.getParameter().getActive());
+        dataInsertModel.setFReset(request.getParameter().getFReset());
+        dataInsertModel.setReset(request.getParameter().getReset());
+        dataInsertModel.setSampleRate(request.getParameter().getSamplerate());
+        dataInsertModel.setRadioTime(request.getParameter().getRadioTime());
+        dataInsertModel.setCregCount(request.getParameter().getCregCount());
+
+
         if (dataInsertModel != null) {
 
-//            dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
+            log.info("dataInsertModel check final : {} ", dataInsertModel);
+
+            dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
             log.info("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
 
         } else {

@@ -10,18 +10,18 @@ public class DataInsertModel {
 
     private int cid;
     private String endRecordTime;
-    private String time1;
-    private String time2;
-    private String time3;
-    private String fmFrequency;
+    private String recordTime1;
+    private String recordTime2;
+    private String recordTime3;
+    private String fmRadio;
     private String firmwareVersion;
-    private String batteryVtg;
-    private String RSSI;
+    private String batteryValue;
+    private String modernRssi;
     private String deviceStatus;
     private String SamplingTime;
     private String px;
     private String py;
-    private String modemNumber;
+    private String pname;
     private String sid;
     private String period;
     private String serverUrl;
@@ -32,8 +32,9 @@ public class DataInsertModel {
     private String active;
     private String fReset;
     private String reset;
-    private String SampleRate;
+    private String sampleRate;
     private String radioTime;
+    private String cregCount;
 
 
 }
