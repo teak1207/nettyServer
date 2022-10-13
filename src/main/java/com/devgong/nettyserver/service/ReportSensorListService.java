@@ -45,7 +45,6 @@ public class ReportSensorListService {
 
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber) {
 
-
         if (dataInsertModel != null) {
 
             dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
