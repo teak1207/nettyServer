@@ -55,6 +55,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     final byte[] nak = {9};
 
     DataRefModel dataRefModel = new DataRefModel();
+    DataInsertModel dataInsertModel = new DataInsertModel();
+    PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
+    RequestListAllModel requestFindResults;
+
     static int framesize;
 
     @Override
@@ -74,11 +78,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         SettingResponseModel settingDeviceInfos;
 
 
-//        PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
 
-        DataInsertModel dataInsertModel = new DataInsertModel();
-        PreInstallSensorListAllModel reportFindResults = new PreInstallSensorListAllModel();
-        RequestListAllModel requestFindResults;
 
         /* 플래그에 값에 따라 분기*/
         /*  <<< Pre-Install  >>> ===========================================================================================*/
@@ -238,31 +238,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Report Readable bytes length : {}", bytes.length);
                 log.info("Report flag : {}", flag);
 
-                int x= 1;
-                for (int i = 0; i < bytes.length; i++) {
-                    log.info("report bytes : {}", (char) bytes[i]);
-                    log.info("report bytes : {}", bytes[i]);
-                    log.info("report bytes : {}",  x );
-                    log.info("--------------------------");
-                    x++;
-                }
-
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 
 
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
 
+                findResult = reportSensorListService.findDataExistence(serialNumber);
 
-                log.info("serialNum check : {}", serialNumber);
-
-
-                reportFindResults = reportSensorListService.findDataExistence(serialNumber);
-
+                log.info("findResult : {}", findResult);
 
 
                 log.info("여기");
-
-
 
 
 //                if (Objects.isNull(reportFindResults)) {
