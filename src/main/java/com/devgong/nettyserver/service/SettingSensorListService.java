@@ -34,6 +34,7 @@ public class SettingSensorListService {
         sensorListAllModel = settingSensorListAllRepository.findPreInstallModelBySsn(serialNumber);
 //        log.info("sensorListAll check : {}", sensorListAllModel);
 
+        log.info("test: {}",sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
         SettingSensorListModel sensorListModel = settingSensorListRepository.findAllBySidAndPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
 //        log.info("sensorList check : {}", sensorListAllModel);
 
