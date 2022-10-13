@@ -27,7 +27,8 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         String convertedSid = "`" + "sensor_report_" + sid;
         String convertedSerialNum = "_" + serialNumber + "`";
 
-        String mix = convertedSid + convertedSerialNum.toLowerCase();
+//        String mix = convertedSid + convertedSerialNum.toLowerCase();
+        String mix = convertedSid + convertedSerialNum;
         simpleJdbcInsert.withTableName(mix).usingGeneratedKeyColumns("cid");
 
         log.info(dataInsertModel.toString());
@@ -45,19 +46,31 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         parameters.put("date", now);
         parameters.put("id", "admin");
         parameters.put("ip", "-1-1");
+
         parameters.put("px", dataInsertModel.getPx());
+
         parameters.put("sid", sid);
+
         parameters.put("py", dataInsertModel.getPy());
+
         parameters.put("pname", dataInsertModel.getModemNumber());
+
         parameters.put("time1", dataInsertModel.getTime1());
         parameters.put("time2", dataInsertModel.getTime2());
         parameters.put("time3", dataInsertModel.getTime3());
+
         parameters.put("end_record_time", dataInsertModel.getEndRecordTime());
+
         parameters.put("fm", dataInsertModel.getFmFrequency());
+
         parameters.put("firmwareVersion", dataInsertModel.getFirmwareVersion());
+
         parameters.put("rssi", dataInsertModel.getRSSI());
+
         parameters.put("status", dataInsertModel.getDeviceStatus());
+
         parameters.put("sample", dataInsertModel.getSamplingTime());
+
         parameters.put("period", dataInsertModel.getPeriod());
         parameters.put("battery", dataInsertModel.getBatteryVtg());
         parameters.put("project", project);

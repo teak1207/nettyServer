@@ -48,10 +48,10 @@ public class ReportSensorListService {
         if (dataInsertModel != null) {
 
             dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
-            System.out.println("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
+            log.info("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
 
         } else {
-            System.out.println("[INSERT FAIL] :  SENSOR_REPORT_(SID)_(SN) 추가 안됨.");
+            log.info("[INSERT FAIL] :  SENSOR_REPORT_(SID)_(SN) 추가 X.");
             return false;
         }
 
