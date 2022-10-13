@@ -42,6 +42,9 @@ public class ReportSensorListService {
             System.out.println("[feat] : F-Reset 값이 없습니다");
         }
 
+        log.info("dataSensorListAllModel222 : {}", dataSensorListAllModel);
+
+
         return dataSensorListAllModel;
     }
 
