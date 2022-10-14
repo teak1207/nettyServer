@@ -62,7 +62,7 @@ public class ReportSensorListService {
         dataInsertModel.setFmRadio(request.getParameter().getFmRadio());
         dataInsertModel.setFirmwareVersion(request.getParameter().getFirmWareVersion());
         dataInsertModel.setBatteryValue(request.getParameter().getBatteryValue());
-        dataInsertModel.setModernRssi(request.getParameter().getRssi());
+        dataInsertModel.setModernRssi(Integer.parseInt(request.getParameter().getRssi()));
         dataInsertModel.setDeviceStatus(request.getParameter().getDeviceStatus());
         dataInsertModel.setSamplingTime(request.getParameter().getSamplingTime());
         dataInsertModel.setPx(request.getParameter().getPx());

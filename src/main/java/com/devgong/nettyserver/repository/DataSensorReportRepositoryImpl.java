@@ -62,9 +62,7 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         parameters.put("firmwareVersion", dataInsertModel.getFirmwareVersion());
 
 
-
-
-        parameters.put("rssi", Integer.parseInt(dataInsertModel.getModernRssi()));
+        parameters.put("rssi", dataInsertModel.getModernRssi());
 
         parameters.put("status", dataInsertModel.getDeviceStatus());
 
