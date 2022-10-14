@@ -53,7 +53,7 @@ public class ReportSensorListService {
 
 
         log.info("request check : {}", request);
-        log.info("fuck : {}", (request.getParameter().getRssi()));
+        log.info("fuck : {}", Character.getNumericValue(request.getParameter().getRssi().charAt(0)));
 
         dataInsertModel.setSn(request.getSensorId());
         dataInsertModel.setEndRecordTime(request.getParameter().getEndRecordTime());
