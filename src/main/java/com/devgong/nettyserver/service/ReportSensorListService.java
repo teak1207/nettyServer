@@ -4,11 +4,9 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
 import com.devgong.nettyserver.protocol.Packet;
-import com.devgong.nettyserver.protocol.Report.ReportModifyData;
 import com.devgong.nettyserver.protocol.Report.ReportRequest;
 import com.devgong.nettyserver.repository.DataSensorListAllRepository;
 import com.devgong.nettyserver.repository.DataSensorReportRepository;
-import com.sun.xml.bind.v2.runtime.reflect.Lister;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,6 @@ public class ReportSensorListService {
 
     PreInstallSensorListAllModel dataSensorListAllModel = null;
 
-    ReportModifyData reportModifyData = new ReportModifyData();
 
     public PreInstallSensorListAllModel findDataExistence(String serialNumber) throws IllegalAccessException {
 
@@ -51,6 +48,13 @@ public class ReportSensorListService {
         return dataSensorListAllModel;
     }
 
+    public int convertData(char value) {
+
+        String convertedHex = Integer.toHexString(value);
+
+        return Integer.parseInt(convertedHex, 16);
+    }
+
 
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
@@ -64,8 +68,8 @@ public class ReportSensorListService {
 //        log.info("fuck3 : {}", Integer.parseInt(d, 16));
 //        log.info("fuck4 : {}", reportModifyData.convertData(request.getParameter().getRssi().charAt(0)));
 
-        int d = reportModifyData.convertData(request.getParameter().getRssi().charAt(0));
-        log.info("ddddd : {}", d);
+        ;
+        log.info("ddddd : {}", convertData(request.getParameter().getRssi().charAt(0)));
 
         dataInsertModel.setSn(request.getSensorId());
         dataInsertModel.setEndRecordTime(request.getParameter().getEndRecordTime());
