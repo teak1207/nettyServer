@@ -69,7 +69,7 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         parameters.put("sample", dataInsertModel.getSamplingTime());
 
         parameters.put("period", dataInsertModel.getPeriod());
-        parameters.put("battery", dataInsertModel.getBatteryValue());
+        parameters.put("batt", dataInsertModel.getBatteryValue());
         parameters.put("project", project);
         parameters.put("server_url", dataInsertModel.getServerUrl());
         parameters.put("server_port", dataInsertModel.getServerPort());
