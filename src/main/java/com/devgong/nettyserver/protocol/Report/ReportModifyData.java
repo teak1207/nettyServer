@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReportModifyData {
 
 
-    public void convertData(char value) {
+    public void convertData(Object value) {
 
         log.info("test : {}", value);
 
