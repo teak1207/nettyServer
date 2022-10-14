@@ -234,8 +234,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
-//                log.info("Report Readable bytes lengㅋth : {}", bytes.length);
-//                log.info("Report flag : {}", flag);
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 
@@ -254,8 +252,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(),request)) {
 
                         log.info("야호");
-//                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-//                        mBuf.release();
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        mBuf.release();
 
                     } else {
                         log.info("문상후");
