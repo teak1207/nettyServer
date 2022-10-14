@@ -4,7 +4,6 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
 import com.devgong.nettyserver.protocol.Packet;
-import com.devgong.nettyserver.protocol.Report.ReportModifyData;
 import com.devgong.nettyserver.protocol.Report.ReportRequest;
 import com.devgong.nettyserver.repository.DataSensorListAllRepository;
 import com.devgong.nettyserver.repository.DataSensorReportRepository;
@@ -22,8 +21,6 @@ public class ReportSensorListService {
     private final DataSensorListAllRepository dataSensorListAllRepository;
 
     private final DataSensorReportRepository dataSensorReportRepository;
-
-    ReportModifyData reportModifyData;
 
     PreInstallSensorListAllModel dataSensorListAllModel = null;
 
@@ -55,8 +52,14 @@ public class ReportSensorListService {
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
 
+
         log.info("request check : {}", request);
-        reportModifyData.convertData(request.getParameter().getRssi().charAt(0));
+        log.info("fuck : {}", (request.getParameter().getRssi().charAt(0)));
+
+
+
+
+
 
 
         dataInsertModel.setSn(request.getSensorId());
