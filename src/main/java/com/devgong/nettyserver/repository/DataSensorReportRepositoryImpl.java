@@ -38,7 +38,7 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         Date now = new Date();
 
         parameters.put("cid", 1);
-        parameters.put("serialNumber", serialNumber);
+        parameters.put("sn", dataInsertModel.getSn());
         parameters.put("date", now);
         parameters.put("id", "admin");
         parameters.put("ip", "-1-1");
@@ -59,7 +59,7 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
 
         parameters.put("fm", dataInsertModel.getFmRadio());
 
-        parameters.put("firmwareVersion", dataInsertModel.getFirmwareVersion());
+        parameters.put("fver", dataInsertModel.getFirmwareVersion());
 
 
         parameters.put("rssi", dataInsertModel.getModernRssi());
