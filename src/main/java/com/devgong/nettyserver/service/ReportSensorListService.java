@@ -52,17 +52,12 @@ public class ReportSensorListService {
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
 
-
         char c = request.getParameter().getRssi().charAt(0);
 
         log.info("request check : {}", request);
-        log.info("fuck : {}", (request.getParameter().getRssi().charAt(0)));
-        log.info("fuck : {}", Integer.toHexString(request.getParameter().getRssi().charAt(0)));
-
-
-
-
-
+        log.info("fuck1 : {}", (request.getParameter().getRssi().charAt(0)));
+        log.info("fuck2 : {}", Integer.toHexString(request.getParameter().getRssi().charAt(0)));
+        log.info("fuck3 : {}", Integer.parseInt(Integer.toHexString(request.getParameter().getRssi().charAt(0))), 16);
 
 
         dataInsertModel.setSn(request.getSensorId());
