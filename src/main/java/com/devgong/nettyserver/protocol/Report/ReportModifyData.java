@@ -7,11 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 public class ReportModifyData {
 
 
-    public void convertData(Object value) {
+    public Object convertData(char value) {
 
-        log.info("test : {}", value);
+        String convertedHex = Integer.toHexString(value);
 
-
+        return Integer.parseInt(convertedHex, 16);
     }
 
 

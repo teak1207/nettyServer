@@ -4,6 +4,7 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.DataInsertModel;
 import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
 import com.devgong.nettyserver.protocol.Packet;
+import com.devgong.nettyserver.protocol.Report.ReportModifyData;
 import com.devgong.nettyserver.protocol.Report.ReportRequest;
 import com.devgong.nettyserver.repository.DataSensorListAllRepository;
 import com.devgong.nettyserver.repository.DataSensorReportRepository;
@@ -23,6 +24,7 @@ public class ReportSensorListService {
     private final DataSensorReportRepository dataSensorReportRepository;
 
     PreInstallSensorListAllModel dataSensorListAllModel = null;
+    ReportModifyData reportModifyData;
 
     public PreInstallSensorListAllModel findDataExistence(String serialNumber) throws IllegalAccessException {
 
@@ -56,9 +58,10 @@ public class ReportSensorListService {
 
         log.info("request check : {}", request);
 
-        String d = Integer.toHexString(request.getParameter().getRssi().charAt(0));
-        log.info("fuck1 : {}", (request.getParameter().getRssi().charAt(0)));
-        log.info("fuck3 : {}", Integer.parseInt(d, 16));
+//        String d = Integer.toHexString(request.getParameter().getRssi().charAt(0));
+//        log.info("fuck1 : {}", (request.getParameter().getRssi().charAt(0)));
+//        log.info("fuck3 : {}", Integer.parseInt(d, 16));
+        log.info("fuck4 : {}", reportModifyData.convertData(request.getParameter().getRssi().charAt(0)));
 
 
         dataInsertModel.setSn(request.getSensorId());
