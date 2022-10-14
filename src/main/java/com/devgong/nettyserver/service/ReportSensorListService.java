@@ -53,8 +53,11 @@ public class ReportSensorListService {
 
 
 
+        char c = request.getParameter().getRssi().charAt(0);
+
         log.info("request check : {}", request);
         log.info("fuck : {}", (request.getParameter().getRssi().charAt(0)));
+        log.info("fuck : {}", Integer.toHexString(request.getParameter().getRssi().charAt(0)));
 
 
 
