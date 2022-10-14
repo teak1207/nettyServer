@@ -24,7 +24,8 @@ public class ReportSensorListService {
     private final DataSensorReportRepository dataSensorReportRepository;
 
     PreInstallSensorListAllModel dataSensorListAllModel = null;
-    ReportModifyData reportModifyData;
+
+    ReportModifyData reportModifyData = new ReportModifyData();
 
     public PreInstallSensorListAllModel findDataExistence(String serialNumber) throws IllegalAccessException {
 
