@@ -17,7 +17,7 @@ public class DataInsertModel {
     private String fmRadio;
     private String firmwareVersion;
     private String batteryValue;
-    private int modernRssi;
+    private String modernRssi;
     private String deviceStatus;
     private String SamplingTime;
     private String px;
