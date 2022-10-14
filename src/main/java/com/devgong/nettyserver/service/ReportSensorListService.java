@@ -55,9 +55,10 @@ public class ReportSensorListService {
         char c = request.getParameter().getRssi().charAt(0);
 
         log.info("request check : {}", request);
+
+        String d = Integer.toHexString(request.getParameter().getRssi().charAt(0));
         log.info("fuck1 : {}", (request.getParameter().getRssi().charAt(0)));
-        log.info("fuck2 : {}", Integer.toHexString(request.getParameter().getRssi().charAt(0)));
-        log.info("fuck3 : {}", Integer.parseInt(Integer.toHexString(request.getParameter().getRssi().charAt(0))), 16);
+        log.info("fuck3 : {}", Integer.parseInt(d, 16));
 
 
         dataInsertModel.setSn(request.getSensorId());
