@@ -48,27 +48,26 @@ public class ReportSensorListService {
         return dataSensorListAllModel;
     }
 
-    public int convertData(char value) {
+    public String convertData(char value) {
 
+        //memo : char --> hex
         String convertedHex = Integer.toHexString(value);
+        //memo : hex --> decimal
+        int convertDecimal = Integer.parseInt(convertedHex, 16);
 
-        return Integer.parseInt(convertedHex, 16);
+        return Integer.toString(convertDecimal);
     }
 
 
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
 
-        char c = request.getParameter().getRssi().charAt(0);
+
+
+
 
         log.info("request check : {}", request);
 
-//        String d = Integer.toHexString(request.getParameter().getRssi().charAt(0));
-//        log.info("fuck1 : {}", (request.getParameter().getRssi().charAt(0)));
-//        log.info("fuck3 : {}", Integer.parseInt(d, 16));
-//        log.info("fuck4 : {}", reportModifyData.convertData(request.getParameter().getRssi().charAt(0)));
-
-        ;
         log.info("ddddd : {}", convertData(request.getParameter().getRssi().charAt(0)));
 
         dataInsertModel.setSn(request.getSensorId());
@@ -79,25 +78,27 @@ public class ReportSensorListService {
         dataInsertModel.setFmRadio(request.getParameter().getFmRadio());
         dataInsertModel.setFirmwareVersion(request.getParameter().getFirmWareVersion());
         dataInsertModel.setBatteryValue(request.getParameter().getBatteryValue());
-        dataInsertModel.setModernRssi(request.getParameter().getRssi());
+        dataInsertModel.setModernRssi(convertData(request.getParameter().getRssi().charAt(0)));
         dataInsertModel.setDeviceStatus(request.getParameter().getDeviceStatus());
         dataInsertModel.setSamplingTime(request.getParameter().getSamplingTime());
         dataInsertModel.setPx(request.getParameter().getPx());
         dataInsertModel.setPy(request.getParameter().getPy());
         dataInsertModel.setPname(request.getParameter().getPname());
         dataInsertModel.setSid(request.getParameter().getSid());
-        dataInsertModel.setPeriod(request.getParameter().getPeriod());
+
+        dataInsertModel.setPeriod(convertData(request.getParameter().getPeriod().charAt(0)));
+
         dataInsertModel.setServerUrl(request.getParameter().getServerUrl());
         dataInsertModel.setServerPort(request.getParameter().getServerPort());
         dataInsertModel.setDbUrl(request.getParameter().getDbUrl());
         dataInsertModel.setDbPort(request.getParameter().getDbPort());
-        dataInsertModel.setSleep(request.getParameter().getSleep());
-        dataInsertModel.setActive(request.getParameter().getActive());
-        dataInsertModel.setFReset(request.getParameter().getFReset());
-        dataInsertModel.setReset(request.getParameter().getReset());
-        dataInsertModel.setSampleRate(request.getParameter().getSamplerate());
-        dataInsertModel.setRadioTime(request.getParameter().getRadioTime());
-        dataInsertModel.setCregCount(request.getParameter().getCregCount());
+        dataInsertModel.setSleep(convertData(request.getParameter().getSleep().charAt(0)));
+        dataInsertModel.setActive(convertData(request.getParameter().getActive().charAt(0)));
+        dataInsertModel.setFReset(convertData(request.getParameter().getFReset().charAt(0)));
+        dataInsertModel.setReset(convertData(request.getParameter().getReset().charAt(0)));
+        dataInsertModel.setSampleRate(convertData(request.getParameter().getSamplerate().charAt(0)));
+        dataInsertModel.setRadioTime(convertData(request.getParameter().getRadioTime().charAt(0)));
+        dataInsertModel.setCregCount(convertData(request.getParameter().getCregCount().charAt(0)));
 
 
         if (dataInsertModel != null) {
