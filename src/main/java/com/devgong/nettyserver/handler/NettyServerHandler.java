@@ -268,6 +268,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 for(byte a : bytes){
                     log.info("test : {}",(char)a);
                 }
+                log.info("test length: {}",bytes.length);
 
                 Packet<ReqRequest> request = new Packet<>(flag,bytes,ReqRequest.class);
 
