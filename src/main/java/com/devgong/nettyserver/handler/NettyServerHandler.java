@@ -93,10 +93,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("PreInstall  readable bytes length : {}", bytes.length);
                 log.info("PreInstall FLAG : {}", (char) readFlag);
 
-//                for (int i = 0; i < bytes.length; i++) {
-//                    log.info("bytes : {}", (char) bytes[i]);
-//                }
-
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
                 preInstallDeviceInfos = preinstallSensorListService.preInstallFindData(request.getParameter().getModemPhoneNumber());
                 PreInstallResponse response = new PreInstallResponse(
@@ -241,6 +237,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 findResult = reportSensorListService.findDataExistence(serialNumber);
 
+                byte[] response = new byte[45];
 
                 if (Objects.isNull(findResult)) {
                     log.info("[FAIL] : 값이 존재하질 않습니다");
@@ -249,24 +246,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     System.out.println("[reportFindResults]" + findResult.toString());
 
                     // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(),request)) {
-
-                        log.info("야호");
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(), request)) {
+                        response[0] = PacketFlag.ACK.getFlag();
+                        ctx.write(Unpooled.copiedBuffer(response));
+                        ctx.flush();
                         mBuf.release();
+                        log.info("유병재");
 
                     } else {
                         log.info("문상후");
