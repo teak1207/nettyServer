@@ -29,9 +29,7 @@ public class SettingRequest implements Serializable<SettingRequest> {
         byte[] serialized = new byte[32];
 
         byte[] sidBytes = Arrays.copyOfRange(sid.getBytes(), 0, 16);
-//        log.info("sidBytes : {}", sidBytes);  // scleak
         byte[] pnameBytes = Arrays.copyOfRange(pname.getBytes(), 0, 16);
-//        log.info("pnameBytes : {}", pnameBytes);
 
         System.arraycopy(sidBytes, 0, serialized, 0, 16);
         System.arraycopy(pnameBytes, 0, serialized, 16, 16);

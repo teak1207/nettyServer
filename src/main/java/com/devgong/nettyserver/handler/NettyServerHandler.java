@@ -9,6 +9,7 @@ import com.devgong.nettyserver.protocol.RequestType;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
+import com.devgong.nettyserver.protocol.request.ReqRequest;
 import com.devgong.nettyserver.protocol.setting.SettingRequest;
 import com.devgong.nettyserver.protocol.setting.SettingResponse;
 import com.devgong.nettyserver.service.ReportSensorListService;
@@ -232,9 +233,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
-
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-
                 findResult = reportSensorListService.findDataExistence(serialNumber);
 
                 byte[] response = new byte[45];
@@ -251,90 +250,35 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
                         mBuf.release();
-                        log.info("유병재");
+                        log.info("REPORT Process Success");
 
                     } else {
-                        log.info("문상후");
-//                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-//                        mBuf.release();
+                        response[0] = PacketFlag.NAK.getFlag();
+                        ctx.write(Unpooled.copiedBuffer(response));
+                        ctx.flush();
+                        mBuf.release();
+                        log.info("REPORT Process fail");
                     }
                 }
-            } else if (flag.equals("5")) {
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String data = mBuf.readCharSequence(256, Charset.defaultCharset()).toString();
-                byte chksum1 = (mBuf.readByte());
-                byte chksum2 = (mBuf.readByte());
+            } else if (flag.equals(PacketFlag.REQUEST)) {
+
+                byte[] bytes = new byte[mBuf.readableBytes()];
+                mBuf.duplicate().readBytes(bytes);
+
+                Packet<ReqRequest> request = new Packet<>(flag,bytes,ReqRequest.class);
+
+                log.info("Setting Readable bytes length : {}", bytes.length);
+                log.info("Setting Request check : {}", request);
 
 
-                log.info(serialNumber);
-                log.info(datetime);
-                log.info(requestType);
-                log.info(paraLen);
-                log.info(data);
-
-                String convertChk = String.format("%x%x", chksum1, chksum2);
-                String chkData = flag + serialNumber + datetime + requestType + paraLen + data;
-
-                int convertDecimalSum = 0;
-
-                for (int i = 0; i < chkData.length(); i++) {
-                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
-                }
-
-                int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[decimal] " + decimal);
-                System.out.println("[convertDecimalSum] " + convertDecimalSum);
-                System.out.println("=====================");
-
-                log.info(dataRefModel.getFilepath());
-
-                File file = new File(dataRefModel.getFilepath());
-                FileWriter writer = null;
-
-                if (convertDecimalSum == decimal) {
-                    System.out.println("[CheckSum] : SUCCESS :)");
-
-                    for (int i = 0; i < framesize; i++) {
-                        writer = new FileWriter(file, true);
-                        writer.write(data);
-                        writer.flush();
-                    }
 
 
-                }
-            } else if (flag.equals("4")) {
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
 
-                String frame = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String dataSize = mBuf.readCharSequence(3, Charset.defaultCharset()).toString();
-                String sampleRate = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                byte chksum1 = (mBuf.readByte());
-                byte chksum2 = (mBuf.readByte());
 
-                // data process에서 쓰고자  static으로 선언.
-                framesize = Integer.parseInt(frame);
 
-                String convertChk = String.format("%x%x", chksum1, chksum2);
-                String chkData = flag + serialNumber + datetime + requestType + paraLen + frame + dataSize + sampleRate;
 
-                int convertDecimalSum = 0;
 
-                for (int i = 0; i < chkData.length(); i++) {
-                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
-                }
-
-                int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[decimal] " + decimal);
-                System.out.println("[convertDecimalSum] " + convertDecimalSum);
-                System.out.println("=====================");
-
-                if (convertDecimalSum == decimal) {
+            /*    if (false) {
                     System.out.println("[CheckSum] : SUCCESS :)");
 
                     requestFindResults = requestSensorListService.findDataExistence(flag.getFlag() + "", serialNumber);
@@ -348,11 +292,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                         String convertedSampleRate;
 
-                        /*
+                        *//*
                            sampleRate 기존 4,8  외에 16 일 경우, 변환
                            sampleRate = 한자리 --> 004 or 008
                            sampleRate = 두자리 --> 016
-                        */
+                        *//*
 
                         if (sampleRate.length() == 1) {
                             convertedSampleRate = "00" + sampleRate;
@@ -417,8 +361,49 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             System.out.println("[FAIL] : " + path1 + " 경로가 존재하지 않습니다.");
                         }
                     }
+                }*/
+            } else if (flag.equals(PacketFlag.DATA)) {
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
+                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
+                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
+                String data = mBuf.readCharSequence(256, Charset.defaultCharset()).toString();
+                byte chksum1 = (mBuf.readByte());
+                byte chksum2 = (mBuf.readByte());
+
+                String convertChk = String.format("%x%x", chksum1, chksum2);
+                String chkData = flag + serialNumber + datetime + requestType + paraLen + data;
+
+                int convertDecimalSum = 0;
+
+                for (int i = 0; i < chkData.length(); i++) {
+                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
+                }
+
+                int decimal = Integer.parseInt(convertChk, 16);
+                System.out.println("[decimal] " + decimal);
+                System.out.println("[convertDecimalSum] " + convertDecimalSum);
+                System.out.println("=====================");
+
+                log.info(dataRefModel.getFilepath());
+
+                File file = new File(dataRefModel.getFilepath());
+                FileWriter writer = null;
+
+                if (convertDecimalSum == decimal) {
+                    System.out.println("[CheckSum] : SUCCESS :)");
+
+                    for (int i = 0; i < framesize; i++) {
+                        writer = new FileWriter(file, true);
+                        writer.write(data);
+                        writer.flush();
+                    }
+
+
                 }
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
