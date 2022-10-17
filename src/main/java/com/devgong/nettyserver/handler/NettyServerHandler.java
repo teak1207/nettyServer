@@ -253,6 +253,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                         log.info("야호");
                         ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
                         mBuf.release();
 
                     } else {
