@@ -265,6 +265,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
+                log.info("test : {}",flag);
                 for(byte a : bytes){
                     log.info("test : {}",(char)a);
                 }
