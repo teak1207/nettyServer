@@ -35,8 +35,8 @@ public class ReqRequest implements Serializable<ReqRequest> {
         byte[] sampleRateBytes = Arrays.copyOfRange(sampleRate.getBytes(), 0, 1);
 
         System.arraycopy(frameCountBytes, 0, serialized, 0, 2);
-        System.arraycopy(dataSizeBytes, 0, serialized, 2, 4);
-        System.arraycopy(sampleRateBytes, 0, serialized, 4, 5);
+        System.arraycopy(dataSizeBytes, 0, serialized, 2, 2);
+        System.arraycopy(sampleRateBytes, 0, serialized, 4, 1);
 
         return serialized;
     }
