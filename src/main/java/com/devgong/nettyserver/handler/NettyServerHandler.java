@@ -273,7 +273,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Setting Request check : {}", request);
 
 
-                log.info("sibal : {}", request.getParameter().getSampleRate());
 
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 

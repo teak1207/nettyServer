@@ -38,9 +38,9 @@ public class RequestSensorListService {
         log.info("pathchk : {}", requestFindResults.getSsn());
         log.info("pathchk : {}", requestFindResults.getRegdate());
 
-        log.info("pathchk2 : {}", request.getParameter().getSampleRate());
-        log.info("pathchk2 : {}", request.getParameter().getFrameCount());
-        log.info("pathchk2 : {}", request.getParameter().getDataSize());
+        log.info("pathchk2 : {}", Integer.parseInt(request.getParameter().getSampleRate()));
+        log.info("pathchk2 : {}", Integer.parseInt(request.getParameter().getFrameCount()));
+        log.info("pathchk2 : {}", Integer.parseInt(request.getParameter().getDataSize()));
 
 
     }
