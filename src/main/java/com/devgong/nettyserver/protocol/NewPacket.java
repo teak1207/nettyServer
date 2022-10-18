@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Optional;
 
 @Slf4j
 @Value
@@ -33,7 +32,7 @@ public class NewPacket<T extends Serializable<T>> {
     }
 
     public NewPacket(PacketFlag flag, byte[] packet, Class<T> clazz) {
-        // TODO : 패킷 길이 제한조건 넣어야 함
+
         if (packet == null) {
             throw new IllegalArgumentException("Packet error!");
         }
@@ -46,7 +45,9 @@ public class NewPacket<T extends Serializable<T>> {
 
         try {
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(byte[].class);
-            parameter = declaredConstructor.newInstance((Object) Arrays.copyOfRange(packet, 44, packet.length - 2));
+            parameter = declaredConstructor.newInstance((Object) Arrays.copyOfRange(packet, 44, packet.length));
+
+
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid parameter error!");
         }
