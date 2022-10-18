@@ -266,6 +266,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 for (byte a : bytes) {
                     log.info("test : {}", (char) a);
                     log.info("test : {}",  a);
+                    log.info("----------");
+
                 }
                 log.info("test length: {}", bytes.length);
 
