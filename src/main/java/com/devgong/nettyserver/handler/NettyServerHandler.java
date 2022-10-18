@@ -1,11 +1,8 @@
 package com.devgong.nettyserver.handler;
 
 import com.devgong.nettyserver.domain.*;
-import com.devgong.nettyserver.protocol.NakPacket;
-import com.devgong.nettyserver.protocol.Packet;
-import com.devgong.nettyserver.protocol.PacketFlag;
+import com.devgong.nettyserver.protocol.*;
 import com.devgong.nettyserver.protocol.Report.ReportRequest;
-import com.devgong.nettyserver.protocol.RequestType;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
@@ -242,7 +239,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("[FAIL] : 값이 존재하질 않습니다");
 
                 } else {
-                    System.out.println("[reportFindResults]" + findResult.toString());
+                    log.info("reportFindResults:{}", findResult);
 
                     // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                     if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(), request)) {
@@ -265,13 +262,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("test : {}",flag);
-                for(byte a : bytes){
-                    log.info("test : {}",(char)a);
+                log.info("test : {}", flag);
+                for (byte a : bytes) {
+                    log.info("test : {}", (char) a);
                 }
-                log.info("test length: {}",bytes.length);
+                log.info("test length: {}", bytes.length);
 
-                Packet<ReqRequest> request = new Packet<>(flag,bytes,ReqRequest.class);
+                NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("Setting Request check : {}", request);

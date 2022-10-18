@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Value
 @ToString
-public class Packet<T extends Serializable<T>> {
+public class NewPacket<T extends Serializable<T>> {
 
     PacketFlag flag; // 1 byte
     String sensorId; // 24 byte
@@ -22,19 +22,17 @@ public class Packet<T extends Serializable<T>> {
     RequestType requestType; // 1 byte
     long parameterLength; // 4 byte
     T parameter;
-    byte[] checksum; // 2 byte
 
-    public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
+    public NewPacket(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {
         this.flag = flag;
         this.sensorId = sensorId;
         this.dateTime = dateTime;
         this.requestType = requestType;
         this.parameter = parameter;
         this.parameterLength = parameterLength;
-        this.checksum = makeChecksum();
     }
 
-    public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
+    public NewPacket(PacketFlag flag, byte[] packet, Class<T> clazz) {
         // TODO : 패킷 길이 제한조건 넣어야 함
         if (packet == null) {
             throw new IllegalArgumentException("Packet error!");
@@ -52,22 +50,18 @@ public class Packet<T extends Serializable<T>> {
         } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException("Invalid parameter error!");
         }
-        checksum = Arrays.copyOfRange(packet, packet.length - 2, packet.length);
 
-        if (!validateChecksum()) {
-            throw new IllegalStateException("Invalid checksum error!");
-        }
     }
 
-    public byte[] serialize() {
+   /* public byte[] serialize() {
         byte[] serializeExceptChecksum = serializeExceptChecksum();
         byte[] serialized = new byte[2 + serializeExceptChecksum.length];
         System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
         System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
         return serialized;
-    }
+    }*/
 
-    private byte[] serializeExceptChecksum() {
+    /*private byte[] serializeExceptChecksum() {
         byte[] serializedParameter = parameter.serialize();
         byte[] serialized = new byte[45 + serializedParameter.length];
 
@@ -92,69 +86,8 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
 
         return serialized;
-    }
+    }*/
 
-    private boolean validateChecksum() {
-        int accumulation = 0;
-
-        for (byte b : serializeExceptChecksum()) {
-            accumulation += b & 0xff;
-//            log.info("validateChecksum byte(char) : {}", (char) b);
-//            log.info("validateChecksum byte : {}", b & 0xff);
-//            log.info("validateChecksum byte sum: {}", accumulation);
-//            log.info("--------------------------------------------");
-        }
-
-        log.info("validateChecksum accumulation : {}", accumulation);
-        log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
-
-        return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
-    }
-
-    public static byte stringToByte(String input) {
-        return input.length() == 1 ? (byte) Character.digit(input.charAt(0), 16)
-                : (byte) ((Character.digit(input.charAt(0), 16) << 4) + Character.digit(input.charAt(1), 16));
-    }
-
-    private byte[] makeChecksum() {
-        int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
-        for (byte b : serializeExceptChecksum()) {
-            //todo : b를 unsigned  처리를 해보자
-            accumulation += b & 0xff;
-//            log.info("accumulation byte(char) : {}", (char) b & 0xff);
-//            log.info("accumulation byte(char) : {}", accumulation);
-        }
-        log.info("accumulation : {}", accumulation);
-
-
-        String hex = Integer.toHexString(accumulation);
-        String first = "";
-        String second = "";
-
-        //TODO : 데이터를 일일히 체크했을 시 ,문제 없음, hex를 찍었더니 값 불일치 발생.
-
-
-        log.info("hex : {}", hex);
-        if (hex.length() == 3) {
-            first = hex.substring(0, 1);
-            second = hex.substring(1, 3);
-            log.info("first , 1 : {} {}", first, second);
-        } else if (hex.length() == 4) {
-            first = hex.substring(0, 2);
-            second = hex.substring(2, 4);
-            log.info("first , 2 : {} {}", first, second);
-        }
-
-        // "c" -> "0x0c" (byte)
-        byte firstByte = stringToByte(first);
-        byte secondByte = stringToByte(second);
-
-        byte[] totalByte = new byte[2];
-        totalByte[0] = firstByte;
-        totalByte[1] = secondByte;
-
-        return totalByte;
-    }
 
     public static byte[] intToByteArray(int value) {
         return new byte[]{
