@@ -274,7 +274,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Setting Request check : {}", request);
 
 
-
+                requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
 
 
@@ -284,7 +284,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             /*    if (false) {
                     System.out.println("[CheckSum] : SUCCESS :)");
 
-                    requestFindResults = requestSensorListService.findDataExistence(flag.getFlag() + "", serialNumber);
 
                     if (requestFindResults == null) {
                         System.out.println("[fail] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
@@ -296,6 +295,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         String convertedSampleRate;
 
                         *//*
+
                            sampleRate 기존 4,8  외에 16 일 경우, 변환
                            sampleRate = 한자리 --> 004 or 008
                            sampleRate = 두자리 --> 016

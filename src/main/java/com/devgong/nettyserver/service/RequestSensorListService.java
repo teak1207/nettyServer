@@ -16,15 +16,12 @@ public class RequestSensorListService {
     RequestListAllModel requestListAllModel = null;
     private final RequestSensorListAllRepository requestSensorListAllRepository;
 
-    public RequestListAllModel findDataExistence(String flag, String serialNumber) {
+    public RequestListAllModel findDataExistence(String serialNumber) {
 
-        if (flag.equals("4")) {
 
-            requestListAllModel = requestSensorListAllRepository.findAllBySsn(serialNumber);
+        requestListAllModel = requestSensorListAllRepository.findAllBySsn(serialNumber);
 
-            log.info(requestListAllModel.toString());
-
-        }
+        log.info("requestListAllModel : {}", requestListAllModel);
 
 
         return requestListAllModel;
