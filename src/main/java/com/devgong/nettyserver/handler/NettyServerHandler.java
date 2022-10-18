@@ -177,7 +177,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
-                log.info("문상훈123");
+
                 if (settingDeviceInfos != null) {
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
@@ -269,7 +269,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("test length: {}", bytes.length);
 
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
-
+                log.info("문상훈456");
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("Setting Request check : {}", request);
 
