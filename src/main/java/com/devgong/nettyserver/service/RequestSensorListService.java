@@ -26,4 +26,15 @@ public class RequestSensorListService {
 
         return requestListAllModel;
     }
+
+    public void confirmPath(RequestListAllModel requestFindResults){
+
+        log.info("pathchk : {}", requestFindResults.getAproject());
+        log.info("pathchk : {}", requestFindResults.getFreset());
+        log.info("pathchk : {}", requestFindResults.getAsid());
+        log.info("pathchk : {}", requestFindResults.getMphone());
+        log.info("pathchk : {}", requestFindResults.getSsn());
+        log.info("pathchk : {}", requestFindResults.getRegdate());
+
+    }
 }

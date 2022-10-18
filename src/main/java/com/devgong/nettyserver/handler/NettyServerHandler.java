@@ -269,14 +269,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("test length: {}", bytes.length);
 
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
-                log.info("문상훈456");
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("Setting Request check : {}", request);
 
 
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
-
+                if(requestFindResults  == null){
+                    log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
+                }else{
+                    requestSensorListService.confirmPath(requestFindResults);
+                }
 
 
 
