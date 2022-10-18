@@ -51,6 +51,7 @@ public class RequestSensorListService {
 
         } else {
             String defaultPath = "/home/scsol/public_html/leak_data_gong";
+            log.info("아모띠");
             String path = defaultPath + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject() + "\\" + requestFindResults.getSsn();
         }
 
