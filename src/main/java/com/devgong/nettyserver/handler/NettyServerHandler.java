@@ -273,12 +273,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Setting Request check : {}", request);
 
 
+                log.info("sibal : {}", request.getParameter().getSampleRate());
+
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
-                if(requestFindResults  == null){
+                if (requestFindResults == null) {
                     log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
-                }else{
-                    requestSensorListService.confirmPath(requestFindResults);
+                } else {
+                    requestSensorListService.confirmPath(requestFindResults, request);
                 }
 
 

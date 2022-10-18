@@ -2,6 +2,8 @@ package com.devgong.nettyserver.service;
 
 
 import com.devgong.nettyserver.domain.RequestListAllModel;
+import com.devgong.nettyserver.protocol.NewPacket;
+import com.devgong.nettyserver.protocol.request.ReqRequest;
 import com.devgong.nettyserver.repository.RequestSensorListAllRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +29,7 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
-    public void confirmPath(RequestListAllModel requestFindResults){
+    public void confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) {
 
         log.info("pathchk : {}", requestFindResults.getAproject());
         log.info("pathchk : {}", requestFindResults.getFreset());
@@ -35,6 +37,11 @@ public class RequestSensorListService {
         log.info("pathchk : {}", requestFindResults.getMphone());
         log.info("pathchk : {}", requestFindResults.getSsn());
         log.info("pathchk : {}", requestFindResults.getRegdate());
+
+        log.info("pathchk2 : {}", request.getParameter().getSampleRate());
+        log.info("pathchk2 : {}", request.getParameter().getFrameCount());
+        log.info("pathchk2 : {}", request.getParameter().getDataSize());
+
 
     }
 }
