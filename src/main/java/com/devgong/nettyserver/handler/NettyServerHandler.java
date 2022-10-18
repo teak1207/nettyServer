@@ -177,7 +177,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
-
+                log.info("문상훈");
                 if (settingDeviceInfos != null) {
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
