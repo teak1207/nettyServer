@@ -45,6 +45,12 @@ public class RequestSensorListService {
         log.info("pathchk2 : {}", getStringToHex(request.getParameter().getDataSize()));
         log.info("pathchk2 : {}", getStringToHex(request.getParameter().getSampleRate()));
 
+        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()),16));
+        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getDataSize()),16));
+        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()),16));
+
+
+
 
     }
 
