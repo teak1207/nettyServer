@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -29,7 +32,7 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
-    public void confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) {
+    public void confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
         log.info("pathchk : {}", requestFindResults.getAproject());
         log.info("pathchk : {}", requestFindResults.getFreset());
@@ -38,10 +41,17 @@ public class RequestSensorListService {
         log.info("pathchk : {}", requestFindResults.getSsn());
         log.info("pathchk : {}", requestFindResults.getRegdate());
 
-        log.info("pathchk2 : {}", Integer.parseInt(request.getParameter().getSampleRate()), 16);
-        log.info("pathchk2 : {}", Integer.parseInt(request.getParameter().getFrameCount()), 16);
-        log.info("pathchk2 : {}", Integer.parseInt(request.getParameter().getDataSize()), 16);
+        log.info("pathchk2 : {}", getStringToHex(request.getParameter().getSampleRate()));
+        log.info("pathchk2 : {}", getStringToHex(request.getParameter().getFrameCount()));
+        log.info("pathchk2 : {}", getStringToHex(request.getParameter().getDataSize()));
 
 
+    }
+
+
+
+    public String getStringToHex(String test) throws UnsupportedEncodingException {
+        byte[] testBytes = test.getBytes("utf-8");
+        return DatatypeConverter.printHexBinary(testBytes);
     }
 }
