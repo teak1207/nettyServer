@@ -23,37 +23,38 @@ public class RequestSensorListService {
 
     public RequestListAllModel findDataExistence(String serialNumber) {
 
-
         requestListAllModel = requestSensorListAllRepository.findAllBySsn(serialNumber);
 
         log.info("requestListAllModel : {}", requestListAllModel);
-
 
         return requestListAllModel;
     }
 
     public void confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
-        log.info("pathchk : {}", requestFindResults.getAproject());
-        log.info("pathchk : {}", requestFindResults.getFreset());
-        log.info("pathchk : {}", requestFindResults.getAsid());
-        log.info("pathchk : {}", requestFindResults.getMphone());
-        log.info("pathchk : {}", requestFindResults.getSsn());
-        log.info("pathchk : {}", requestFindResults.getRegdate());
+        String convertedSampleRate;
+        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()), 16));
+        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getDataSize()), 16));
+        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16));
 
-        log.info("pathchk2 : {}", getStringToHex(request.getParameter().getFrameCount()));
-        log.info("pathchk2 : {}", getStringToHex(request.getParameter().getDataSize()));
-        log.info("pathchk2 : {}", getStringToHex(request.getParameter().getSampleRate()));
-
-        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()),16));
-        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getDataSize()),16));
-        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()),16));
+        if (request.getParameter().getSampleRate().length() == 1) {
+            convertedSampleRate = "00" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
+            log.info(convertedSampleRate);
+        } else {
+            convertedSampleRate = "0" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
+            log.info(convertedSampleRate);
+        }
 
 
+        if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
+            log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
+        } else {
+            String defaultPath = "/home/scsol/public_html/leak_data_gong";
+            String path = defaultPath + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject() + "\\" + requestFindResults.getSsn();
+        }
 
     }
-
 
 
     public String getStringToHex(String test) throws UnsupportedEncodingException {
