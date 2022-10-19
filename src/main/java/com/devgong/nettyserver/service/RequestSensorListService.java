@@ -41,9 +41,9 @@ public class RequestSensorListService {
     public void confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
         String convertedSampleRate;
-        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()), 16));
-        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getDataSize()), 16));
-        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16));
+//        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()), 16));
+//        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getDataSize()), 16));
+//        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16));
 
         if (request.getParameter().getSampleRate().length() == 1) {
             convertedSampleRate = "00" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
@@ -63,6 +63,10 @@ public class RequestSensorListService {
             log.info("path : {}", path);
 
             char underBar = '_';
+
+            log.info("initDate : {}", initDate(requestFindResults.getRegdate()) );
+
+
             String filePath = path + "/" + requestFindResults.getSsn() + underBar + initDate(requestFindResults.getRegdate()) + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
             log.info("filePath : {}", filePath);
 
@@ -89,10 +93,13 @@ public class RequestSensorListService {
 
         String chk = null;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_ssssss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
             Date test = dateFormat.parse(date);
 
             chk = String.valueOf(test.getTime());
+
+
+
 
         } catch (Exception e) {
             log.info(e.toString());
