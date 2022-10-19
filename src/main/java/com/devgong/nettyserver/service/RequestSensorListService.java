@@ -57,12 +57,12 @@ public class RequestSensorListService {
 
         } else {
             String defaultPath = "/home/scsol/public_html/leak_data_gong";
-            log.info("아모띠");
-            String path = defaultPath + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject() + "\\" + requestFindResults.getSsn();
+            String path = defaultPath + requestFindResults.getAsid() + "/" + requestFindResults.getAproject() + "/" + requestFindResults.getSsn();
             log.info("path : {}", path);
 
             char underBar = '_';
-            String filePath = path + "\\" + requestFindResults.getSsn() + underBar + requestFindResults.getRegdate() + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
+            String filePath = path + "/" + requestFindResults.getSsn() + underBar + requestFindResults.getRegdate() + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
+            log.info("filePath : {}", filePath);
             File initFilePath = new File(filePath);
             File file3 = new File(path);
             Path filePathExistence = Paths.get(filePath);
@@ -73,6 +73,8 @@ public class RequestSensorListService {
             if (file3.isDirectory()) {
                 log.info("good");
             } else {
+
+
                 log.info("fail");
 
             }
