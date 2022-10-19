@@ -9,8 +9,8 @@ import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
 import com.devgong.nettyserver.protocol.setting.SettingRequest;
 import com.devgong.nettyserver.protocol.setting.SettingResponse;
-import com.devgong.nettyserver.service.ReportSensorListService;
 import com.devgong.nettyserver.service.PreinstallSensorListService;
+import com.devgong.nettyserver.service.ReportSensorListService;
 import com.devgong.nettyserver.service.RequestSensorListService;
 import com.devgong.nettyserver.service.SettingSensorListService;
 import io.netty.buffer.ByteBuf;
@@ -25,14 +25,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -50,8 +44,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final ReportSensorListService reportSensorListService;
     private final RequestSensorListService requestSensorListService;
 
-    final byte[] ack = {8};
-    final byte[] nak = {9};
 
 
     DataInsertModel dataInsertModel = new DataInsertModel();
@@ -177,6 +169,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
+                byte [] nakResponse = new byte[45];
                 if (settingDeviceInfos != null) {
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
@@ -216,9 +209,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 } else {
 
                     //memo : nak 45 byte 처리하기
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                    log.info("setting response fail ");
-
+                    nakResponse[0] = PacketFlag.NAK.getFlag();
+                    ctx.write(Unpooled.copiedBuffer(nakResponse));
+                    ctx.flush();
                     mBuf.release();
                 }
 
@@ -264,7 +257,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("test : {}", flag);
                 for (byte a : bytes) {
                     log.info("test : {}", (char) a);
-                    log.info("test : {}",  a);
+                    log.info("test : {}", a);
                     log.info("----------");
                 }
                 log.info("test length: {}", bytes.length);
@@ -273,17 +266,25 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("Setting Request check : {}", request);
 
-
+                byte[] response = new byte[45];
 
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
                 if (requestFindResults == null) {
                     log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
                 } else {
-                    if(requestSensorListService.confirmPath(requestFindResults, request)){
-                        log.info("good");
-                    }else{
-                        log.info("fail");
+                    if (requestSensorListService.confirmPath(requestFindResults, request)) {
+                        response[0] = PacketFlag.ACK.getFlag();
+                        ctx.write(Unpooled.copiedBuffer(response));
+                        ctx.flush();
+                        mBuf.release();
+                        log.info("yahoo");
+
+                    } else {
+                        response[0] = PacketFlag.NAK.getFlag();
+                        ctx.write(Unpooled.copiedBuffer(response));
+                        ctx.flush();
+                        mBuf.release();
                     }
                 }
 
