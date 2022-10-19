@@ -291,129 +291,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-            /*    if (false) {
-                    System.out.println("[CheckSum] : SUCCESS :)");
-
-
-                    if (requestFindResults == null) {
-                        System.out.println("[fail] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
-                    } else {
-                        String path1 = "C:\\dev\\" + requestFindResults.getAsid();
-                        String path2 = "C:\\dev\\" + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject();
-                        String path3 = "C:\\dev\\" + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject() + "\\" + requestFindResults.getSsn();
-
-                        String convertedSampleRate;
-
-                        *//*
-
-                           sampleRate 기존 4,8  외에 16 일 경우, 변환
-                           sampleRate = 한자리 --> 004 or 008
-                           sampleRate = 두자리 --> 016
-                        *//*
-
-                        if (sampleRate.length() == 1) {
-                            convertedSampleRate = "00" + sampleRate;
-                            log.info(convertedSampleRate);
-                        } else {
-                            convertedSampleRate = "0" + sampleRate;
-                            log.info(convertedSampleRate);
-                        }
-
-                        char underBar = '_';
-                        String filePath = path3 + "\\" + serialNumber + underBar + datetime + underBar + convertedSampleRate + ".dat";
-                        File initFilePath = new File(filePath);
-                        File file1 = new File(path1);
-                        File file2 = new File(path2);
-                        File file3 = new File(path3);
-                        Path filePathExistence = Paths.get(filePath);
-
-                        dataRefModel.setFilepath(filePath);
-                        log.info(dataRefModel.getFilepath());
-
-
-                        if (file1.isDirectory()) {
-                            System.out.println("[PASS] : " + path1 + " 경로가 존재합니다");
-                            if (file2.isDirectory()) {
-                                System.out.println("[PASS] : " + path2 + " 경로가 존재합니다");
-                                if (file3.isDirectory()) {
-                                    System.out.println("[PASS] : " + path3 + " 경로가 존재합니다");
-
-                                    if (Files.exists(filePathExistence)) {
-                                        System.out.println("[EXIST] : " + filePath + " 경로에 파일이 존재합니다");
-
-                                        // 해당경로 파일 존재 시, NAK 처리
-                                        ctx.writeAndFlush(Unpooled.copiedBuffer(nak));
-                                        mBuf.release();
-
-                                    } else {
-                                        System.out.println("[NOT EXIST] : " + filePath + " 경로에 파일이 존재하지 않습니다. 파일을 생성합니다.");
-                                        // 해당경로 파일 없을 경우, ACK 처리
-                                        ctx.writeAndFlush(Unpooled.copiedBuffer(ack));
-
-                                        mBuf.release();
-
-                                        try {
-                                            if (initFilePath.createNewFile()) {
-                                                System.out.println("File created");
-
-                                            } else {
-                                                System.out.println("File already exists");
-                                            }
-
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                } else {
-                                    System.out.println("[FAIL] : " + path3 + " 경로가 존재하지 않습니다.");
-                                }
-                            } else {
-                                System.out.println("[FAIL] : " + path2 + " 경로가 존재하지 않습니다.");
-                            }
-                        } else {
-                            System.out.println("[FAIL] : " + path1 + " 경로가 존재하지 않습니다.");
-                        }
-                    }
-                }*/
             } else if (flag.equals(PacketFlag.DATA)) {
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                String datetime = mBuf.readCharSequence(15, Charset.defaultCharset()).toString();
-                String requestType = mBuf.readCharSequence(1, Charset.defaultCharset()).toString();
-                String paraLen = mBuf.readCharSequence(4, Charset.defaultCharset()).toString();
-                String data = mBuf.readCharSequence(256, Charset.defaultCharset()).toString();
-                byte chksum1 = (mBuf.readByte());
-                byte chksum2 = (mBuf.readByte());
 
-                String convertChk = String.format("%x%x", chksum1, chksum2);
-                String chkData = flag + serialNumber + datetime + requestType + paraLen + data;
+                log.info("엄석대");
 
-                int convertDecimalSum = 0;
 
-                for (int i = 0; i < chkData.length(); i++) {
-                    convertDecimalSum += chkData.charAt(i);    // 문자열 10진수로 바꿔서 저장
-                }
 
-                int decimal = Integer.parseInt(convertChk, 16);
-                System.out.println("[decimal] " + decimal);
-                System.out.println("[convertDecimalSum] " + convertDecimalSum);
-                System.out.println("=====================");
 
-//                log.info(dataRefModel.getFilepath());
 
-//                File file = new File(dataRefModel.getFilepath());
-                FileWriter writer = null;
 
-//                if (convertDecimalSum == decimal) {
-//                    System.out.println("[CheckSum] : SUCCESS :)");
-//
-//                    for (int i = 0; i < framesize; i++) {
-//                        writer = new FileWriter(file, true);
-//                        writer.write(data);
-//                        writer.flush();
-//                    }
-//
-//
-//                }
             }
 
 
