@@ -67,7 +67,10 @@ public class RequestSensorListService {
             log.info("initDate : {}", initDate(requestFindResults.getRegdate()) );
 
 
-            String filePath = path + "/" + requestFindResults.getSsn() + underBar + request.getDateTime() + underBar + convertedSampleRate + ".dat";
+            String dateTime = new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(request.getDateTime());
+
+
+            String filePath = path + "/" + requestFindResults.getSsn() + underBar + dateTime + underBar + convertedSampleRate + ".dat";
             log.info("filePath : {}", filePath);
 
             File initFilePath = new File(filePath);
@@ -93,7 +96,7 @@ public class RequestSensorListService {
 
         String chk = null;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
             Date test = dateFormat.parse(date);
 
             chk = String.valueOf(test.getTime());
