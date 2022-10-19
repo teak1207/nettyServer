@@ -68,7 +68,7 @@ public class RequestSensorListService {
             Path filePathExistence = Paths.get(filePath);
             dataRefModel.setFilepath(filePath);
 
-            log.info(dataRefModel.getFilepath());
+            log.info("dataRefModel: {}", dataRefModel.getFilepath());
 
             if (file3.isDirectory()) {
                 log.info("good");
