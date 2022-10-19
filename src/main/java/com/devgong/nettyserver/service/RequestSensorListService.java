@@ -41,7 +41,7 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
-    public void confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
+    public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
         String convertedSampleRate;
 //        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()), 16));
@@ -76,9 +76,7 @@ public class RequestSensorListService {
             File file3 = new File(path);
             Path filePathExistence = Paths.get(filePath);
             dataRefModel.setFilepath(filePath);
-
-            log.info("dataRefModel: {}", dataRefModel.getFilepath());
-
+//            log.info("dataRefModel: {}", dataRefModel.getFilepath());
 
             if (file3.isDirectory()) {
 
@@ -92,6 +90,7 @@ public class RequestSensorListService {
                     try {
                         if (initFilePath.createNewFile()) {
                             log.info("파일 생성 완료 : {} ", filePath);
+                            return  true;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -102,7 +101,7 @@ public class RequestSensorListService {
                 log.info("경로가 존재하지 않습니다. : {}", filePath);
             }
         }
-
+        return false ;
     }
 
     public String convertDate(LocalDateTime date) {

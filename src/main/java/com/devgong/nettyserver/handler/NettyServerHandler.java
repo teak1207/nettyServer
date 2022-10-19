@@ -266,7 +266,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("test : {}", (char) a);
                     log.info("test : {}",  a);
                     log.info("----------");
-
                 }
                 log.info("test length: {}", bytes.length);
 
@@ -281,7 +280,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 if (requestFindResults == null) {
                     log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
                 } else {
-                    requestSensorListService.confirmPath(requestFindResults, request);
+                    if(requestSensorListService.confirmPath(requestFindResults, request)){
+                        log.info("good");
+                    }else{
+                        log.info("fail");
+                    }
                 }
 
 
