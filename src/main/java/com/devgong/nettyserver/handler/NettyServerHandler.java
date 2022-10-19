@@ -56,8 +56,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
 
+
         System.out.println("Channel Read");
         System.out.println("===================");
+        log.info("msg : {}",msg);
+
 
         byte readFlag = mBuf.readByte();
         PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
