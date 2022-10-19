@@ -60,7 +60,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("===================");
 
         byte readFlag = mBuf.readByte();
-        PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findFirst()
+        PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + readFlag));
 
         //memo : preinstall response 담을 객체 생성
@@ -249,7 +249,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("REPORT Process fail");
                     }
                 }
-            } else if (flag.equals(PacketFlag.REQUEST)) {
+            } else if (PacketFlag.REQUEST.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
