@@ -67,7 +67,7 @@ public class RequestSensorListService {
             log.info("initDate : {}", initDate(requestFindResults.getRegdate()) );
 
 
-            String filePath = path + "/" + requestFindResults.getSsn() + underBar + initDate(requestFindResults.getRegdate()) + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
+            String filePath = path + "/" + requestFindResults.getSsn() + underBar + requestFindResults.getRegdate() + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
             log.info("filePath : {}", filePath);
 
             File initFilePath = new File(filePath);
