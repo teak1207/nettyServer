@@ -65,7 +65,7 @@ public class RequestSensorListService {
 
             char underBar = '_';
 
-            log.info("initDate : {}", convertDate(request.getDateTime()) );
+            log.info("initDate : {}", convertDate(request.getDateTime()));
 
 
             String filePath = path + "/" + requestFindResults.getSsn() + underBar + request.getDateTime() + underBar + convertedSampleRate + ".dat";
@@ -92,11 +92,14 @@ public class RequestSensorListService {
 
     public String convertDate(LocalDateTime date) {
 
-        log.info("date test : {}", date.toString());
+        String convertValue = date.toString();
+
+        convertValue = convertValue.replace("-", "");
+        convertValue = convertValue.replace(":", "");
+        convertValue = convertValue.replace("T", "_");
 
 
-
-        return "test";
+        return convertValue;
     }
 
 
