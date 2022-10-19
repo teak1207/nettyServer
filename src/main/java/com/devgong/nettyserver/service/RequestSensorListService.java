@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -61,8 +63,9 @@ public class RequestSensorListService {
             log.info("path : {}", path);
 
             char underBar = '_';
-            String filePath = path + "/" + requestFindResults.getSsn() + underBar + requestFindResults.getRegdate() + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
+            String filePath = path + "/" + requestFindResults.getSsn() + underBar + initDate(requestFindResults.getRegdate()) + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
             log.info("filePath : {}", filePath);
+
             File initFilePath = new File(filePath);
             File file3 = new File(path);
             Path filePathExistence = Paths.get(filePath);
@@ -73,8 +76,6 @@ public class RequestSensorListService {
             if (file3.isDirectory()) {
                 log.info("good");
             } else {
-
-
                 log.info("fail");
 
             }
@@ -82,6 +83,23 @@ public class RequestSensorListService {
 
         }
 
+    }
+
+    public String initDate(String date) {
+
+        String chk = null;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_ssssss");
+            Date test = dateFormat.parse(date);
+
+            chk = String.valueOf(test.getTime());
+
+        } catch (Exception e) {
+            log.info(e.toString());
+        }
+
+
+        return chk;
     }
 
 
