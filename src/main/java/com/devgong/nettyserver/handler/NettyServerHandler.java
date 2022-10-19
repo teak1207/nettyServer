@@ -64,6 +64,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         log.info("readableBytes : {}",mBuf.readableBytes());
         log.info("writableBytes : {}",mBuf.writableBytes());
+        log.info("capacity : {}",mBuf.capacity());
 
 
         byte readFlag = mBuf.readByte();
