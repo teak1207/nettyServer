@@ -63,6 +63,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
         log.info("msg : {}",mBuf.readableBytes());
+        log.info("msg : {}",mBuf.writableBytes());
 
 
         byte readFlag = mBuf.readByte();
@@ -297,7 +298,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-            } else if (PacketFlag.DATA.equals(flag)) {
+            } else if (flag.equals('5')) {
 
                 log.info("flag : {}" , flag);
                 log.info("뭐가문제야");
