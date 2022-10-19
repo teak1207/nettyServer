@@ -311,9 +311,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Data  readable bytes length : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
 
+                int i =0;
                 for(byte s : bytes){
                     log.info("data : {}", s);
                     log.info("data : {}", (char)s);
+                    log.info("data",i++);
                     log.info("-------------------");
                 }
 
