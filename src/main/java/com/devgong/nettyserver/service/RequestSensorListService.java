@@ -80,22 +80,26 @@ public class RequestSensorListService {
             log.info("dataRefModel: {}", dataRefModel.getFilepath());
 
 
-            if (Files.exists(filePathExistence)) {
+            if (file3.isDirectory()) {
 
-                if (file3.isDirectory()) {
-                    //memo : 해당 경로에 파일 존재할 경우, NAK return
-                    log.info("경로가 존재합니다. : {}", filePath);
+                //memo : 해당 경로에 파일 존재할 경우, NAK return
+                log.info("경로가 존재합니다. : {}", filePath);
+
+                if (Files.exists(filePathExistence)) {
+                log.info("해당파일이 존재합니다. : {}", filePathExistence);
                 } else {
-                    //memo : 해당 경로에 파일이 없을 경우,File 생성후, ACK return
-                    log.info("경로가 존재하지 않습니다. : {}", filePath);
+
                     try {
                         if (initFilePath.createNewFile()) {
-                            log.info("생성완료 : {} ", filePath);
+                            log.info("파일 생성 완료 : {} ", filePath);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+            } else {
+                //memo : 해당 경로에 파일이 없을 경우,File 생성후, ACK return
+                log.info("경로가 존재하지 않습니다. : {}", filePath);
             }
         }
 
