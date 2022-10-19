@@ -64,13 +64,10 @@ public class RequestSensorListService {
 
             char underBar = '_';
 
+            log.info("initDate : {}", initDate(requestFindResults.getRegdate()) );
 
 
-            String dateTime = new SimpleDateFormat("yyyyMMddHHmmssSSSS").format(request.getDateTime());
-            log.info("initDate : {}", dateTime );
-
-
-            String filePath = path + "/" + requestFindResults.getSsn() + underBar + dateTime + underBar + convertedSampleRate + ".dat";
+            String filePath = path + "/" + requestFindResults.getSsn() + underBar + request.getDateTime() + underBar + convertedSampleRate + ".dat";
             log.info("filePath : {}", filePath);
 
             File initFilePath = new File(filePath);
