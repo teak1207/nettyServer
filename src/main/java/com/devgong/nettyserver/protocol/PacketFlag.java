@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum PacketFlag {
     REQUEST((byte) '4'),
-    DATA((byte) '5'),
+    DATA((byte) 'd'),
     SETTING((byte) '6'),
     REPORT((byte) '7'),
     ACK((byte) '8'),
