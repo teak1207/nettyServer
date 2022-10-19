@@ -38,7 +38,7 @@ public class NewPacket<T extends Serializable<T>> {
         }
         this.flag = flag;
         sensorId = new String(Arrays.copyOfRange(packet, 0, 24));
-        dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd HHmmss"));
+        dateTime = LocalDateTime.parse(new String(Arrays.copyOfRange(packet, 24, 39)), DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
         requestType = Arrays.stream(RequestType.values()).filter(type -> type.getType() == packet[39]).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
         parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44));
