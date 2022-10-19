@@ -54,40 +54,40 @@ public class NewPacket<T extends Serializable<T>> {
 
     }
 
-   /* public byte[] serialize() {
-        byte[] serializeExceptChecksum = serializeExceptChecksum();
-        byte[] serialized = new byte[2 + serializeExceptChecksum.length];
-        System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
-        System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
-        return serialized;
-    }*/
+//    public byte[] serialize() {
+//        byte[] serializeExceptChecksum = serializeExceptChecksum();
+//        byte[] serialized = new byte[2 + serializeExceptChecksum.length];
+//        System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
+//        System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
+//        return serialized;
+//    }
 
-    /*private byte[] serializeExceptChecksum() {
-        byte[] serializedParameter = parameter.serialize();
-        byte[] serialized = new byte[45 + serializedParameter.length];
-
-        //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
-        int test = Optional.of(parameterLength).orElse(0L).intValue();
-
-
-        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
-        byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
-
-        int res = 0;
-        for (int i = 0; i < paramterLengthBytes.length; i++) {
-            res = (res * 10) + ((paramterLengthBytes[i] & 0xff));
-        }
-
-        serialized[0] = flag.getFlag();
-        System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
-        System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
-        serialized[40] = requestType.getType();
-        System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
-        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
-
-        return serialized;
-    }*/
+//    private byte[] serializeExceptChecksum() {
+//        byte[] serializedParameter = parameter.serialize();
+//        byte[] serialized = new byte[45 + serializedParameter.length];
+//
+//        //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
+//        int test = Optional.of(parameterLength).orElse(0L).intValue();
+//
+//
+//        byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
+//        byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
+//        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
+//
+//        int res = 0;
+//        for (int i = 0; i < paramterLengthBytes.length; i++) {
+//            res = (res * 10) + ((paramterLengthBytes[i] & 0xff));
+//        }
+//
+//        serialized[0] = flag.getFlag();
+//        System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
+//        System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
+//        serialized[40] = requestType.getType();
+//        System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
+//        System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
+//
+//        return serialized;
+//    }
 
 
     public static byte[] intToByteArray(int value) {
