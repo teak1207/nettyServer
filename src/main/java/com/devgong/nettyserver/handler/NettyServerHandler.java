@@ -308,8 +308,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-                log.info("PreInstall  readable bytes length : {}", bytes.length);
-                log.info("PreInstall FLAG : {}", (char) readFlag);
+                log.info("Data  readable bytes length : {}", bytes.length);
+                log.info("Data FLAG : {}", (char) readFlag);
 
 
 
