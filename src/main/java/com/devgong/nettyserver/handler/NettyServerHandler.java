@@ -308,7 +308,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("Data  readable bytes length : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
-
+                log.info("mBuf length : {}", mBuf);
 //                for(byte s : bytes){
 //                    log.info("data : {}", s);
 //                    log.info("data : {}", (char)s);
