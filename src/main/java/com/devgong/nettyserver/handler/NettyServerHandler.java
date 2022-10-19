@@ -254,7 +254,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("test : {}", flag);
+                log.info("flag : {}", flag);
                 for (byte a : bytes) {
                     log.info("test : {}", (char) a);
                     log.info("test : {}", a);
@@ -291,9 +291,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-            } else if (flag.equals(PacketFlag.DATA)) {
+            } else if (PacketFlag.DATA.equals(flag)) {
 
-                log.info("엄석대");
+                log.info("엄석");
 
 
 
