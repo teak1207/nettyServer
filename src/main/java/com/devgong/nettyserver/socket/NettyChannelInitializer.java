@@ -4,6 +4,7 @@ import com.devgong.nettyserver.decoder.TestDecoder;
 import com.devgong.nettyserver.handler.NettyServerHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
@@ -23,8 +24,10 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel ch) {
         ChannelPipeline pipeline = ch.pipeline();
 
+        ch.config().setRecvByteBufAllocator(new FixedRecvByteBufAllocator(2048)); //set  buf size here
 
-        ch.config().setReceiveBufferSize(1024);
+
+//        ch.config().setReceiveBufferSize(1024);
         // decoder는 @Sharable이 안 됨, Bean 객체 주입이 안 되고, 매번 새로운 객체 생성해야 함
         TestDecoder testDecoder = new TestDecoder();
 
