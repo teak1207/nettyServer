@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @RequiredArgsConstructor
@@ -64,7 +65,7 @@ public class RequestSensorListService {
 
             char underBar = '_';
 
-            log.info("initDate : {}", initDate(requestFindResults.getRegdate()) );
+            log.info("initDate : {}", convertDate(request.getDateTime()) );
 
 
             String filePath = path + "/" + requestFindResults.getSsn() + underBar + request.getDateTime() + underBar + convertedSampleRate + ".dat";
@@ -89,24 +90,13 @@ public class RequestSensorListService {
 
     }
 
-    public String initDate(String date) {
+    public String convertDate(LocalDateTime date) {
 
-        String chk = null;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
-            Date test = dateFormat.parse(date);
-
-            chk = String.valueOf(test.getTime());
+        log.info("date test : {}", date.toString());
 
 
 
-
-        } catch (Exception e) {
-            log.info(e.toString());
-        }
-
-
-        return chk;
+        return "test";
     }
 
 
