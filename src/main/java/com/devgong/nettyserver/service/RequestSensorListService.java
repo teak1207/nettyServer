@@ -56,7 +56,7 @@ public class RequestSensorListService {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
         } else {
-            String defaultPath = "/home/scsol/public_html/leak_data_gong";
+            String defaultPath = "/home/scsol/public_html/leak_data_gong/";
             String path = defaultPath + requestFindResults.getAsid() + "/" + requestFindResults.getAproject() + "/" + requestFindResults.getSsn();
             log.info("path : {}", path);
 
