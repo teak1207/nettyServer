@@ -53,7 +53,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     final byte[] ack = {8};
     final byte[] nak = {9};
 
-    DataRefModel dataRefModel = new DataRefModel();
+
     DataInsertModel dataInsertModel = new DataInsertModel();
     PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
@@ -75,14 +75,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreInstallSetModel preInstallDeviceInfos;
         //memo : setting response 담을 객체 생성
         SettingResponseModel settingDeviceInfos;
-
-
-
-
-
-
-
-
 
 
         /* 플래그에 값에 따라 분기*/
@@ -402,22 +394,22 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.out.println("[convertDecimalSum] " + convertDecimalSum);
                 System.out.println("=====================");
 
-                log.info(dataRefModel.getFilepath());
+//                log.info(dataRefModel.getFilepath());
 
-                File file = new File(dataRefModel.getFilepath());
+//                File file = new File(dataRefModel.getFilepath());
                 FileWriter writer = null;
 
-                if (convertDecimalSum == decimal) {
-                    System.out.println("[CheckSum] : SUCCESS :)");
-
-                    for (int i = 0; i < framesize; i++) {
-                        writer = new FileWriter(file, true);
-                        writer.write(data);
-                        writer.flush();
-                    }
-
-
-                }
+//                if (convertDecimalSum == decimal) {
+//                    System.out.println("[CheckSum] : SUCCESS :)");
+//
+//                    for (int i = 0; i < framesize; i++) {
+//                        writer = new FileWriter(file, true);
+//                        writer.write(data);
+//                        writer.flush();
+//                    }
+//
+//
+//                }
             }
 
 

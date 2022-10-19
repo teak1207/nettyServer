@@ -1,6 +1,7 @@
 package com.devgong.nettyserver.service;
 
 
+import com.devgong.nettyserver.domain.DataRefModel;
 import com.devgong.nettyserver.domain.RequestListAllModel;
 import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
@@ -10,7 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -19,6 +23,8 @@ public class RequestSensorListService {
 
 
     RequestListAllModel requestListAllModel = null;
+    DataRefModel dataRefModel = new DataRefModel();
+
     private final RequestSensorListAllRepository requestSensorListAllRepository;
 
     public RequestListAllModel findDataExistence(String serialNumber) {
@@ -53,6 +59,25 @@ public class RequestSensorListService {
             String defaultPath = "/home/scsol/public_html/leak_data_gong";
             log.info("아모띠");
             String path = defaultPath + requestFindResults.getAsid() + "\\" + requestFindResults.getAproject() + "\\" + requestFindResults.getSsn();
+            log.info("path : {}", path);
+
+            char underBar = '_';
+            String filePath = path + "\\" + requestFindResults.getSsn() + underBar + requestFindResults.getRegdate() + underBar + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16) + ".dat";
+            File initFilePath = new File(filePath);
+            File file3 = new File(path);
+            Path filePathExistence = Paths.get(filePath);
+            dataRefModel.setFilepath(filePath);
+
+            log.info(dataRefModel.getFilepath());
+
+            if (file3.isDirectory()) {
+                log.info("good");
+            } else {
+                log.info("fail");
+
+            }
+
+
         }
 
     }
