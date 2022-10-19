@@ -298,7 +298,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
 
-            } else if (flag.equals('5')) {
+            } else if (PacketFlag.DATA .equals(flag)) {
 
                 log.info("flag : {}" , flag);
                 log.info("뭐가문제야");
