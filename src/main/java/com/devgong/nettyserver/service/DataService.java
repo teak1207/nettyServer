@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -29,15 +26,12 @@ public class DataService {
 
         log.info("data test : {}", dataRefModel.getFilepath());
 
-        byte [] bytes = request.getParameter().getData().getBytes();
-//        File file = new File(dataRefModel.getFilepath());
-//        FileWriter fileWriter = null;
-//        fileWriter = new FileWriter(file,true);
+        File file = new File(dataRefModel.getFilepath());
+        FileWriter fileWriter = null;
+        fileWriter = new FileWriter(file,true);
 
-        Path path = Paths.get(dataRefModel.getFilepath());
-
-        Files.write(path,bytes);
-//        fileWriter.flush();
+        fileWriter.write(request.getParameter().getData());
+        fileWriter.flush();
 
     }
 }
