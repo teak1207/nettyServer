@@ -26,6 +26,9 @@ public class DataService {
 
         log.info("data test : {}", dataRefModel.getFilepath());
 
+            log.info("length : {}", request.getParameter().getData().length());
+
+
         File file = new File(dataRefModel.getFilepath());
         FileWriter fileWriter = null;
         fileWriter = new FileWriter(file,true);
