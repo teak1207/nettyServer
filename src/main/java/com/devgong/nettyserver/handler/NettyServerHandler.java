@@ -307,7 +307,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Data FLAG : {}", (char) readFlag);
                 log.info("mBuf length : {}", mBuf);
 
-                response[0] = PacketFlag.NAK.getFlag();
+                response[0] = PacketFlag.ACK.getFlag();
                 ctx.write(Unpooled.copiedBuffer(response));
                 ctx.flush();
                 mBuf.release();
