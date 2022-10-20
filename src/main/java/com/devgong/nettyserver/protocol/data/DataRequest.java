@@ -16,7 +16,7 @@ public class DataRequest implements Serializable<DataRequest> {
 
     public DataRequest(byte[] payload) {
 
-        if (payload == null || payload.length != 557) {
+        if (payload == null || payload.length != 512) {
             throw new IllegalArgumentException("Setting Request payload error!");
         }
         data = new String(Arrays.copyOfRange(payload, 0, 512));
