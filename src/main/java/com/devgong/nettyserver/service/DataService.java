@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
@@ -19,7 +20,7 @@ public class DataService {
 
     private final RequestSensorListService requestSensorListService;
 
-    public void saveData(NewPacket<DataRequest> request) {
+    public void saveData(NewPacket<DataRequest> request) throws IOException {
 
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
@@ -27,9 +28,10 @@ public class DataService {
 
         File file = new File(dataRefModel.getFilepath());
         FileWriter fileWriter = null;
+        fileWriter = new FileWriter(file,true);
 
-//        fileWriter = new FileWriter()
-
+        fileWriter.write(request.getParameter().getData());
+        fileWriter.flush();
 
     }
 }
