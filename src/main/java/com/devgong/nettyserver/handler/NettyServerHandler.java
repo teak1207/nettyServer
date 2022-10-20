@@ -297,20 +297,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 dataService.saveData(request);
 
-
-
-
-
-
-
-
-
-/*
                 response[0] = PacketFlag.ACK.getFlag();
                 ctx.write(Unpooled.copiedBuffer(response));
                 ctx.flush();
                 mBuf.release();
-*/
 
 
             }
