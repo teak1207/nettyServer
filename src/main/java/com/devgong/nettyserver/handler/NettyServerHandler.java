@@ -45,7 +45,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final RequestSensorListService requestSensorListService;
 
 
-
     DataInsertModel dataInsertModel = new DataInsertModel();
     PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
@@ -59,7 +58,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         System.out.println("Channel Read");
         System.out.println("===================");
-
 
 
 //        log.info("readableBytes : {}",mBuf.readableBytes());
@@ -177,7 +175,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
-                byte [] nakResponse = new byte[45];
+                byte[] nakResponse = new byte[45];
                 if (settingDeviceInfos != null) {
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
@@ -297,11 +295,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
 
-            } else if (PacketFlag.DATA .equals(flag)) {
+            } else if (PacketFlag.DATA.equals(flag)) {
 
-                log.info("flag : {}" , flag);
-                log.info("뭐가문제야");
-
+                log.info("flag : {}", flag);
+                byte[] response = new byte[45];
                 byte[] bytes = new byte[mBuf.readableBytes()];
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
@@ -309,11 +306,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Data  readable bytes length : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
                 log.info("mBuf length : {}", mBuf);
-//                for(byte s : bytes){
-//                    log.info("data : {}", s);
-//                    log.info("data : {}", (char)s);
-//                    log.info("-------------------");
-//                }
+
+                response[0] = PacketFlag.NAK.getFlag();
+                ctx.write(Unpooled.copiedBuffer(response));
+                ctx.flush();
+                mBuf.release();
+
+
             }
 
         } catch (Exception e) {
