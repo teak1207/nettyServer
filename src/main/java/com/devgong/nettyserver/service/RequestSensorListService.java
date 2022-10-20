@@ -17,9 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -84,13 +82,13 @@ public class RequestSensorListService {
                 log.info("경로가 존재합니다. : {}", filePath);
 
                 if (Files.exists(filePathExistence)) {
-                log.info("해당파일이 존재합니다. : {}", filePathExistence);
+                    log.info("해당파일이 존재합니다. : {}", filePathExistence);
                 } else {
 
                     try {
                         if (initFilePath.createNewFile()) {
                             log.info("파일 생성 완료 : {} ", filePath);
-                            return  true;
+                            return true;
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -101,7 +99,7 @@ public class RequestSensorListService {
                 log.info("경로가 존재하지 않습니다. : {}", filePath);
             }
         }
-        return false ;
+        return false;
     }
 
     public String convertDate(LocalDateTime date) {

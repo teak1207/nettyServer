@@ -3,16 +3,14 @@ package com.devgong.nettyserver.handler;
 import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.protocol.*;
 import com.devgong.nettyserver.protocol.Report.ReportRequest;
+import com.devgong.nettyserver.protocol.data.DataRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallReportRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallRequest;
 import com.devgong.nettyserver.protocol.preinstall.PreInstallResponse;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
 import com.devgong.nettyserver.protocol.setting.SettingRequest;
 import com.devgong.nettyserver.protocol.setting.SettingResponse;
-import com.devgong.nettyserver.service.PreinstallSensorListService;
-import com.devgong.nettyserver.service.ReportSensorListService;
-import com.devgong.nettyserver.service.RequestSensorListService;
-import com.devgong.nettyserver.service.SettingSensorListService;
+import com.devgong.nettyserver.service.*;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -25,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.FileWriter;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -43,27 +40,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final SettingSensorListService settingSensorListService;
     private final ReportSensorListService reportSensorListService;
     private final RequestSensorListService requestSensorListService;
-
+    private final DataService  dataService;
 
     DataInsertModel dataInsertModel = new DataInsertModel();
     PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
 
-    static int framesize;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf mBuf = (ByteBuf) msg;
 
 
-        System.out.println("Channel Read");
-        System.out.println("===================");
-
-
-//        log.info("readableBytes : {}",mBuf.readableBytes());
-//        log.info("writableBytes : {}",mBuf.writableBytes());
-//        log.info("capacity : {}",mBuf.capacity());
-
+        log.info("Channel Read");
+        log.info("===================");
 
         byte readFlag = mBuf.readByte();
         PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
@@ -211,10 +201,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
-
                 } else {
-
-                    //memo : nak 45 byte 처리하기
                     nakResponse[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(nakResponse));
                     ctx.flush();
@@ -284,7 +271,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
                         mBuf.release();
-                        log.info("yahoo");
 
                     } else {
                         response[0] = PacketFlag.NAK.getFlag();
@@ -303,14 +289,28 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
+                NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
+
                 log.info("Data  readable bytes length : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
                 log.info("mBuf length : {}", mBuf);
 
+                dataService.saveData(request);
+
+
+
+
+
+
+
+
+
+/*
                 response[0] = PacketFlag.ACK.getFlag();
                 ctx.write(Unpooled.copiedBuffer(response));
                 ctx.flush();
                 mBuf.release();
+*/
 
 
             }
