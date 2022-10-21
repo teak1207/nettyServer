@@ -6,5 +6,5 @@ import com.devgong.nettyserver.protocol.request.ReqRequest;
 
 public interface RequestSendDataRepository {
 
-    RequestLeakDataModel  save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel);
+    boolean save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel);
 }
