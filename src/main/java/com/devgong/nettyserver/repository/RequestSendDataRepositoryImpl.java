@@ -21,7 +21,7 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public boolean save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel) {
+    public RequestLeakDataModel save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel) {
 
         log.info("repository : {}", request);
         log.info("repository : {}", requestLeakDataModel);
@@ -58,6 +58,6 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         requestLeakDataModel.setCid(key.intValue());
 
-        return true;
+        return requestLeakDataModel;
     }
 }

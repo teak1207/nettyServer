@@ -69,14 +69,14 @@ public class RequestSensorListService {
         requestLeakDataModel.setInference("");
 
 
-        if (requestSendDataRepository.save(request, requestLeakDataModel)) {
+        /*if () {
             log.info("leak_send data Insert Success");
         } else {
             log.info("leak_send data Insert fail");
 
         }
-        ;
-
+        ;*/
+        requestSendDataRepository.save(request, requestLeakDataModel);
 
     }
 
