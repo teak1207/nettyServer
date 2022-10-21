@@ -36,6 +36,7 @@ public class RequestSensorListService {
     private final RequestSendDataRepository requestSendDataRepository;
 
     static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
+    char underBar = '_';
 
 
     public RequestListAllModel findDataExistence(String serialNumber) {
@@ -50,22 +51,19 @@ public class RequestSensorListService {
     public void saveSendData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) {
 
         Date now = new Date();
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
+
+        String fname = defaultPath + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + ".dat";
 
         requestLeakDataModel.setPname(request.getSensorId());
         requestLeakDataModel.setDate(String.valueOf(simpleDateFormat.format(now)));
         requestLeakDataModel.setId("admin");
-
         requestLeakDataModel.setIp("-1-1");
-
         requestLeakDataModel.setSid(sensorListAll.getAsid());
         requestLeakDataModel.setValid("");
         requestLeakDataModel.setRequestTime(String.valueOf(simpleDateFormat.format(now)));
-        requestLeakDataModel.setFname(defaultPath);
+        requestLeakDataModel.setFname(fname);
         requestLeakDataModel.setSn(sensorListAll.getSsn());
         requestLeakDataModel.setComplete("");
         requestLeakDataModel.setCompleteTime("");
@@ -105,8 +103,6 @@ public class RequestSensorListService {
             String path = defaultPath + requestFindResults.getAsid() + "/" + requestFindResults.getAproject() + "/" + requestFindResults.getSsn();
 
             log.info("path : {}", path);
-
-            char underBar = '_';
 
 
             String filePath = path + "/" + requestFindResults.getSsn() + underBar + convertDate(request.getDateTime()) + underBar + convertedSampleRate + ".dat";
