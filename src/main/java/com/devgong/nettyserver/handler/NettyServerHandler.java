@@ -263,8 +263,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
-                //memo : leak_send_data 에  넣어라
-                requestSensorListService.saveSendData(request, requestFindResults);
+                //memo : leak_send_data 에  저장
+                requestSensorListService.saveData(request, requestFindResults);
 
 
                 if (requestFindResults == null) {
@@ -295,20 +295,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
 
-                log.info("Data  readable bytes length : {}", bytes.length);
+                log.info("Data  길이 : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
                 log.info("mBuf length : {}", mBuf);
 
+
+                //memo : dat file (frame amount * Data*size)에 저장.
                 dataService.saveData(request);
+
+                //memo : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
+                requestSensorListService.updateData();
+
 
                 response[0] = PacketFlag.ACK.getFlag();
                 ctx.write(Unpooled.copiedBuffer(response));
                 ctx.flush();
                 mBuf.release();
-
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

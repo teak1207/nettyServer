@@ -48,13 +48,19 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
-    public void saveSendData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {
+    public void updateData() {
+
+
+    }
+
+
+    public void saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {
 
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
-        String fname = defaultPath + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate())+".dat";
+        String convertedFname = defaultPath + sensorListAll.getAsid() + "/" + sensorListAll.getAproject() + "/" + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
 
         requestLeakDataModel.setPname(request.getSensorId());
         requestLeakDataModel.setDate(String.valueOf(simpleDateFormat.format(now)));
@@ -63,47 +69,31 @@ public class RequestSensorListService {
         requestLeakDataModel.setSid(sensorListAll.getAsid());
         requestLeakDataModel.setValid("");
         requestLeakDataModel.setRequestTime(String.valueOf(simpleDateFormat.format(now)));
-        requestLeakDataModel.setFname(fname);
+        requestLeakDataModel.setFname(convertedFname);
         requestLeakDataModel.setSn(sensorListAll.getSsn());
         requestLeakDataModel.setComplete("");
         requestLeakDataModel.setCompleteTime("");
         requestLeakDataModel.setFnum("");
         requestLeakDataModel.setInference("");
 
-
         if (requestSendDataRepository.save(request, requestLeakDataModel)) {
             log.info("leak_send data Insert Success");
         } else {
             log.info("leak_send data Insert fail");
-
         }
-        ;
-
 
     }
 
 
     public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
-//        String convertedSampleRate;
-//
-//        if (request.getParameter().getSampleRate().length() == 1) {
-//            convertedSampleRate = "00" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
-//            log.info(convertedSampleRate);
-//        } else {
-//            convertedSampleRate = "0" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
-//            log.info(convertedSampleRate);
-//        }
-
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
         } else {
-//            String defaultPath = "/home/scsol/public_html/leak_data_gong/";
             String path = defaultPath + requestFindResults.getAsid() + "/" + requestFindResults.getAproject() + "/" + requestFindResults.getSsn();
 
             log.info("path : {}", path);
-
 
             String filePath = path + "/" + requestFindResults.getSsn() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
             log.info("filePath : {}", filePath);
@@ -112,7 +102,6 @@ public class RequestSensorListService {
             File file3 = new File(path);
             Path filePathExistence = Paths.get(filePath);
             dataRefModel.setFilepath(filePath);
-//            log.info("dataRefModel: {}", dataRefModel.getFilepath());
 
             if (file3.isDirectory()) {
 

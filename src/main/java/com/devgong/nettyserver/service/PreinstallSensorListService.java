@@ -66,7 +66,6 @@ public class PreinstallSensorListService {
         PreinstallReportModel preinstallReportModel = new PreinstallReportModel();
 
         if (bytes != null) {
-
             preinstallReportModel.setSerialNumber(new String(Arrays.copyOfRange(bytes, 0, 24)));
             preinstallReportModel.setDateTime(LocalDateTime.now());
             preinstallReportModel.setDebugMsg(new String(Arrays.copyOfRange(bytes, 44, 56)));
@@ -76,13 +75,9 @@ public class PreinstallSensorListService {
             preinstallReportModel.setFmRadio(new String(Arrays.copyOfRange(bytes, 69, 73)));
             preinstallReportModel.setFirmWareVersion(new String(Arrays.copyOfRange(bytes, 73, 79)));
             preinstallReportModel.setBatteryVtg(new String(Arrays.copyOfRange(bytes, 79, 85)));
-
             preinstallReportModel.setRSSI(String.valueOf(bytes[85] & 0xff));
             preinstallReportModel.setDeviceStatus(new String(Arrays.copyOfRange(bytes, 86, 88)));
-
             preinstallReportModel.setSamplingTime(String.valueOf(bytes[89] & 0xff));
-
-
             preinstallReportModel.setPx(new String(Arrays.copyOfRange(bytes, 89, 99)));
             preinstallReportModel.setPy(new String(Arrays.copyOfRange(bytes, 99, 109)));
             preinstallReportModel.setModemNumber(new String(Arrays.copyOfRange(bytes, 109, 125)));
@@ -97,12 +92,6 @@ public class PreinstallSensorListService {
             preinstallReportModel.setBaudrate(String.valueOf(bytes[217]));
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
 
-
-//            log.info("preinstallReportModel : {}", bytes);
-//            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime1());
-//            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime2());
-//            log.info("preinstallReportModel : {}", preinstallReportModel.getRecordingTime3());
-//            log.info("preinstallReportModel : {}", preinstallReportModel.getServerUrl());
             log.info("preinstallReportModel : {}", preinstallReportModel);
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
