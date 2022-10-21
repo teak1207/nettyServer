@@ -51,7 +51,7 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
         parameters.put("valid", requestLeakDataModel.getValid());
         parameters.put("request_time", requestLeakDataModel.getRequestTime());
         parameters.put("fname", requestLeakDataModel.getFname());
-        parameters.put("SN", request.getSensorId());
+        parameters.put("sn", request.getSensorId());
         parameters.put("complete", requestLeakDataModel.getComplete());
         parameters.put("complete_time", requestLeakDataModel.getCompleteTime());
         parameters.put("fnum", requestLeakDataModel.getFnum());
