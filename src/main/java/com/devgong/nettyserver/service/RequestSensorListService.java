@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -50,17 +51,20 @@ public class RequestSensorListService {
 
         Date now = new Date();
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
         requestLeakDataModel.setPname(request.getSensorId());
-        requestLeakDataModel.setDate(String.valueOf(now));
+        requestLeakDataModel.setDate(String.valueOf(simpleDateFormat.format(now)));
         requestLeakDataModel.setId("admin");
 
         requestLeakDataModel.setIp("-1-1");
 
         requestLeakDataModel.setSid(sensorListAll.getAsid());
         requestLeakDataModel.setValid("");
-        requestLeakDataModel.setRequestTime(String.valueOf(now));
+        requestLeakDataModel.setRequestTime(String.valueOf(simpleDateFormat.format(now)));
         requestLeakDataModel.setFname(defaultPath);
         requestLeakDataModel.setSn(sensorListAll.getSsn());
         requestLeakDataModel.setComplete("");

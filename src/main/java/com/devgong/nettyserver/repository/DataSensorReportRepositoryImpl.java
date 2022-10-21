@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         Map<String, Object> parameters = new HashMap<>();
 
         Date now = new Date();
+
 
         parameters.put("cid", 1);
         parameters.put("sn", dataInsertModel.getSn());
