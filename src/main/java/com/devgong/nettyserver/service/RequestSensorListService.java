@@ -48,13 +48,13 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
-    public void saveSendData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) {
+    public void saveSendData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {
 
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
-        String fname = defaultPath + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + ".dat";
+        String fname = defaultPath + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate())+".dat";
 
         requestLeakDataModel.setPname(request.getSensorId());
         requestLeakDataModel.setDate(String.valueOf(simpleDateFormat.format(now)));
@@ -148,9 +148,23 @@ public class RequestSensorListService {
         convertValue = convertValue.replace(":", "");
         convertValue = convertValue.replace("T", "_");
 
-
         return convertValue;
     }
+
+    public String convertSampleRate(String input) throws UnsupportedEncodingException {
+
+        String result;
+
+        if (input.length() == 1) {
+            result = "00" + Integer.valueOf(getStringToHex(input), 16);
+        } else {
+            result = "0" + Integer.valueOf(getStringToHex(input), 16);
+        }
+
+
+        return result;
+    }
+
 
 
     public String getStringToHex(String test) throws UnsupportedEncodingException {
