@@ -28,13 +28,11 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
 
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 
-        String convertedSid = "'" + "leak_send_data_" + request.getSensorId() + requestLeakDataModel.getSid();
-        String convertedSn = "_" + request.getSensorId() + "'";
-        String totalTableName = convertedSid + convertedSn;
+        String totalTableName = "'" + "leak_send_data_" + requestLeakDataModel.getSid() + request.getSensorId();
+//        String convertedSn = "_" + request.getSensorId() + "'";
 
 
-        log.info("convertedSid : {}", convertedSid);
-        log.info("convertedSn : {}", convertedSn);
+//        log.info("convertedSn : {}", convertedSn);
         log.info("totalTableName : {}", totalTableName);
 
 
