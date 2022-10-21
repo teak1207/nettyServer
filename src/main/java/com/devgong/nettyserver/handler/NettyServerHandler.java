@@ -263,6 +263,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
+                //memo : leak_send_data 에  넣어라
+                requestSensorListService.saveSendData(request, requestFindResults);
+
+
                 if (requestFindResults == null) {
                     log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
                 } else {

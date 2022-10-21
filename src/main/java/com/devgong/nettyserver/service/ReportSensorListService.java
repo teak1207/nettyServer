@@ -61,15 +61,6 @@ public class ReportSensorListService {
 
     public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
-
-
-
-
-
-        log.info("request check : {}", request);
-
-        log.info("ddddd : {}", convertData(request.getParameter().getRssi().charAt(0)));
-
         dataInsertModel.setSn(request.getSensorId());
         dataInsertModel.setEndRecordTime(request.getParameter().getEndRecordTime());
         dataInsertModel.setRecordTime1(request.getParameter().getRecordTime1());
@@ -85,9 +76,7 @@ public class ReportSensorListService {
         dataInsertModel.setPy(request.getParameter().getPy());
         dataInsertModel.setPname(request.getParameter().getPname());
         dataInsertModel.setSid(request.getParameter().getSid());
-
         dataInsertModel.setPeriod(convertData(request.getParameter().getPeriod().charAt(0)));
-
         dataInsertModel.setServerUrl(request.getParameter().getServerUrl());
         dataInsertModel.setServerPort(request.getParameter().getServerPort());
         dataInsertModel.setDbUrl(request.getParameter().getDbUrl());

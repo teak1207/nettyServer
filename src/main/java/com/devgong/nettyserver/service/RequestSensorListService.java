@@ -2,9 +2,11 @@ package com.devgong.nettyserver.service;
 
 
 import com.devgong.nettyserver.domain.DataRefModel;
+import com.devgong.nettyserver.domain.RequestLeakDataModel;
 import com.devgong.nettyserver.domain.RequestListAllModel;
 import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
+import com.devgong.nettyserver.repository.RequestSendDataRepository;
 import com.devgong.nettyserver.repository.RequestSensorListAllRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Service
@@ -29,6 +32,10 @@ public class RequestSensorListService {
     DataRefModel dataRefModel = new DataRefModel();
 
     private final RequestSensorListAllRepository requestSensorListAllRepository;
+    private final RequestSendDataRepository requestSendDataRepository;
+
+    static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
+
 
     public RequestListAllModel findDataExistence(String serialNumber) {
 
@@ -39,12 +46,42 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
+    public void saveSendData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) {
+
+        Date now = new Date();
+
+        RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
+
+        requestLeakDataModel.setPname(sensorListAll.getAproject());
+        requestLeakDataModel.setDate(String.valueOf(now));
+        requestLeakDataModel.setId("admin");
+        requestLeakDataModel.setIp("-1-1");
+        requestLeakDataModel.setSid(sensorListAll.getAsid());
+        requestLeakDataModel.setValid("");
+        requestLeakDataModel.setRequestTime(String.valueOf(now));
+        requestLeakDataModel.setFname(defaultPath);
+        requestLeakDataModel.setSn(sensorListAll.getSsn());
+        requestLeakDataModel.setComplete("");
+        requestLeakDataModel.setCompleteTime("");
+        requestLeakDataModel.setFnum("");
+        requestLeakDataModel.setInference("");
+
+
+        if (requestSendDataRepository.save(request, requestLeakDataModel)) {
+            log.info("leak_send data Insert Success");
+        } else {
+            log.info("leak_send data Insert fail");
+
+        }
+        ;
+
+
+    }
+
+
     public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
         String convertedSampleRate;
-//        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getFrameCount()), 16));
-//        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getDataSize()), 16));
-//        log.info("pathchk3 : {}", Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16));
 
         if (request.getParameter().getSampleRate().length() == 1) {
             convertedSampleRate = "00" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
@@ -54,12 +91,11 @@ public class RequestSensorListService {
             log.info(convertedSampleRate);
         }
 
-
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
         } else {
-            String defaultPath = "/home/scsol/public_html/leak_data_gong/";
+//            String defaultPath = "/home/scsol/public_html/leak_data_gong/";
             String path = defaultPath + requestFindResults.getAsid() + "/" + requestFindResults.getAproject() + "/" + requestFindResults.getSsn();
 
             log.info("path : {}", path);
