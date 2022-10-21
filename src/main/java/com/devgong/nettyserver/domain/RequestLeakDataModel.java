@@ -11,8 +11,10 @@ public class RequestLeakDataModel {
     private String date;
     private String id;
     private String ip;
+
     private String sid;
     private String valid;
+
     private String requestTime;
     private String fname;
     private String sn;

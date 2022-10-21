@@ -52,10 +52,12 @@ public class RequestSensorListService {
 
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
-        requestLeakDataModel.setPname(sensorListAll.getAproject());
+        requestLeakDataModel.setPname(request.getSensorId());
         requestLeakDataModel.setDate(String.valueOf(now));
         requestLeakDataModel.setId("admin");
+
         requestLeakDataModel.setIp("-1-1");
+
         requestLeakDataModel.setSid(sensorListAll.getAsid());
         requestLeakDataModel.setValid("");
         requestLeakDataModel.setRequestTime(String.valueOf(now));
