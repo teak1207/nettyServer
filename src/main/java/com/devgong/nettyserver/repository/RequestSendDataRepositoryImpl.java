@@ -57,6 +57,7 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
         parameters.put("fnum", requestLeakDataModel.getFnum());
         parameters.put("inference", requestLeakDataModel.getInference());
 
+        log.info("sibal : {}",parameters);
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         requestLeakDataModel.setCid(key.intValue());
