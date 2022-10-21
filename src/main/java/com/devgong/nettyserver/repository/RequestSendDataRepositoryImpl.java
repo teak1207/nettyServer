@@ -39,6 +39,9 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
         simpleJdbcInsert.withTableName(totalTableName).usingGeneratedKeyColumns("cid");
         Map<String, Object> parameters = new HashMap<>();
 
+        log.info("complete : {}", requestLeakDataModel.getComplete());
+
+
         parameters.put("cid", 1);
         parameters.put("pname", requestLeakDataModel.getPname());
         parameters.put("date", requestLeakDataModel.getDate());
