@@ -85,15 +85,15 @@ public class RequestSensorListService {
 
     public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
-        String convertedSampleRate;
-
-        if (request.getParameter().getSampleRate().length() == 1) {
-            convertedSampleRate = "00" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
-            log.info(convertedSampleRate);
-        } else {
-            convertedSampleRate = "0" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
-            log.info(convertedSampleRate);
-        }
+//        String convertedSampleRate;
+//
+//        if (request.getParameter().getSampleRate().length() == 1) {
+//            convertedSampleRate = "00" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
+//            log.info(convertedSampleRate);
+//        } else {
+//            convertedSampleRate = "0" + Integer.valueOf(getStringToHex(request.getParameter().getSampleRate()), 16);
+//            log.info(convertedSampleRate);
+//        }
 
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
@@ -105,7 +105,7 @@ public class RequestSensorListService {
             log.info("path : {}", path);
 
 
-            String filePath = path + "/" + requestFindResults.getSsn() + underBar + convertDate(request.getDateTime()) + underBar + convertedSampleRate + ".dat";
+            String filePath = path + "/" + requestFindResults.getSsn() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
             log.info("filePath : {}", filePath);
 
             File initFilePath = new File(filePath);
@@ -160,12 +160,8 @@ public class RequestSensorListService {
         } else {
             result = "0" + Integer.valueOf(getStringToHex(input), 16);
         }
-
-
         return result;
     }
-
-
 
     public String getStringToHex(String test) throws UnsupportedEncodingException {
         byte[] testBytes = test.getBytes("utf-8");
