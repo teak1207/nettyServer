@@ -40,7 +40,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final SettingSensorListService settingSensorListService;
     private final ReportSensorListService reportSensorListService;
     private final RequestSensorListService requestSensorListService;
-    private final DataService  dataService;
+    private final DataService dataService;
 
     DataInsertModel dataInsertModel = new DataInsertModel();
     PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
@@ -49,13 +49,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        //seq : 장치에서 전송해주는 바이트를 byteBuf 타입으로 형변환하여 초기화
         ByteBuf mBuf = (ByteBuf) msg;
-
 
         log.info("Channel Read");
         log.info("===================");
-
+        //seq : 프로토콜의 첫 바이트는 flag value 이기에, readFlag 값 할당
         byte readFlag = mBuf.readByte();
+
+        //seq : 만약 flag value 가 PacketFlag에 정의해놓은 값이 아닌 경우, 예외처리 (IllegalStateException)
         PacketFlag flag = Arrays.stream(PacketFlag.values()).filter(f -> f.getFlag() == readFlag).findAny()
                 .orElseThrow(() -> new IllegalStateException("Invalid flag error : " + readFlag));
 
@@ -65,21 +67,29 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         SettingResponseModel settingDeviceInfos;
 
 
-        /* 플래그에 값에 따라 분기*/
-        /*  <<< Pre-Install  >>> ===========================================================================================*/
+        //seq : flag 값에 따른 분기 처리
         try {
-
+            //seq : preinstall value (A) 인 경우 분기
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
+                //seq : mBuf 에서 읽을수 있는 바이트수를 반환해서 byte[] 에 담음. readableBytes()는 netty에서 사용되는 메서드
                 byte[] bytes = new byte[mBuf.readableBytes()];
-
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
                 log.info("PreInstall  readable bytes length : {}", bytes.length);
                 log.info("PreInstall FLAG : {}", (char) readFlag);
 
+                //seq : <<장치에서 보낸 값과 서버에서 받은 값이 타당한지를 수행하는 과정 >>
+                //seq : packet 이라는 클래스를 해두었음. 생성자의 파라미터로  flag, bytes, PreInstallRequest.class 줌.
+                //seq : 프로토콜헤더 항목 길이별로 맞게 할당하는 처리수행.
+                //seq : 헤더에서 넘어오는 parameterLength 체크하는 작업 + checkSum 타당성검사 작업 수행
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
+
+                //seq : <<preinstall 프로세스 진행>>
                 preInstallDeviceInfos = preinstallSensorListService.preInstallFindData(request.getParameter().getModemPhoneNumber());
+
+                //seq : preinstallSensorListService.preInstallFindData 에서 가져온 값을 장치로 보내주기위한 작업 진행.
+                //seq : preinstall,Server->Device
                 PreInstallResponse response = new PreInstallResponse(
                         preInstallDeviceInfos.getTime1(),
                         preInstallDeviceInfos.getTime2(),
@@ -101,8 +111,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         Integer.parseInt((preInstallDeviceInfos.getBaudrate()).substring(0, 3))
                 );
 
-                if (preInstallDeviceInfos != null) {
 
+
+                if (preInstallDeviceInfos != null) {
                     log.info("response.serialize() : {}", response.serialize().length);
                     log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
@@ -118,12 +129,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 } else {
                     ctx.writeAndFlush(new NakPacket("0".repeat(24), LocalDateTime.now()).serialize());
-                    System.out.println("[CheckSum][FAIL] : Not Accurate");
+                    log.info("[CheckSum][FAIL] : Not Accurate");
+
                     mBuf.release();
                 }
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
-                System.out.println("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
+                log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
@@ -136,7 +148,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] result = new byte[45];
 
-                //TODO : Header 값이 아닌 flag+null 45byte 만 보내고 있음!!! 수정해야함.
                 if (reportResult) {
                     result[0] = PacketFlag.ACK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(result));

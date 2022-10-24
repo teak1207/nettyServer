@@ -29,17 +29,18 @@ public class ReportSensorListService {
         dataSensorListAllModel = dataSensorListAllRepository.findPreInstallSensorListAllModelBySsn(serialNumber);
 
         if (dataSensorListAllModel.getRegdate() == null || dataSensorListAllModel.getRegdate().equals("")) {
-            System.out.println("[feat] : regdate 값이 없습니다");
+
+            log.info("[feat] : regdate 값이 없습니다");
         } else if (dataSensorListAllModel.getSsn() == null || dataSensorListAllModel.getSsn().equals("")) {
-            System.out.println("[feat] : serialnum 값이 없습니다");
+            log.info("[feat] : serialnum 값이 없습니다");
         } else if (dataSensorListAllModel.getAsid() == null || dataSensorListAllModel.getAsid().equals("")) {
-            System.out.println("[feat] : sid 값이 없습니다");
+            log.info("[feat] : sid 값이 없습니다");
         } else if (dataSensorListAllModel.getAproject() == null || dataSensorListAllModel.getAproject().equals("")) {
-            System.out.println("[feat] : aproject 값이 없습니다");
+            log.info("[feat] : aproject 값이 없습니다");
         } else if (dataSensorListAllModel.getMphone() == null || dataSensorListAllModel.getMphone().equals("")) {
-            System.out.println("[feat] : phone 값이 없습니다");
+            log.info("[feat] : phone 값이 없습니다");
         } else if (dataSensorListAllModel.getFreset() == null || dataSensorListAllModel.getFreset().equals("")) {
-            System.out.println("[feat] : F-Reset 값이 없습니다");
+            log.info("[feat] : F-Reset 값이 없습니다");
         }
 
         log.info("dataSensorListAllModel222 : {}", dataSensorListAllModel);

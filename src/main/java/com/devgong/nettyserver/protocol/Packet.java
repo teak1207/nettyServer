@@ -21,7 +21,7 @@ public class Packet<T extends Serializable<T>> {
     LocalDateTime dateTime; // 15 byte
     RequestType requestType; // 1 byte
     long parameterLength; // 4 byte
-    T parameter;
+    T parameter; // 이곳에 프로세스 당 바디값을 할당해줌.
     byte[] checksum; // 2 byte
 
     public Packet(PacketFlag flag, String sensorId, LocalDateTime dateTime, RequestType requestType, long parameterLength, T parameter) {

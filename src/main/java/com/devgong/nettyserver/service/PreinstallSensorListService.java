@@ -29,9 +29,14 @@ public class PreinstallSensorListService {
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel;
 
+        //seq : sensor_list_all 에서 serialNum에 해당하는 값을 탐색 후,preInstallSensorListAllModel 이라는 객체에 담음.
         preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum.trim());
+        //seq : 앞서 담은 preInstallSensorListAllModel 객체로 값을 get,set 할 수 있음.
+        //seq : preInstallSensorListAllModel의 Aproject,Asid 값으로 leak_project 테이블에서 값을 가져옴.
         preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
+        //seq : preInstallSensorListAllModel의 Ssn 값으로 leakset_bysensor 테이블에서 값을 가져옴.
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
+        //seq : preInstallSensorListAllModel의 Ssn 값으로 sensor_list 테이블에서 값을 가져옴.
         preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
 
         log.info("-------------------------------");
@@ -39,6 +44,8 @@ public class PreinstallSensorListService {
         log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
         log.info("-------------------------------");
 
+
+        //seq : preinstallSetModel 라는 객체에 4개의 테이블에서 가져온 값들을 채워넣어 객체를 리턴함.
         preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
         preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
         preinstallSetModel.setTime3(preinstallDeviceSetModel.getTime3());
