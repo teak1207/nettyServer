@@ -62,7 +62,7 @@ public class RequestSensorListService {
 
         String convertedFname = defaultPath + sensorListAll.getAsid() + "/" + sensorListAll.getAproject() + "/" + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
 
-        requestLeakDataModel.setPname(request.getSensorId());
+        requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate(String.valueOf(simpleDateFormat.format(now)));
         requestLeakDataModel.setId("admin");
         requestLeakDataModel.setIp("-1-1");
