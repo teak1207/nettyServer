@@ -80,7 +80,7 @@ public class ReportSensorListService {
         dataInsertModel.setDeviceStatus(request.getParameter().getDeviceStatus());
         dataInsertModel.setSamplingTime(convertData(request.getParameter().getSamplingTime().charAt(0)));
         dataInsertModel.setPx(request.getParameter().getPx());
-        dataInsertModel.setPy(request.getParameter().getPy().substring(0,10));
+        dataInsertModel.setPy(request.getParameter().getPy().substring(0,9));
         dataInsertModel.setPname(request.getParameter().getPname());
         dataInsertModel.setSid(request.getParameter().getSid());
         dataInsertModel.setPeriod(convertData(request.getParameter().getPeriod().charAt(0)));
