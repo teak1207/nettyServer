@@ -41,7 +41,7 @@ public class SettingSensorListService {
         //seq : factory_sensor_list 에서  Asid, Aproject,Ssn 해당하는 값을 탐색 후,factorySensorListModel 이라는 객체에 담음.
         SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
 
-
+            //ㅅㅂ
         //seq : factorySensorListModel 존재 유무에 따른 참조테이블이 달라 분기 처리
         if (Objects.isNull(factorySensorListModel)) {
 
