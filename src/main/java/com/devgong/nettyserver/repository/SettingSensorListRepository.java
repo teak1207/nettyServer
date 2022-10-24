@@ -13,6 +13,6 @@ public interface SettingSensorListRepository extends JpaRepository<SettingSensor
 
 
     @Query("select m from SettingSensorListModel AS m where m.sid = :sid and m.pname= :pname and m.serialNumber= :sn  and NOT m.col_valid = -1")
-    SettingSensorListModel findAllBySidAndPname(String sid, String pname);
+    SettingSensorListModel findAllBySidAndPnameAndSerialNumber(String sid, String pname,String serialNumber);
 
 }
