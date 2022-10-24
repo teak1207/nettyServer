@@ -43,7 +43,7 @@ public class ReportSensorListService {
             log.info("[feat] : F-Reset 값이 없습니다");
         }
 
-        log.info("dataSensorListAllModel222 : {}", dataSensorListAllModel);
+        log.info("dataSensorListAllModel : {}", dataSensorListAllModel);
 
 
         return dataSensorListAllModel;

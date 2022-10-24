@@ -79,7 +79,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("PreInstall  readable bytes length : {}", bytes.length);
                 log.info("PreInstall FLAG : {}", (char) readFlag);
 
-                //seq : <<장치에서 보낸 값과 서버에서 받은 값이 타당한지를 수행하는 과정 >>
+                //seq : <<장치에서 보낸 값과 서버에서 받은 값이 타당한지를 수행하는 과정 ,바이트배열->객체 >>
                 //seq : packet 이라는 클래스를 해두었음. 생성자의 파라미터로  flag, bytes, PreInstallRequest.class 줌.
                 //seq : 프로토콜헤더 항목 길이별로 맞게 할당하는 처리수행.
                 //seq : 헤더에서 넘어오는 parameterLength 체크하는 작업 + checkSum 타당성검사 작업 수행
@@ -112,7 +112,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 );
 
 
-
+                //seq : preInstallDeviceInfos null 체크 후, 객체-> 바이트배열 변환
                 if (preInstallDeviceInfos != null) {
                     log.info("response.serialize() : {}", response.serialize().length);
                     log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
@@ -133,6 +133,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     mBuf.release();
                 }
+            //seq : 장치에서 보낸 ACK or NAK + REPORT 값을 받는 과정
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -148,6 +149,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] result = new byte[45];
 
+
+                // seq : reportResult 의 값에 따른 분기
                 if (reportResult) {
                     result[0] = PacketFlag.ACK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(result));
@@ -162,7 +165,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.error("Report Insert Failed");
                 }
-
+            //seq : SETTING value (6) 인 경우 분기
             } else if (PacketFlag.SETTING.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -171,12 +174,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
 
                 log.info("Setting Readable bytes length : {}", bytes.length);
-                log.info("Setting Request check : {}", request);
-
+                log.info("setting request check : {}", request);
+                //seq : << Setting process 진행 >>
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
                 byte[] nakResponse = new byte[45];
+
+                //seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
                 if (settingDeviceInfos != null) {
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
@@ -200,7 +205,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             settingDeviceInfos.getDbPort(),
                             Integer.parseInt(settingDeviceInfos.getRadioTime())
                     );
-
+                    //seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
                     Packet<SettingResponse> responsePacket = new Packet<>(
                             PacketFlag.SETTING,
                             response.getSid(),
@@ -212,6 +217,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
+
+                //seq : Nak 인 경우, byte[45] 의 첫 index에 NAK(9) 만 담아서 보냄.
                 } else {
                     nakResponse[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(nakResponse));
@@ -219,7 +226,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-
+            //seq : << Report 프로세스 진행 >>
             } else if (PacketFlag.REPORT.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -227,6 +234,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                //seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
                 findResult = reportSensorListService.findDataExistence(serialNumber);
 
                 byte[] response = new byte[45];
@@ -268,7 +276,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
                 log.info("Setting Readable bytes length : {}", bytes.length);
-                log.info("Setting Request check : {}", request);
+                log.info("settingResponset check : {}", request);
 
                 byte[] response = new byte[45];
 

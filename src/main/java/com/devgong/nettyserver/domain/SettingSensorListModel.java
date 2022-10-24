@@ -37,4 +37,8 @@ public class SettingSensorListModel {
     @Column(name = "sid")
     private String sid;
 
+    @Column(name = "col_valid")
+    private String col_valid;
+
+
 }

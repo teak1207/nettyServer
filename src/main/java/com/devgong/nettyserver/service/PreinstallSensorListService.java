@@ -100,6 +100,8 @@ public class PreinstallSensorListService {
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
 
             log.info("preinstallReportModel : {}", preinstallReportModel);
+
+            //seq : factory_report 테이블에 값을 저장.
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return true;
