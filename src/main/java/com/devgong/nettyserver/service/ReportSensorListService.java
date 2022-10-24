@@ -66,6 +66,7 @@ public class ReportSensorListService {
         log.info("py : {}", request.getParameter().getPy());
         log.info("py : {}", request.getParameter().getPy().trim());
         log.info("py : {}", request.getParameter().getPy().length());
+        log.info("py : {}", request.getParameter().getPy().substring(0,9).length());
 
         dataInsertModel.setSn(request.getSensorId());
         dataInsertModel.setEndRecordTime(request.getParameter().getEndRecordTime());
