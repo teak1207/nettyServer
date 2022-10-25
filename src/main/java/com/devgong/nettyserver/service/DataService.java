@@ -30,7 +30,8 @@ public class DataService {
         File file = new File(dataRefModel.getFilepath());
         FileWriter fileWriter = null;
         fileWriter = new FileWriter(file, true);
-        log.info("data check : {}", request.getParameter().getData());
+//        log.info("data check : {}", request.getParameter().getData());
+        log.info("data check : {}", request.getParameter().getData().length());
         fileWriter.write(request.getParameter().getData());
         fileWriter.flush();
 
