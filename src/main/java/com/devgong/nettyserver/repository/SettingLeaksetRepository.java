@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface SettingLeaksetRepository extends JpaRepository<SettingLeaksetModel, Integer> {
     SettingLeaksetModel findAllBySidAndPnameAndReset(String sid, String pname,String freset);
 
-    SettingLeaksetModel findTop1BySidAndPnameOrderByCidDesc  (String sid, String pname,String ssn);
+    SettingLeaksetModel findTop1BySidAndPnameAndResetOrderByCidDesc  (String sid, String pname,String freset);
 
 }
