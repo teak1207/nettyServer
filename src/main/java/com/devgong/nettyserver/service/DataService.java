@@ -27,11 +27,10 @@ public class DataService {
         log.info("data test : {}", dataRefModel.getFilepath());
 
 
-
         File file = new File(dataRefModel.getFilepath());
         FileWriter fileWriter = null;
-        fileWriter = new FileWriter(file,true);
-
+        fileWriter = new FileWriter(file, true);
+        log.info("data check : {}", request.getParameter().getData());
         fileWriter.write(request.getParameter().getData());
         fileWriter.flush();
 

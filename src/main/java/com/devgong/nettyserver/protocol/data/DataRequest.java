@@ -9,7 +9,6 @@ import java.util.Arrays;
 
 @Slf4j
 @Value
-
 public class DataRequest implements Serializable<DataRequest> {
 
     String data;
@@ -31,7 +30,7 @@ public class DataRequest implements Serializable<DataRequest> {
         byte[] dataBytes = Arrays.copyOfRange(data.getBytes(), 0, 512);
 
         System.arraycopy(dataBytes, 0, serialized, 0, 512);
-
+        log.info("serialized check : {}", serialized);
         return serialized;
     }
 

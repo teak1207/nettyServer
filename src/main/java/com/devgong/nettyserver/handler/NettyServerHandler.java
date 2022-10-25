@@ -133,7 +133,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     mBuf.release();
                 }
-            //seq : 장치에서 보낸 ACK or NAK + REPORT 값을 받는 과정
+                //seq : 장치에서 보낸 ACK or NAK + REPORT 값을 받는 과정
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -165,7 +165,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.error("Report Insert Failed");
                 }
-            //seq : SETTING value (6) 인 경우 분기
+                //seq : SETTING value (6) 인 경우 분기
             } else if (PacketFlag.SETTING.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -218,7 +218,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
 
 
-                //seq : Nak 인 경우, byte[45] 의 첫 index에 NAK(9) 만 담아서 보냄.
+                    //seq : Nak 인 경우, byte[45] 의 첫 index에 NAK(9) 만 담아서 보냄.
                 } else {
                     nakResponse[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(nakResponse));
@@ -226,7 +226,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-            //seq : << Report 프로세스 진행 >>
+                //seq : << Report 프로세스 진행 >>
             } else if (PacketFlag.REPORT.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
