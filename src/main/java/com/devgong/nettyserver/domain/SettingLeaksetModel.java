@@ -64,6 +64,8 @@ public class SettingLeaksetModel {
     @Column(name = "tdate")
     private String tdate;
 
+    @Column(name = "sn")
+    private String sn;
 
 
 

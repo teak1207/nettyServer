@@ -36,7 +36,7 @@ public class SettingSensorListService {
         SettingSensorListModel sensorListModel = settingSensorListRepository.findBySidAndPnameAndSerialNumber(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(),sensorListAllModel.getSsn());
 
         //seq : leakset 에서 Asid, Aproject,fReset 해당하는 값을 탐색 후,leakSetModel 이라는 객체에 담음.
-        SettingLeaksetModel leakSetModel = settingLeaksetRepository.findTop1BySidAndPnameAndResetOrderByCidDesc(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getFreset());
+        SettingLeaksetModel leakSetModel = settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
 
         //seq : factory_sensor_list 에서  Asid, Aproject,Ssn 해당하는 값을 탐색 후,factorySensorListModel 이라는 객체에 담음.
         SettingFactorySensorListModel factorySensorListModel = settingFactorySensorListRepository.findAllBySidAndPnameAndSn(sensorListAllModel.getAsid(), sensorListAllModel.getAproject(), sensorListAllModel.getSsn());
