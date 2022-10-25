@@ -37,7 +37,7 @@ public class PreinstallSensorListService {
         //seq : preInstallSensorListAllModel의 Ssn 값으로 leakset_bysensor 테이블에서 값을 가져옴.
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
         //seq : preInstallSensorListAllModel의 Ssn 값으로 sensor_list 테이블에서 값을 가져옴.
-        preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumber(preInstallSensorListAllModel.getSsn());
+        preInstallSensorListModel = preInstallSensorListRepository.findBySerialNumberOrderByCidDesc(preInstallSensorListAllModel.getSsn());
 
         log.info("-------------------------------");
         log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);

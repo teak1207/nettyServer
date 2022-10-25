@@ -31,5 +31,8 @@ public class PreinstallNetworkSetModel {
     @Column(name = "DB_PORT")
     private String dbPort;
 
+    @Column(name = "active")
+    private String active;
+
 
 }
