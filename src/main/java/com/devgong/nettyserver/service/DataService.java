@@ -20,11 +20,12 @@ import java.nio.file.Paths;
 @Slf4j
 public class DataService {
 
+    int i = 1;
 
     private final RequestSensorListService requestSensorListService;
 
     public void saveData(NewPacket<DataRequest> request) throws IOException {
-        int i = 1;
+
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
         log.info("data test : {}", dataRefModel.getFilepath());
