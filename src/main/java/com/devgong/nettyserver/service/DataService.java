@@ -24,7 +24,7 @@ public class DataService {
     private final RequestSensorListService requestSensorListService;
 
     public void saveData(NewPacket<DataRequest> request) throws IOException {
-
+        int i = 1;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
         log.info("data test : {}", dataRefModel.getFilepath());
@@ -40,9 +40,10 @@ public class DataService {
         fileWriter.flush();*/
 
         //memo : byte[] 을 .dat 파일에 저장
-        log.info("data check : {}", test);
+//        log.info("data check : {}", test);
         Path path = Paths.get(dataRefModel.getFilepath());
-        Files.write(path,test);
-
+        Files.write(path, test);
+        i++;
+        log.info("iii :{}", i);
     }
 }
