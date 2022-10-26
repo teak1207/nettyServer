@@ -48,10 +48,7 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
-    public void updateData() {
 
-
-    }
 
 
     public void saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {

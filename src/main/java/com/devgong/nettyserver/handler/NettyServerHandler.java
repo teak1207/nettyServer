@@ -46,6 +46,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
 
+     static String sid ="";
+
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -179,6 +182,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
+
+
+
+
                 byte[] nakResponse = new byte[45];
 
                 //seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
@@ -245,6 +252,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 } else {
                     log.info("reportFindResults:{}", findResult);
 
+                    //memo : sid 공유변수인데 data process에서 쓰려고 만듦.
+                    sid = request.getParameter().getSid();
                     // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                     if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(), request)) {
                         response[0] = PacketFlag.ACK.getFlag();
@@ -267,11 +276,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);
 
                 log.info("flag : {}", flag);
-                /*for (byte a : bytes) {
-                    log.info("test : {}", (char) a);
-                    log.info("test : {}", a);
-                    log.info("----------");
-                }*/
                 log.info("test length: {}", bytes.length);
 
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
@@ -323,7 +327,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 dataService.saveData(request);
 
                 //memo : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
-                requestSensorListService.updateData();
+                DataService.updateData();
 
 
                 response[0] = PacketFlag.ACK.getFlag();

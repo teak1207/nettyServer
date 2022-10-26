@@ -4,6 +4,7 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.DataRefModel;
 import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.data.DataRequest;
+import com.devgong.nettyserver.repository.DataUpdateSendDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +23,14 @@ public class DataService {
     FileWriter fileWriter = null;
 
     private final RequestSensorListService requestSensorListService;
+    private final DataUpdateSendDataRepository dataUpdateSendDataRepository;
+
+    public static void updateData() {
+
+//        dataUpdateSendDataRepository.update();
+
+    }
+
 
     public void saveData(NewPacket<DataRequest> request) throws IOException {
 
@@ -42,7 +48,7 @@ public class DataService {
         fileWriter.flush();
 
         //memo : byte[] 을 .dat 파일에 저장
-//        log.info("data check : {}", test);
+        log.info("data check : {}", test);
 //        Path path = Paths.get(dataRefModel.getFilepath());
 //        Files.write(path, test);
         i += 1;
