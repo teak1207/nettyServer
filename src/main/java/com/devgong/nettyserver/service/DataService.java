@@ -23,7 +23,7 @@ public class DataService {
     FileWriter fileWriter = null;
 
     private final RequestSensorListService requestSensorListService;
-    private final DataUpdateSendDataRepository dataUpdateSendDataRepository;
+//    private final DataUpdateSendDataRepository dataUpdateSendDataRepository;
 
     public static void updateData() {
 
