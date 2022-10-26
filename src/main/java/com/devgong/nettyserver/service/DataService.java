@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 public class DataService {
 
     int i = 0;
-
+    byte[] test;
     private final RequestSensorListService requestSensorListService;
 
     public void saveData(NewPacket<DataRequest> request) throws IOException {
@@ -33,7 +33,7 @@ public class DataService {
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
         //memo : data to byte[] 변환
-        byte[] test = request.getParameter().getData().getBytes();
+        test = request.getParameter().getData().getBytes();
 
 /*        FileWriter fileWriter = null;
         fileWriter = new FileWriter(file, true);
@@ -44,7 +44,7 @@ public class DataService {
         log.info("data check : {}", test);
         Path path = Paths.get(dataRefModel.getFilepath());
         Files.write(path, test);
-        i+=1;
+        i += 1;
         log.info("iii :{}", i);
         log.info("-----------");
     }
