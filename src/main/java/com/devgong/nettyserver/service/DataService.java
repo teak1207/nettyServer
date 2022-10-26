@@ -43,7 +43,7 @@ public class DataService {
 //        log.info("data check : {}", test);
         Path path = Paths.get(dataRefModel.getFilepath());
         Files.write(path, test);
-        i++;
+        i+=1;
         log.info("iii :{}", i);
     }
 }

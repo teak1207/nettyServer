@@ -267,11 +267,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);
 
                 log.info("flag : {}", flag);
-                for (byte a : bytes) {
+                /*for (byte a : bytes) {
                     log.info("test : {}", (char) a);
                     log.info("test : {}", a);
                     log.info("----------");
-                }
+                }*/
                 log.info("test length: {}", bytes.length);
 
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
