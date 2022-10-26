@@ -22,6 +22,8 @@ public class DataService {
 
     int i = 0;
     byte[] test;
+    FileWriter fileWriter = null;
+
     private final RequestSensorListService requestSensorListService;
 
     public void saveData(NewPacket<DataRequest> request) throws IOException {
@@ -35,15 +37,14 @@ public class DataService {
         //memo : data to byte[] 변환
         test = request.getParameter().getData().getBytes();
 
-/*        FileWriter fileWriter = null;
         fileWriter = new FileWriter(file, true);
         fileWriter.write(request.getParameter().getData());
-        fileWriter.flush();*/
+        fileWriter.flush();
 
         //memo : byte[] 을 .dat 파일에 저장
-        log.info("data check : {}", test);
-        Path path = Paths.get(dataRefModel.getFilepath());
-        Files.write(path, test);
+//        log.info("data check : {}", test);
+//        Path path = Paths.get(dataRefModel.getFilepath());
+//        Files.write(path, test);
         i += 1;
         log.info("iii :{}", i);
         log.info("-----------");
