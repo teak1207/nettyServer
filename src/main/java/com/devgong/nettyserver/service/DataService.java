@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -25,15 +28,21 @@ public class DataService {
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
         log.info("data test : {}", dataRefModel.getFilepath());
-
-
         File file = new File(dataRefModel.getFilepath());
-        FileWriter fileWriter = null;
+        log.info("getFilePath check : {}", dataRefModel.getFilepath());
+
+        //memo : data to byte[] 변환
+        byte[] test = request.getParameter().getData().getBytes();
+
+/*        FileWriter fileWriter = null;
         fileWriter = new FileWriter(file, true);
-//        log.info("data check : {}", request.getParameter().getData());
-        log.info("data check : {}", request.getParameter().getData().length());
         fileWriter.write(request.getParameter().getData());
-        fileWriter.flush();
+        fileWriter.flush();*/
+
+        //memo : byte[] 을 .dat 파일에 저장
+        log.info("data check : {}", test);
+        Path path = Paths.get(dataRefModel.getFilepath());
+        Files.write(path,test);
 
     }
 }
