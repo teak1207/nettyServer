@@ -20,7 +20,7 @@ import java.nio.file.Paths;
 @Slf4j
 public class DataService {
 
-    int i = 1;
+    int i = 0;
 
     private final RequestSensorListService requestSensorListService;
 
