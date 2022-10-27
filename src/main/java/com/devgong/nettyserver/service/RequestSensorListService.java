@@ -48,6 +48,16 @@ public class RequestSensorListService {
         return requestListAllModel;
     }
 
+    public RequestListAllModel findDataExistence(String serialNumber,String valid,String status) {
+
+        requestListAllModel = requestSensorListAllRepository.findAllBySsnAndStatusIsAndValidNot(serialNumber,status,valid);
+
+        log.info("requestListAllModel : {}", requestListAllModel);
+
+        return requestListAllModel;
+    }
+
+
 
 
 

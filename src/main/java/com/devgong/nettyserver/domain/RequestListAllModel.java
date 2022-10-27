@@ -37,5 +37,9 @@ public class RequestListAllModel {
     @Column(name = "F_RESET")
     private String freset;
 
+    @Column(name = "status")
+    private String status;
 
+    @Column(name = "valid")
+    private String valid;
 }
