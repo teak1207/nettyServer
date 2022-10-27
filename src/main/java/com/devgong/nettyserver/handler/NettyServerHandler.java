@@ -45,9 +45,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     DataInsertModel dataInsertModel = new DataInsertModel();
     PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
-
-     static String sid ="";
-
+    RequestListAllModel dataFindResults;
 
 
     @Override
@@ -183,9 +181,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
 
-
-
-
                 byte[] nakResponse = new byte[45];
 
                 //seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
@@ -253,7 +248,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("reportFindResults:{}", findResult);
 
                     //memo : sid 공유변수인데 data process에서 쓰려고 만듦.
-                    sid = request.getParameter().getSid();
+//                    sid = request.getParameter().getSid();
                     // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                     if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(), request)) {
                         response[0] = PacketFlag.ACK.getFlag();
@@ -322,12 +317,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Data FLAG : {}", (char) readFlag);
                 log.info("mBuf length : {}", mBuf);
 
+                //memo : request에 참조 없음-> sensor_list_all에서 참조해옴.
+                dataFindResults = requestSensorListService.findDataExistence(request.getSensorId());
+                log.info("dataFindResults:{}", dataFindResults);
+                //memo : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
+
+                //memo : leak_send_data_(sid)_(sn)에서 fname 참조해야함.
+
 
                 //memo : dat file (frame amount * Data*size)에 저장.
                 dataService.saveData(request);
 
                 //memo : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
-                DataService.updateData();
+//                dataService.updateData();
 
 
                 response[0] = PacketFlag.ACK.getFlag();

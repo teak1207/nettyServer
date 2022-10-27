@@ -22,12 +22,13 @@ public class DataService {
     byte[] test;
     FileWriter fileWriter = null;
 
+     DataUpdateSendDataRepository dataUpdateSendDataRepository;
     private final RequestSensorListService requestSensorListService;
-//    private final DataUpdateSendDataRepository dataUpdateSendDataRepository;
+    //    private final DataUpdateSendDataRepository dataUpdateSendDataRepository;
 
-    public static void updateData() {
+    public  void updateData() {
 
-//        dataUpdateSendDataRepository.update();
+        dataUpdateSendDataRepository.update();
 
     }
 
