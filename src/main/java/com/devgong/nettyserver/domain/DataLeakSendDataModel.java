@@ -20,6 +20,6 @@ public class DataLeakSendDataModel {
 
     @Column(name = "FNAME")
     private String fname;
-    @
+
 
 }
