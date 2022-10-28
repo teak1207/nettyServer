@@ -45,7 +45,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
             pstmt.setString(2, String.valueOf(now));
             pstmt.setString(3, fname);
             pstmt.executeUpdate();
-            rs = pstmt.executeQuery();
+//            rs = pstmt.executeQuery();
 
 /*            if (rs.next()) {
                 DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
