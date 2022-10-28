@@ -28,7 +28,7 @@ public class TestRepositoryImpl implements TestRepository {
 
         String mixTableName = "leak_send_data"+"_" + sid + "_" + sn;
 
-        String sql = "select fname from " + mixTableName + "where sid=? and sn =?"+"order by cid desc limit 1";
+        String sql = "select fname from " + mixTableName + " where sid=? and sn =? "+" order by cid desc limit 1";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
