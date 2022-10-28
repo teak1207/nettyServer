@@ -50,7 +50,7 @@ public class TestRepositoryImpl implements TestRepository {
 
             if (rs.next()) {
                 DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
-                dataLeakSendDataModel.setFname("fname");
+                dataLeakSendDataModel.setFname(rs.getString("fname"));
                 return dataLeakSendDataModel.getFname();
             }
 
