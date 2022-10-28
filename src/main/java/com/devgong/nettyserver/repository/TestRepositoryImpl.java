@@ -26,9 +26,16 @@ public class TestRepositoryImpl implements TestRepository {
     @Override
     public String selectBySnAndSid(String sn, String sid) {
 
-        String mixTableName = "leak_send_data"+"_" + sid + "_" + sn;
+        String mixTableName1 = "`" + "leak_send_data_" + sid;
+        String mixTableName2 = "_" + sn + "`";
 
-        String sql = "select fname from " + mixTableName + " where sid=? and sn =? "+" order by cid desc limit 1";
+        String convertedTableName = mixTableName1 + mixTableName2;
+
+        log.info("mixTableName check : {}", convertedTableName);
+
+        String sql = "select fname from " + convertedTableName + " where sid=? and sn =? " + " order by cid desc limit 1";
+
+        log.info("sql check : {}", sql);
 
         Connection conn = null;
         PreparedStatement pstmt = null;
