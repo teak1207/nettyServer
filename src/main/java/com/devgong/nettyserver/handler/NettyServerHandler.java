@@ -318,15 +318,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("mBuf length : {}", mBuf);
 
                 //memo : request에 참조 없음-> sensor_list_all에서 참조해옴.
+                //memo : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
                 dataFindResults = requestSensorListService.findDataExistence(request.getSensorId(), "-1", "0");
                 log.info("dataFindResults : {}", dataFindResults);
-                //memo : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
-                String convertedSid = "`" + "leak_send_data_" + dataFindResults.getAsid();
-                String convertedSerialNum = "_" + dataFindResults.getSsn() + "`";
-                String totalTableName = convertedSid + convertedSerialNum;
+
                 //memo : leak_send_data_(sid)_(sn)에서 fname 참조해야함.
+                String fname =requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
 
-
+                log.info("fname : {}",fname);
                 //memo : dat file (frame amount * Data*size)에 저장.
                 dataService.saveData(request);
 

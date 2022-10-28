@@ -1,6 +1,7 @@
 package com.devgong.nettyserver.service;
 
 
+import com.devgong.nettyserver.domain.DataLeakSendDataModel;
 import com.devgong.nettyserver.domain.DataRefModel;
 import com.devgong.nettyserver.domain.RequestLeakDataModel;
 import com.devgong.nettyserver.domain.RequestListAllModel;
@@ -8,6 +9,7 @@ import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
 import com.devgong.nettyserver.repository.RequestSendDataRepository;
 import com.devgong.nettyserver.repository.RequestSensorListAllRepository;
+import com.devgong.nettyserver.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,35 +32,33 @@ public class RequestSensorListService {
 
 
     RequestListAllModel requestListAllModel = null;
+    DataLeakSendDataModel DataLeakSendDataModel = null;
     DataRefModel dataRefModel = new DataRefModel();
 
     private final RequestSensorListAllRepository requestSensorListAllRepository;
     private final RequestSendDataRepository requestSendDataRepository;
-
+    private final TestRepository testRepository;
     static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
     char underBar = '_';
 
 
     public RequestListAllModel findDataExistence(String serialNumber) {
-
         requestListAllModel = requestSensorListAllRepository.findAllBySsn(serialNumber);
-
         log.info("requestListAllModel : {}", requestListAllModel);
-
         return requestListAllModel;
     }
 
-    public RequestListAllModel findDataExistence(String serialNumber,String valid,String status) {
-
-        requestListAllModel = requestSensorListAllRepository.findAllBySsnAndStatusIsAndValidNot(serialNumber,status,valid);
-
+    public RequestListAllModel findDataExistence(String serialNumber, String valid, String status) {
+        requestListAllModel = requestSensorListAllRepository.findAllBySsnAndStatusIsAndValidNot(serialNumber, status, valid);
         log.info("requestListAllModel : {}", requestListAllModel);
-
         return requestListAllModel;
     }
 
+    public String findDataFname(String serialNumber, String sid) {
 
 
+        return testRepository.selectBySnAndSid(serialNumber, sid);
+    }
 
 
     public void saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {

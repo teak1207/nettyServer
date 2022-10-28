@@ -19,7 +19,7 @@ import java.io.IOException;
 public class DataService {
 
     int i = 0;
-    byte[] test;
+    byte[] dataArray;
     FileWriter fileWriter = null;
 
      DataUpdateSendDataRepository dataUpdateSendDataRepository;
@@ -28,7 +28,6 @@ public class DataService {
 
     public  void updateData() {
 
-        dataUpdateSendDataRepository.update();
 
     }
 
@@ -42,14 +41,14 @@ public class DataService {
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
         //memo : data to byte[] 변환
-        test = request.getParameter().getData().getBytes();
+        dataArray = request.getParameter().getData().getBytes();
 
         fileWriter = new FileWriter(file, true);
         fileWriter.write(request.getParameter().getData());
         fileWriter.flush();
 
         //memo : byte[] 을 .dat 파일에 저장
-        log.info("data check : {}", test);
+        log.info("data check : {}", dataArray);
 //        Path path = Paths.get(dataRefModel.getFilepath());
 //        Files.write(path, test);
         i += 1;
