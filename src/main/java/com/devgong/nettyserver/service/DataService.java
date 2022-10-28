@@ -4,7 +4,7 @@ package com.devgong.nettyserver.service;
 import com.devgong.nettyserver.domain.DataRefModel;
 import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.data.DataRequest;
-import com.devgong.nettyserver.repository.DataUpdateSendDataRepository;
+import com.devgong.nettyserver.repository.DataUpdateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,12 +22,13 @@ public class DataService {
     byte[] dataArray;
     FileWriter fileWriter = null;
 
-     DataUpdateSendDataRepository dataUpdateSendDataRepository;
+    DataUpdateRepository dataUpdateSendDataRepository;
     private final RequestSensorListService requestSensorListService;
-    //    private final DataUpdateSendDataRepository dataUpdateSendDataRepository;
+    private final DataUpdateRepository dataUpdateRepository;
 
-    public  void updateData() {
+    public boolean updateData(String fname, String sid, String sn) {
 
+        return dataUpdateRepository.updateComleteTime(fname, sid, sn);
 
     }
 

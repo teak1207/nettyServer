@@ -323,14 +323,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("dataFindResults : {}", dataFindResults);
 
                 //memo : leak_send_data_(sid)_(sn)에서 fname 참조해야함.
-                String fname =requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
-
-                log.info("fname : {}",fname);
+                String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
+//                log.info("fname : {}", fname);
                 //memo : dat file (frame amount * Data*size)에 저장.
                 dataService.saveData(request);
 
                 //memo : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
-//                dataService.updateData();
+                dataService.updateData(fname,dataFindResults.getAsid(),dataFindResults.getSsn());
 
 
                 response[0] = PacketFlag.ACK.getFlag();

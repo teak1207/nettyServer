@@ -1,9 +1,7 @@
 package com.devgong.nettyserver.repository;
 
-import com.devgong.nettyserver.domain.DataLeakSendDataModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
@@ -12,29 +10,29 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 @Slf4j
 @RequiredArgsConstructor
 @Repository
-public class TestRepositoryImpl implements TestRepository {
+public class DataUpdateRepositoryImpl implements DataUpdateRepository {
 
-//    final private JdbcTemplate template;
     private final DataSource dataSource;
 
     @Override
-    public String selectBySnAndSid(String sn, String sid) {
+    public boolean updateComleteTime(String fname, String sid, String sn) {
 
         String mixTableName1 = "`" + "leak_send_data_" + sid;
         String mixTableName2 = "_" + sn + "`";
-
         String convertedTableName = mixTableName1 + mixTableName2;
+        LocalDate now = LocalDate.now();
 
-        log.info("mixTableName check : {}", convertedTableName);
 
-        String sql = "select fname from " + convertedTableName + " where sid=? and sn =? " + " order by cid desc limit 1";
+        log.info("mixTableName update check : {}", convertedTableName);
 
-        log.info("sql check : {}", sql);
+        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=?" + " where fname=?";
+        log.info("update sql check : {}", sql);
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -43,25 +41,27 @@ public class TestRepositoryImpl implements TestRepository {
         try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, sid);
-            pstmt.setString(2, sn);
+            pstmt.setString(1, "1");
+            pstmt.setString(2, String.valueOf(now));
+            pstmt.setString(2, fname);
+            pstmt.executeUpdate();
             rs = pstmt.executeQuery();
 
-            if (rs.next()) {
+/*            if (rs.next()) {
                 DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
                 dataLeakSendDataModel.setFname(rs.getString("fname"));
                 return dataLeakSendDataModel.getFname();
-            }
+            }*/
 
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         } finally {
             close(conn, pstmt, rs);
         }
-
-
-        return null;
+        return true;
     }
+
 
     private Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);
