@@ -48,7 +48,7 @@ public class DataService {
         fileWriter.flush();
 
         //memo : byte[] 을 .dat 파일에 저장
-        log.info("data check : {}", dataArray);
+//        log.info("data check : {}", dataArray);
 //        Path path = Paths.get(dataRefModel.getFilepath());
 //        Files.write(path, test);
         i += 1;
