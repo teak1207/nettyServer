@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -45,15 +42,22 @@ public class DataService {
 
         //memo : data to byte[] 변환
         dataArray = request.getParameter().getData().getBytes();
+        log.info("dataArray : {}", dataArray);
+        log.info("dataArray : {}", dataArray.length);
+
 
         //memo : byte[] 을 .dat 파일에 저장
-//        fileWriter = new FileWriter(file, true);
-//        fileWriter.write(request.getParameter().getData());
-//        fileWriter.flush();
 
-        log.info("data check : {}", dataArray);
-        Path path = Paths.get(dataRefModel.getFilepath());
-        Files.write(path, dataArray);
+        //memo 방법1 : 파일의 사이즈 맞음. 하지만 그래프가 이상함
+        fileWriter = new FileWriter(file, true);
+        fileWriter.write(request.getParameter().getData());
+        fileWriter.flush();
+
+
+        //memo 방법2 : 파일의 사이즈가 1024가 되버림.
+//        log.info("data check : {}", dataArray);
+//        Path path = Paths.get(dataRefModel.getFilepath());
+//        Files.write(path, test);
         i += 1;
         log.info("iii :{}", i);
         log.info("-----------");
