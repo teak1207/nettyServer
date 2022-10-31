@@ -326,7 +326,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
 //                log.info("fname : {}", fname);
                 //memo : dat file (frame amount * Data*size)에 저장.
-                log.info("request check : {}", request.getParameter().getData());
+                log.info("request check : {}", request.getParameter().getData().getBytes());
                 dataService.saveData(request);
 
                 //memo : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
