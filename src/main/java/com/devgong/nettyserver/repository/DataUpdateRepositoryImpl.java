@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 
 @Slf4j
@@ -38,13 +41,16 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        LocalDate localDate  = LocalDate.now();
+//      LocalDate localDate  = LocalDate.now();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateTime = dateFormat.format(new Date());
+
 
         try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, "1");
-            pstmt.setString(2, String.valueOf(localDate));
+            pstmt.setString(2, dateTime);
             pstmt.setString(3, fname);
             pstmt.executeUpdate();
 
