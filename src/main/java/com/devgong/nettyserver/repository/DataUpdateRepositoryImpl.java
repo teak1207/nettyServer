@@ -38,20 +38,15 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
+        LocalDate localDate  = LocalDate.now();
+
         try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, "1");
-            pstmt.setString(2, String.valueOf(now));
+            pstmt.setString(2, String.valueOf(localDate));
             pstmt.setString(3, fname);
             pstmt.executeUpdate();
-//            rs = pstmt.executeQuery();
-
-/*            if (rs.next()) {
-                DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
-                dataLeakSendDataModel.setFname(rs.getString("fname"));
-                return dataLeakSendDataModel.getFname();
-            }*/
 
         } catch (
                 Exception e) {
