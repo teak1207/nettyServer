@@ -32,7 +32,6 @@ public class RequestSensorListService {
 
 
     RequestListAllModel requestListAllModel = null;
-    DataLeakSendDataModel DataLeakSendDataModel = null;
     DataRefModel dataRefModel = new DataRefModel();
 
     private final RequestSensorListAllRepository requestSensorListAllRepository;
@@ -70,12 +69,12 @@ public class RequestSensorListService {
         String convertedFname = defaultPath + sensorListAll.getAsid() + "/" + sensorListAll.getAproject() + "/" + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
-        requestLeakDataModel.setDate(String.valueOf(simpleDateFormat.format(now)));
+        requestLeakDataModel.setDate((simpleDateFormat.format(now)));
         requestLeakDataModel.setId("admin");
         requestLeakDataModel.setIp("-1-1");
         requestLeakDataModel.setSid(sensorListAll.getAsid());
         requestLeakDataModel.setValid("");
-        requestLeakDataModel.setRequestTime(String.valueOf(simpleDateFormat.format(now)));
+        requestLeakDataModel.setRequestTime((simpleDateFormat.format(now)));
         requestLeakDataModel.setFname(convertedFname);
         requestLeakDataModel.setSn(sensorListAll.getSsn());
         requestLeakDataModel.setComplete("");
@@ -93,6 +92,8 @@ public class RequestSensorListService {
 
 
     public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
+
+
 
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");

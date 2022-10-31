@@ -22,20 +22,19 @@ public class DataService {
     byte[] dataArray;
     FileWriter fileWriter = null;
 
-    DataUpdateRepository dataUpdateSendDataRepository;
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
 
     public boolean updateData(String fname, String sid, String sn) {
-
-        return dataUpdateRepository.updateComleteTime(fname, sid, sn);
-
+        return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
     }
 
 
     public void saveData(NewPacket<DataRequest> request) throws IOException {
 
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
+
+        log.info("dataRefModel.getFilepath : {}", dataRefModel.getFilepath());
 
         log.info("data test : {}", dataRefModel.getFilepath());
         File file = new File(dataRefModel.getFilepath());

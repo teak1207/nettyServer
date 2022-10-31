@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -24,12 +23,11 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
     private final DataSource dataSource;
 
     @Override
-    public boolean updateComleteTime(String fname, String sid, String sn) {
+    public boolean updateCompleteTime(String fname, String sid, String sn) {
 
         String mixTableName1 = "`" + "leak_send_data_" + sid;
         String mixTableName2 = "_" + sn + "`";
         String convertedTableName = mixTableName1 + mixTableName2;
-        LocalDate now = LocalDate.now();
 
 
         log.info("mixTableName update check : {}", convertedTableName);
@@ -41,7 +39,6 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-//      LocalDate localDate  = LocalDate.now();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateTime = dateFormat.format(new Date());
 
