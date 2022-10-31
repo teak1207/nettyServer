@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -43,14 +46,14 @@ public class DataService {
         //memo : data to byte[] 변환
         dataArray = request.getParameter().getData().getBytes();
 
-        fileWriter = new FileWriter(file, true);
-        fileWriter.write(request.getParameter().getData());
-        fileWriter.flush();
-
         //memo : byte[] 을 .dat 파일에 저장
-//        log.info("data check : {}", dataArray);
-//        Path path = Paths.get(dataRefModel.getFilepath());
-//        Files.write(path, test);
+//        fileWriter = new FileWriter(file, true);
+//        fileWriter.write(request.getParameter().getData());
+//        fileWriter.flush();
+
+        log.info("data check : {}", dataArray);
+        Path path = Paths.get(dataRefModel.getFilepath());
+        Files.write(path, dataArray);
         i += 1;
         log.info("iii :{}", i);
         log.info("-----------");
