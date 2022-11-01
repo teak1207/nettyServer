@@ -18,7 +18,7 @@ import java.io.IOException;
 public class DataService {
 
     int i = 0;
-    byte[] dataArray;
+//    byte[] dataArray;
     FileWriter fileWriter = null;
 
     private final RequestSensorListService requestSensorListService;
@@ -29,7 +29,7 @@ public class DataService {
     }
 
 
-    public void saveData(String request) throws IOException {
+    public void saveData(byte[] request) throws IOException {
 
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
@@ -40,17 +40,16 @@ public class DataService {
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
         //memo : data(String) to byte[] 변환
-        dataArray = request.getBytes();
+//        dataArray = request.getBytes();
 
         //데이터를 찍어보겠음
-        log.info("data request 1: {}", request);
-        log.info("data request 2: {}", request.length());
-        log.info("===================================");
-
+//        log.info("data request 1: {}", request);
+//        log.info("data request 2: {}", request.length());
+//        log.info("===================================");
         // 길이가 900~1024 로 찍힘.
-        log.info("dataArray 1: {}", dataArray);
-        log.info("dataArray 2: {}", dataArray.length);
-        log.info("===================================");
+//        log.info("dataArray 1: {}", dataArray);
+//        log.info("dataArray 2: {}", dataArray.length);
+//        log.info("===================================");
 
         //memo : byte[] 을 .dat 파일에 저장
 
@@ -58,7 +57,10 @@ public class DataService {
 //        fileWriter = new FileWriter(file, true);
 //        fileWriter.write(request);
 //        fileWriter.flush();
-        writeToFile( dataRefModel.getFilepath(),dataArray);
+
+
+        //memo 방법2 : 파일의 사이즈가 1024가 되버림.
+        writeToFile(dataRefModel.getFilepath(), request);
 
         //memo 방법2 : 파일의 사이즈가 1024가 되버림.
 //        log.info("data check : {}", dataArray);

@@ -11,14 +11,16 @@ import java.util.Arrays;
 @Value
 public class DataRequest implements Serializable<DataRequest> {
 
-    String data;
+//    String data;
+    byte[] data;
 
     public DataRequest(byte[] payload) {
 
         if (payload == null || payload.length != 512) {
             throw new IllegalArgumentException("Setting Request payload error!");
         }
-        data = new String(Arrays.copyOfRange(payload, 0, 512));
+        data = (Arrays.copyOfRange(payload, 0, 512));
+//        data = new String(Arrays.copyOfRange(payload, 0, 512));
     }
 
 
@@ -27,7 +29,7 @@ public class DataRequest implements Serializable<DataRequest> {
 
         byte[] serialized = new byte[512];
 
-        byte[] dataBytes = Arrays.copyOfRange(data.getBytes(), 0, 512);
+        byte[] dataBytes = Arrays.copyOfRange(data, 0, 512);
 
         System.arraycopy(dataBytes, 0, serialized, 0, 512);
         log.info("serialized check : {}", serialized);
