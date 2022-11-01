@@ -45,10 +45,13 @@ public class DataService {
 
         //memo : data(String) to byte[] 변환
         dataArray = request.getBytes();
-        Path path = Paths.get(dataRefModel.getFilepath());
-        Files.write(path,dataArray);
 
+        //데이터를 찍어보겠음
+        log.info("data request : {}", request);
+        log.info("data request : {}", request.length());
+        log.info("===================================");
 
+        // 길이가 900~1024 로 찍힘.
         log.info("dataArray : {}", dataArray);
         log.info("dataArray : {}", dataArray.length);
         log.info("===================================");
@@ -65,6 +68,11 @@ public class DataService {
 //        log.info("data check : {}", dataArray);
 //        Path path = Paths.get(dataRefModel.getFilepath());
 //        Files.write(path, test);
+
+        //memo 방법3 : 파일의 사이즈가 1024 가 되버림
+//        dataArray = request.getBytes();
+//        Path path = Paths.get(dataRefModel.getFilepath());
+//        Files.write(path,dataArray);
         i += 1;
         log.info("iii :{}", i);
         log.info("-----------");
