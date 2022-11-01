@@ -42,8 +42,8 @@ public class DataService {
 
         //memo : data(String) to byte[] 변환
 //        dataArray = request.getBytes();
-        log.info("dataArray : {}", dataArray);
-        log.info("dataArray : {}", dataArray.length);
+//        log.info("dataArray : {}", dataArray);
+//        log.info("dataArray : {}", dataArray.length);
 
 
         //memo : byte[] 을 .dat 파일에 저장
