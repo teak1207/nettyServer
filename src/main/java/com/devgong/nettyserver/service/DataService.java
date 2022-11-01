@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -18,7 +21,7 @@ import java.io.IOException;
 public class DataService {
 
     int i = 0;
-//    byte[] dataArray;
+    byte[] dataArray;
     FileWriter fileWriter = null;
 
     private final RequestSensorListService requestSensorListService;
@@ -60,17 +63,19 @@ public class DataService {
 
 
         //memo 방법2 : 파일의 사이즈가 1024가 되버림.
-        writeToFile(dataRefModel.getFilepath(), request);
+//        writeToFile(dataRefModel.getFilepath(), request);
 
-        //memo 방법2 : 파일의 사이즈가 1024가 되버림.
+        //memo 방법3 : 파일의 사이즈가 1024가 되버림.
 //        log.info("data check : {}", dataArray);
 //        Path path = Paths.get(dataRefModel.getFilepath());
 //        Files.write(path, test);
 
-        //memo 방법3 : 파일의 사이즈가 1024 가 되버림
-//        dataArray = request.getBytes();
-//        Path path = Paths.get(dataRefModel.getFilepath());
-//        Files.write(path,dataArray);
+        //memo 방법4 : 파일의 사이즈가 1024 가 되버림
+        dataArray = request;
+        Path path = Paths.get(dataRefModel.getFilepath());
+        Files.write(path,dataArray);
+
+
         i += 1;
         log.info("iii :{}", i);
         log.info("-----------");
