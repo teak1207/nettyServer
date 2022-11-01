@@ -314,9 +314,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
 
+
                 log.info("Data  길이 : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
-                log.info("mBuf length : {}", mBuf);
+//                log.info("mBuf length : {}", mBuf);
 
                 //memo 1 : request에 참조 없음-> sensor_list_all에서 참조해옴.
                 //memo 2 : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
@@ -329,10 +330,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //memo 4 : dat file (frame amount * Data*size)에 저장.
                 log.info("request check : {}", request.getParameter().getData().getBytes());
-                dataService.saveData(request);
+                dataService.saveData(request.getParameter().getData());
 
                 //memo 5 : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
-                dataService.updateData(fname,dataFindResults.getAsid(),dataFindResults.getSsn());
+                dataService.updateData(fname, dataFindResults.getAsid(), dataFindResults.getSsn());
 
 
                 response[0] = PacketFlag.ACK.getFlag();

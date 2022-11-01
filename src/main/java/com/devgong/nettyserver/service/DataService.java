@@ -30,7 +30,7 @@ public class DataService {
     }
 
 
-    public void saveData(NewPacket<DataRequest> request) throws IOException {
+    public void saveData(String request) throws IOException {
 
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
@@ -41,7 +41,7 @@ public class DataService {
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
         //memo : data(String) to byte[] 변환
-        dataArray = request.getParameter().getData().getBytes();
+//        dataArray = request.getBytes();
         log.info("dataArray : {}", dataArray);
         log.info("dataArray : {}", dataArray.length);
 
@@ -50,7 +50,7 @@ public class DataService {
 
         //memo 방법1 : 파일의 사이즈 맞음. 하지만 그래프가 이상함
         fileWriter = new FileWriter(file, true);
-        fileWriter.write(request.getParameter().getData());
+        fileWriter.write(request);
         fileWriter.flush();
 
 
