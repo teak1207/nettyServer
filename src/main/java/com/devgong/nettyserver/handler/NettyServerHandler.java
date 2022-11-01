@@ -275,11 +275,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
                 log.info("Setting Readable bytes length : {}", bytes.length);
-                log.info("settingResponset check : {}", request);
+                log.info("setting Response check : {}", request);
 
                 byte[] response = new byte[45];
 
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
+                log.info("setting Response check : {}", requestFindResults);
 
                 //memo : leak_send_data 에  저장
                 requestSensorListService.saveData(request, requestFindResults);

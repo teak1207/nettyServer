@@ -40,7 +40,7 @@ public class DataService {
         File file = new File(dataRefModel.getFilepath());
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
-        //memo : data to byte[] 변환
+        //memo : data(String) to byte[] 변환
         dataArray = request.getParameter().getData().getBytes();
         log.info("dataArray : {}", dataArray);
         log.info("dataArray : {}", dataArray.length);
