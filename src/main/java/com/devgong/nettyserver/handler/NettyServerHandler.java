@@ -330,6 +330,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //memo 4 : dat file (frame amount * Data*size)에 저장.
                 log.info("시발점1 : {}", request.getParameter().getData().getBytes());
+                log.info("시발점1 : {}", request.getParameter().getData().getBytes().length);
                 log.info("시발점2 : {}", request.getParameter().getData());
                 log.info("시발점3 : {}", request.getParameter().getData().length());
                 dataService.saveData(request.getParameter().getData());
