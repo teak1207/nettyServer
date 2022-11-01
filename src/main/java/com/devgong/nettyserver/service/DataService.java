@@ -74,7 +74,7 @@ public class DataService {
         dataArray = request;
         Path path = Paths.get(dataRefModel.getFilepath());
         Files.write(path,dataArray);
-
+        log.info("dataArray : {}",dataArray.length);
 
         i += 1;
         log.info("iii :{}", i);
