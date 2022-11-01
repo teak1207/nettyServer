@@ -47,13 +47,13 @@ public class DataService {
         dataArray = request.getBytes();
 
         //데이터를 찍어보겠음
-        log.info("data request : {}", request);
-        log.info("data request : {}", request.length());
+        log.info("data request 1: {}", request);
+        log.info("data request 2: {}", request.length());
         log.info("===================================");
 
         // 길이가 900~1024 로 찍힘.
-        log.info("dataArray : {}", dataArray);
-        log.info("dataArray : {}", dataArray.length);
+        log.info("dataArray 1: {}", dataArray);
+        log.info("dataArray 2: {}", dataArray.length);
         log.info("===================================");
 
         //memo : byte[] 을 .dat 파일에 저장
