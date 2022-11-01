@@ -41,9 +41,10 @@ public class DataService {
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
         //memo : data(String) to byte[] 변환
-//        dataArray = request.getBytes();
-//        log.info("dataArray : {}", dataArray);
-//        log.info("dataArray : {}", dataArray.length);
+        dataArray = request.getBytes();
+        log.info("dataArray : {}", dataArray);
+        log.info("dataArray : {}", dataArray.length);
+        log.info("===================================");
 
 
         //memo : byte[] 을 .dat 파일에 저장
