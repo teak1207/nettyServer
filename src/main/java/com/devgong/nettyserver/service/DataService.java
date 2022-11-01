@@ -2,19 +2,15 @@ package com.devgong.nettyserver.service;
 
 
 import com.devgong.nettyserver.domain.DataRefModel;
-import com.devgong.nettyserver.protocol.NewPacket;
-import com.devgong.nettyserver.protocol.data.DataRequest;
 import com.devgong.nettyserver.repository.DataUpdateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -62,7 +58,7 @@ public class DataService {
 //        fileWriter = new FileWriter(file, true);
 //        fileWriter.write(request);
 //        fileWriter.flush();
-
+        writeToFile( dataRefModel.getFilepath(),dataArray);
 
         //memo 방법2 : 파일의 사이즈가 1024가 되버림.
 //        log.info("data check : {}", dataArray);
@@ -77,4 +73,30 @@ public class DataService {
         log.info("iii :{}", i);
         log.info("-----------");
     }
+
+    public void writeToFile(String filename, byte[] pData) {
+
+        if (pData == null) {
+            return;
+        }
+        int lByteArraySize = pData.length;
+        log.info("lByteArraySize : {}", lByteArraySize);
+        try {
+
+            File lOutFile = new File(filename);
+
+            FileOutputStream lFileOutputStream = new FileOutputStream(lOutFile);
+
+            lFileOutputStream.write(pData);
+
+            lFileOutputStream.close();
+
+        } catch (Throwable e) {
+
+            e.printStackTrace(System.out);
+
+        }
+
+    }
+
 }
