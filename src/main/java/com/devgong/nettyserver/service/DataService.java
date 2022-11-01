@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -42,17 +45,20 @@ public class DataService {
 
         //memo : data(String) to byte[] 변환
         dataArray = request.getBytes();
+        Path path = Paths.get(dataRefModel.getFilepath());
+        Files.write(path,dataArray);
+
+
         log.info("dataArray : {}", dataArray);
         log.info("dataArray : {}", dataArray.length);
         log.info("===================================");
 
-
         //memo : byte[] 을 .dat 파일에 저장
 
         //memo 방법1 : 파일의 사이즈 맞음. 하지만 그래프가 이상함
-        fileWriter = new FileWriter(file, true);
-        fileWriter.write(request);
-        fileWriter.flush();
+//        fileWriter = new FileWriter(file, true);
+//        fileWriter.write(request);
+//        fileWriter.flush();
 
 
         //memo 방법2 : 파일의 사이즈가 1024가 되버림.
