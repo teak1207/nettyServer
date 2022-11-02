@@ -40,7 +40,7 @@ public class DataService {
         int readCount = 0;
 //        File file = new File(dataRefModel.getFilepath());
 
-        inputStream.read(temp,0, temp.length);
+        inputStream.read(temp,0, request.length);
         outputStream.write(temp,0,temp.length);
 
 //        outputStream.write(request, 0, readCount);
