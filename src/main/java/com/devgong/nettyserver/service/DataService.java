@@ -11,6 +11,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Service
@@ -32,28 +33,25 @@ public class DataService {
 
         ByteArrayOutputStream outputStream = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
-
+        byte [] temp = new byte[200000];
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
-
-        byte[] temp = new byte[request.length];
-        int readCount = 0;
-//        File file = new File(dataRefModel.getFilepath());
-
         log.info("request length check : {}", request.length);
 
+//        File file = new File(dataRefModel.getFilepath());
 
-        outputStream.write(temp,0,request.length);
+        //memo 1 : request byte[] 을 temp 에 누적해서 저장
+        System.arraycopy(request,0,temp,temp.length  ,request.length);
 
-//        outputStream.write(request, 0, readCount);
+
+        //memo 2 : outputStream.write 할때 temp 를 읽어줌
+        outputStream.write(temp);
 
 
-        //memo 방법4 : 파일의 사이즈가 1024 가 되버림
         Path path = Paths.get(dataRefModel.getFilepath());
-        //memo  : 들어오는 데이터를 ByteArrayOutputStream 에 계속 쌓음.
 //        outputStream.write(request);
 
-        // memo : 들어온 데이터를 파일에다가 저장.
-        Files.write(path, temp);
+        //memo 3 : Files.write(path, outputStream.toByteArray());
+        Files.write(path, outputStream.toByteArray());
 
 
         i += 1;
