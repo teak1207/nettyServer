@@ -29,22 +29,24 @@ public class DataService {
 
 
     public void saveData(byte[] request) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        FileInputStream fis = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
-        log.info("dataRefModel.getFilepath : {}", dataRefModel.getFilepath());
-
-        log.info("data test : {}", dataRefModel.getFilepath());
-        File file = new File(dataRefModel.getFilepath());
+        int readCount = 0;
+//        File file = new File(dataRefModel.getFilepath());
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
-        //memo : data(String) to byte[] 변환
+        while ((readCount = fis.read(request)) != -1) {
+            outputStream.write(request, 0, readCount);
+        }
+
 
         //memo 방법4 : 파일의 사이즈가 1024 가 되버림
         Path path = Paths.get(dataRefModel.getFilepath());
         //memo  : 들어오는 데이터를 ByteArrayOutputStream 에 계속 쌓음.
-        outputStream.write(request);
+//        outputStream.write(request);
 
         // memo : 들어온 데이터를 파일에다가 저장.
         Files.write(path, outputStream.toByteArray());
