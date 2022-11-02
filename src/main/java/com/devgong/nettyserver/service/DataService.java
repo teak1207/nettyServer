@@ -33,18 +33,17 @@ public class DataService {
 
         ByteArrayOutputStream outputStream = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
-        byte [] temp = new byte[200000];
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
         log.info("request length check : {}", request.length);
 
 
         //memo 1 : request byte[] 을 temp 에 누적해서 저장
-        System.arraycopy(request,0,temp,temp.length  ,request.length);
 
 
         //memo 2 : outputStream.write 할때 temp 를 읽어줌
-        outputStream.write(temp);
-
+        for (int i = 0; i <= 96; i++) {
+            outputStream.write(request);
+        }
 
         Path path = Paths.get(dataRefModel.getFilepath());
 //        outputStream.write(request);
