@@ -40,6 +40,7 @@ public class DataService {
         int readCount = 0;
 //        File file = new File(dataRefModel.getFilepath());
 
+        log.info("request length check : {}", request.length);
         inputStream.read(temp,0, request.length);
         outputStream.write(temp,0,temp.length);
 
