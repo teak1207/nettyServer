@@ -30,7 +30,6 @@ public class DataService {
 
     public void saveData(byte[] request) throws IOException {
 
-        ByteArrayInputStream inputStream = null;
         ByteArrayOutputStream outputStream = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
@@ -41,8 +40,9 @@ public class DataService {
 //        File file = new File(dataRefModel.getFilepath());
 
         log.info("request length check : {}", request.length);
-        inputStream.read(temp,0, request.length);
-        outputStream.write(temp,0,temp.length);
+
+
+        outputStream.write(temp,0,request.length);
 
 //        outputStream.write(request, 0, readCount);
 
@@ -53,7 +53,7 @@ public class DataService {
 //        outputStream.write(request);
 
         // memo : 들어온 데이터를 파일에다가 저장.
-        Files.write(path, outputStream.toByteArray());
+        Files.write(path, temp);
 
 
         i += 1;
