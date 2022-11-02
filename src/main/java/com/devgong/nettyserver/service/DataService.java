@@ -23,9 +23,8 @@ public class DataService {
 
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
+
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-
 
     public boolean updateData(String fname, String sid, String sn) {
         return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
@@ -67,13 +66,15 @@ public class DataService {
 //        Files.write(path, test);
         //memo 방법4 : 파일의 사이즈가 1024 가 되버림
 //        dataArray = request;
-
-
         Path path = Paths.get(dataRefModel.getFilepath());
-//        log.info("dataArray : {}",dataArray.length);
-        outputStream.write(request);
+        //memo  : 들어오는 데이터를 ByteArrayOutputStream 에 계속 쌓음.
 
-        Files.write(path,outputStream.toByteArray());
+//        outputStream.write(request);
+        byte[] result = new byte[100];
+        System.arraycopy(request,0,result,0,request.length);
+        // memo : 들어온 데이터를 파일에다가 저장.
+//        Files.write(path,outputStream.toByteArray());
+        Files.write(path,result);
 
 
         i += 1;
