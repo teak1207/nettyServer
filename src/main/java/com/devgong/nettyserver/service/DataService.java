@@ -33,7 +33,7 @@ public class DataService {
 
         ByteArrayOutputStream outputStream = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
-        byte [] temp = new byte[200512];
+        byte [] temp = new byte[201024];
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
         log.info("request length check : {}", request.length);
 
