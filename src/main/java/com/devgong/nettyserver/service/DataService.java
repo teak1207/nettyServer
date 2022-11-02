@@ -31,7 +31,7 @@ public class DataService {
 
     public void saveData(byte[] request) throws IOException {
 
-        ByteArrayOutputStream outputStream = null;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
         log.info("request length check : {}", request.length);
