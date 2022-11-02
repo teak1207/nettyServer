@@ -70,7 +70,7 @@ public class DataService {
 
 
         Path path = Paths.get(dataRefModel.getFilepath());
-        log.info("dataArray : {}",dataArray.length);
+//        log.info("dataArray : {}",dataArray.length);
         outputStream.write(request);
 
         Files.write(path,outputStream.toByteArray());
