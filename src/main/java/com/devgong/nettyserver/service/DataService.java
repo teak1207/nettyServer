@@ -23,6 +23,7 @@ public class DataService {
 
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 
 
@@ -32,9 +33,6 @@ public class DataService {
 
 
     public void saveData(byte[] request) throws IOException {
-
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
