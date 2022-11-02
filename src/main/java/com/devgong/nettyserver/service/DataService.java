@@ -41,8 +41,9 @@ public class DataService {
 
 
         //memo 2 : outputStream.write 할때 temp 를 읽어줌
-        outputStream.write(request);
-
+        for (int i = 0; i <= 96; i++) {
+            outputStream.write(request);
+        }
         Path path = Paths.get(dataRefModel.getFilepath());
 //        outputStream.write(request);
 
