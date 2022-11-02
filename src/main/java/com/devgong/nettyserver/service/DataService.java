@@ -30,15 +30,20 @@ public class DataService {
 
     public void saveData(byte[] request) throws IOException {
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        FileInputStream fis = null;
+        ByteArrayInputStream inputStream = null;
+        ByteArrayOutputStream outputStream = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
-        int readCount = 0;
-//        File file = new File(dataRefModel.getFilepath());
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
-            outputStream.write(request, 0, readCount);
+        byte[] temp = new byte[request.length];
+        int readCount = 0;
+//        File file = new File(dataRefModel.getFilepath());
+
+        inputStream.read(temp,0, temp.length);
+        outputStream.write(temp,0,temp.length);
+
+//        outputStream.write(request, 0, readCount);
 
 
         //memo 방법4 : 파일의 사이즈가 1024 가 되버림
