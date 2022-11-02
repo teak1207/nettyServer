@@ -31,16 +31,14 @@ public class DataService {
     public void saveData(byte[] request) throws IOException {
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        FileInputStream fis = null;
+//        FileInputStream fis = null;
         DataRefModel dataRefModel = requestSensorListService.dataRefModel;
 
         int readCount = 0;
 //        File file = new File(dataRefModel.getFilepath());
         log.info("getFilePath check : {}", dataRefModel.getFilepath());
 
-        while ((readCount = fis.read(request)) != -1) {
             outputStream.write(request, 0, readCount);
-        }
 
 
         //memo 방법4 : 파일의 사이즈가 1024 가 되버림
