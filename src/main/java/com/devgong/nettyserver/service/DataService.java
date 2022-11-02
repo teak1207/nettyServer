@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +23,9 @@ public class DataService {
 
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+
 
     public boolean updateData(String fname, String sid, String sn) {
         return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
@@ -55,26 +55,26 @@ public class DataService {
 //        log.info("===================================");
 
         //memo : byte[] 을 .dat 파일에 저장
-
         //memo 방법1 : 파일의 사이즈 맞음. 하지만 그래프가 이상함
 //        fileWriter = new FileWriter(file, true);
 //        fileWriter.write(request);
 //        fileWriter.flush();
-
-
         //memo 방법2 : 파일의 사이즈가 1024가 되버림.
 //        writeToFile(dataRefModel.getFilepath(), request);
-
-        //memo 방법3 : 파일의 사이즈가 1024가 되버림.
+        //memo 방법3 : 파일의 사이즈가 1024가 되버림.->1024 가 되는게 아니라 마지막 바이트만 저장됨.
 //        log.info("data check : {}", dataArray);
 //        Path path = Paths.get(dataRefModel.getFilepath());
 //        Files.write(path, test);
-
         //memo 방법4 : 파일의 사이즈가 1024 가 되버림
-        dataArray = request;
+//        dataArray = request;
+
+
         Path path = Paths.get(dataRefModel.getFilepath());
-        Files.write(path,dataArray);
         log.info("dataArray : {}",dataArray.length);
+        outputStream.write(request);
+
+        Files.write(path,outputStream.toByteArray());
+
 
         i += 1;
         log.info("iii :{}", i);
