@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RequiredArgsConstructor
 @Service
@@ -48,14 +51,14 @@ public class DataService {
 
 
         //memo 2 : outputStream.write 할때 temp 를 읽어줌
-//        outputStream.write(request);
+        outputStream.write(request);
 
 
-//        Path path = Paths.get(filePath);
-//        outputStream.write(request);
+        Path path = Paths.get(fname);
+        outputStream.write(request);
 
         //memo 3 : Files.write(path, outputStream.toByteArray());
-//        Files.write(path, outputStream.toByteArray());
+        Files.write(path, outputStream.toByteArray());
 
 
         i += 1;
