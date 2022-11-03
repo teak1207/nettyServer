@@ -1,25 +1,23 @@
 package com.devgong.nettyserver.service;
 
 
-import com.devgong.nettyserver.domain.DataRefModel;
+import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
+import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.repository.DataUpdateRepository;
+import com.devgong.nettyserver.repository.PreInstallSensorListAllRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class DataService {
 
-    int i = 0;
-
+    private final PreInstallSensorListAllRepository preInstallSensorListAllRepository;
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
 
@@ -29,26 +27,32 @@ public class DataService {
     }
 
 
-    public void saveData(byte[] request) throws IOException {
+    public void saveData(String sn, byte[] request) throws IOException {
+        int i = 0;
 
+        PreInstallSensorListAllModel sensorListAllModel ;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        DataRefModel dataRefModel = requestSensorListService.dataRefModel;
-        log.info("getFilePath check : {}", dataRefModel.getFilepath());
-        log.info("request length check : {}", request.length);
+
+//        String filePath = requestSensorListService.referenceFilePath;
+        //순서 : sn 로  sensor_list_all 가서 sid  값을 가져온다.
+        sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(sn);
+        log.info("sensorListAllModel check : {}",sensorListAllModel);
+        //순서 : leak_send_data_(sid)_(sn)에서 fname 을 가져온다.
+        //순서 : fname을 가자고 filePath 로 활용한다.
 
 
         //memo 1 : request byte[] 을 temp 에 누적해서 저장
 
 
         //memo 2 : outputStream.write 할때 temp 를 읽어줌
-        for (int i = 0; i <= 96; i++) {
-            outputStream.write(request);
-        }
-        Path path = Paths.get(dataRefModel.getFilepath());
+//        outputStream.write(request);
+
+
+//        Path path = Paths.get(filePath);
 //        outputStream.write(request);
 
         //memo 3 : Files.write(path, outputStream.toByteArray());
-        Files.write(path, outputStream.toByteArray());
+//        Files.write(path, outputStream.toByteArray());
 
 
         i += 1;

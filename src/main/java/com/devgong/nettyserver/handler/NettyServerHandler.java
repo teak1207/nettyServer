@@ -334,7 +334,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                log.info("시발점3 : {}", request.getParameter().getData());
 //                log.info("시발점4 : {}", request.getParameter().getData().length());
 
-                dataService.saveData(request.getParameter().getData());
+                dataService.saveData(request.getSensorId(), request.getParameter().getData());
 
                 //memo 5 : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
                 dataService.updateData(fname, dataFindResults.getAsid(), dataFindResults.getSsn());

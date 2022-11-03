@@ -32,7 +32,6 @@ public class RequestSensorListService {
 
 
     RequestListAllModel requestListAllModel = null;
-    DataRefModel dataRefModel = new DataRefModel();
 
     private final RequestSensorListAllRepository requestSensorListAllRepository;
     private final RequestSendDataRepository requestSendDataRepository;
@@ -94,7 +93,6 @@ public class RequestSensorListService {
     public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
 
-
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
@@ -109,7 +107,6 @@ public class RequestSensorListService {
             File initFilePath = new File(filePath);
             File file3 = new File(path);
             Path filePathExistence = Paths.get(filePath);
-            dataRefModel.setFilepath(filePath);
 
             if (file3.isDirectory()) {
 
