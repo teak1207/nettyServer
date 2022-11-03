@@ -3,7 +3,6 @@ package com.devgong.nettyserver.repository;
 import com.devgong.nettyserver.domain.DataLeakSendDataModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,7 @@ import java.sql.SQLException;
 @Slf4j
 @RequiredArgsConstructor
 @Repository
-public class TestRepositoryImpl implements TestRepository {
+public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRepository {
 
 //    final private JdbcTemplate template;
     private final DataSource dataSource;

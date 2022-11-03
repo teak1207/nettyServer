@@ -7,7 +7,7 @@ import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
 import com.devgong.nettyserver.repository.RequestSendDataRepository;
 import com.devgong.nettyserver.repository.RequestSensorListAllRepository;
-import com.devgong.nettyserver.repository.TestRepository;
+import com.devgong.nettyserver.repository.RequestSendDataJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class RequestSensorListService {
 
     private final RequestSensorListAllRepository requestSensorListAllRepository;
     private final RequestSendDataRepository requestSendDataRepository;
-    private final TestRepository testRepository;
+    private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
     static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
     char underBar = '_';
 
@@ -52,8 +52,7 @@ public class RequestSensorListService {
 
     public String findDataFname(String serialNumber, String sid) {
 
-
-        return testRepository.selectBySnAndSid(serialNumber, sid);
+        return requestSendDataJdbcRepository.selectBySnAndSid(serialNumber, sid);
     }
 
 
