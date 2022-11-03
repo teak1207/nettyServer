@@ -24,6 +24,7 @@ public class DataService {
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
     private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     public boolean updateData(String fname, String sid, String sn) {
         return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
@@ -34,7 +35,6 @@ public class DataService {
         int i = 0;
 
         PreInstallSensorListAllModel sensorListAllModel;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 //        String filePath = requestSensorListService.referenceFilePath;
         //순서 : sn 로  sensor_list_all 가서 sid  값을 가져온다.
