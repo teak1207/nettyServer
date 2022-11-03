@@ -5,6 +5,7 @@ import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
 import com.devgong.nettyserver.domain.PreInstallSetModel;
 import com.devgong.nettyserver.repository.DataUpdateRepository;
 import com.devgong.nettyserver.repository.PreInstallSensorListAllRepository;
+import com.devgong.nettyserver.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class DataService {
     private final PreInstallSensorListAllRepository preInstallSensorListAllRepository;
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
-
+    private final TestRepository testRepository;
 
     public boolean updateData(String fname, String sid, String sn) {
         return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
@@ -30,14 +31,17 @@ public class DataService {
     public void saveData(String sn, byte[] request) throws IOException {
         int i = 0;
 
-        PreInstallSensorListAllModel sensorListAllModel ;
+        PreInstallSensorListAllModel sensorListAllModel;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
 //        String filePath = requestSensorListService.referenceFilePath;
         //순서 : sn 로  sensor_list_all 가서 sid  값을 가져온다.
         sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(sn);
-        log.info("sensorListAllModel check : {}",sensorListAllModel);
+//        log.info("sensorListAllModel check : {}",sensorListAllModel);
         //순서 : leak_send_data_(sid)_(sn)에서 fname 을 가져온다.
+        String fname = testRepository.selectBySnAndSid(sensorListAllModel.getSsn(), sensorListAllModel.getAsid());
+        log.info("fname check : {}", fname);
+
         //순서 : fname을 가자고 filePath 로 활용한다.
 
 
