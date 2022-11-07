@@ -282,6 +282,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
                 log.info("setting Response check : {}", requestFindResults);
 
+                log.info("request check : {}",request);
                 //memo : leak_send_data 에  저장
                 requestSensorListService.saveData(request, requestFindResults);
 
@@ -329,11 +330,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
 
                 //memo 4 : dat file (frame amount * Data*size)에 저장.
-//                log.info("시발점1 : {}", request.getParameter().getData().getBytes());
-//                log.info("시발점2 : {}", request.getParameter().getData().getBytes().length);
-//                log.info("시발점3 : {}", request.getParameter().getData());
-//                log.info("시발점4 : {}", request.getParameter().getData().length());
 
+
+                // 순서 :
                 dataService.saveData(request.getSensorId(), request.getParameter().getData());
 
                 //memo 5 : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.

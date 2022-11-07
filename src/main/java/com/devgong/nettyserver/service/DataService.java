@@ -24,7 +24,6 @@ public class DataService {
     private final RequestSensorListService requestSensorListService;
     private final DataUpdateRepository dataUpdateRepository;
     private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     public boolean updateData(String fname, String sid, String sn) {
         return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
@@ -34,6 +33,7 @@ public class DataService {
     public void saveData(String sn, byte[] request) throws IOException {
         int i = 0;
 
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PreInstallSensorListAllModel sensorListAllModel;
 
 //        String filePath = requestSensorListService.referenceFilePath;
