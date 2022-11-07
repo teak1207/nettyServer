@@ -282,7 +282,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
                 log.info("setting Response check : {}", requestFindResults);
 
-                log.info("request check : {}",request);
+                log.info("request check : {}",request.getParameter().getFrameCount());
                 //memo : leak_send_data 에  저장
                 requestSensorListService.saveData(request, requestFindResults);
 
