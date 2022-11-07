@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -282,7 +283,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
                 log.info("setting Response check : {}", requestFindResults);
 
-                log.info("request check : {}",Integer.parseInt(request.getParameter().getFrameCount()));
+                byte[] test = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
+                log.info("request check : {}",test);
                 //memo : leak_send_data 에  저장
                 requestSensorListService.saveData(request, requestFindResults);
 
