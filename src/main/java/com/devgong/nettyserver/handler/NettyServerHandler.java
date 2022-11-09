@@ -304,10 +304,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
-                log.info("Setting Readable bytes length : {}", bytes.length);
-                log.info("setting Response check : {}", request);
+//                log.info("Setting Readable bytes length : {}", bytes.length);
+//                log.info("setting Response check : {}", request);
 
-                log.info("frame count check : {}",request.getParameter().getFrameCount());
+                log.info("frame count check : {}",request.getParameter().getFrameCount().length());
+                log.info("frame count check : {}",request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
 
 
                 byte[] response = new byte[45];
