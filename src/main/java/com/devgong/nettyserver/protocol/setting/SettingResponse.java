@@ -11,10 +11,6 @@ import java.util.Arrays;
 @Value
 public class SettingResponse implements Serializable<SettingResponse> {
 
-    //TODO
-    // - response total length : 193
-    // - body length : 148(except checksum) /150(include checksum)
-    // - header length : 45
 
     String recordTime1; // 4 byte
     String recordTime2;  // 4 byte

@@ -35,7 +35,6 @@ public class Packet<T extends Serializable<T>> {
     }
 
     public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
-        // TODO : 패킷 길이 제한조건 넣어야 함
         if (packet == null) {
             throw new IllegalArgumentException("Packet error!");
         }
@@ -71,10 +70,6 @@ public class Packet<T extends Serializable<T>> {
         byte[] serializedParameter = parameter.serialize();
         byte[] serialized = new byte[45 + serializedParameter.length];
 
-        //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
-        int test = Optional.of(parameterLength).orElse(0L).intValue();
-
-
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
         byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
@@ -100,7 +95,7 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
             log.info("accumulation : {}", b);
-            log.info("accumulation : {}", (char)b);
+            log.info("accumulation : {}", (char) b);
         }
 
         log.info("validateChecksum accumulation : {}", accumulation);
@@ -117,7 +112,6 @@ public class Packet<T extends Serializable<T>> {
     private byte[] makeChecksum() {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
         for (byte b : serializeExceptChecksum()) {
-            //todo : b를 unsigned  처리를 해보자
             accumulation += b & 0xff;
 //            log.info("accumulation byte(char) : {}", (char) b & 0xff);
 //            log.info("accumulation byte(char) : {}", accumulation);
@@ -128,9 +122,6 @@ public class Packet<T extends Serializable<T>> {
         String hex = Integer.toHexString(accumulation);
         String first = "";
         String second = "";
-
-        //TODO : 데이터를 일일히 체크했을 시 ,문제 없음, hex를 찍었더니 값 불일치 발생.
-
 
         log.info("hex : {}", hex);
         if (hex.length() == 3) {

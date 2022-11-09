@@ -66,7 +66,6 @@ public class NewPacket<T extends Serializable<T>> {
 //        byte[] serializedParameter = parameter.serialize();
 //        byte[] serialized = new byte[45 + serializedParameter.length];
 //
-//        //TODO : 패킷담을때만 long으로 처리하고, 다른데선 int로 처리하기위해 cast 처리
 //        int test = Optional.of(parameterLength).orElse(0L).intValue();
 //
 //

@@ -29,6 +29,23 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * <p>
+ * develop Spec
+ * (추가 기입 해야함.)
+ * </p>
+ *
+ * @author devgong
+ * 디바이스와의 통신관련 통제는 핸들러에서 이루어진다
+ * (1) Preinstall
+ * (2) Setting
+ * (3) Report
+ * (4) Requaest
+ * (5) Data
+ * @version 1.0
+ */
+
+
 @Slf4j
 @Component
 @ChannelHandler.Sharable //#1 @Sharable 어노테이션은 여러채널에서 핸들러를 공유 할 수 있음을 나타냄.
@@ -43,8 +60,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final RequestSensorListService requestSensorListService;
     private final DataService dataService;
 
-    DataInsertModel dataInsertModel = new DataInsertModel();
-    PreInstallSensorListAllModel findResult = new PreInstallSensorListAllModel();
+
+    PreInstallSensorListAllModel reportFindResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
@@ -84,14 +101,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //seq : <<장치에서 보낸 값과 서버에서 받은 값이 타당한지를 수행하는 과정 ,바이트배열->객체 >>
                 //seq : packet 이라는 클래스를 해두었음. 생성자의 파라미터로  flag, bytes, PreInstallRequest.class 줌.
                 //seq : 프로토콜헤더 항목 길이별로 맞게 할당하는 처리수행.
+
                 //seq : 헤더에서 넘어오는 parameterLength 체크하는 작업 + checkSum 타당성검사 작업 수행
                 Packet<PreInstallRequest> request = new Packet<>(flag, bytes, PreInstallRequest.class);
 
-                //seq : <<preinstall 프로세스 진행>>
+                //preinstall_seq : <<preinstall 프로세스 진행>>
+                //preinstall_seq : 고유값 전송(modemNumber)
                 preInstallDeviceInfos = preinstallSensorListService.preInstallFindData(request.getParameter().getModemPhoneNumber());
 
                 //seq : preinstallSensorListService.preInstallFindData 에서 가져온 값을 장치로 보내주기위한 작업 진행.
-                //seq : preinstall,Server->Device
+
+                //preinstall_seq : preinstall,Server->Device, PreInstall 값 전송 or NAK
                 PreInstallResponse response = new PreInstallResponse(
                         preInstallDeviceInfos.getTime1(),
                         preInstallDeviceInfos.getTime2(),
@@ -135,7 +155,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     mBuf.release();
                 }
-                //seq : 장치에서 보낸 ACK or NAK + REPORT 값을 받는 과정
+
+                //preinstall_seq :ACK or NAK + REPORT 전송
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -146,13 +167,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("ACK/NAK FLAG : {}", (char) readFlag);
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
-
+                //preinstall_seq : 기기에서 보내준 값을 factory_report 테이블에 저장하는 작업.
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
                 byte[] result = new byte[45];
 
 
-                // seq : reportResult 의 값에 따른 분기
+                // preinstall_seq : reportResult 의 값에 따른 분기 처리 true(ACK) / false(NAK)
                 if (reportResult) {
                     result[0] = PacketFlag.ACK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(result));
@@ -167,7 +188,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.error("Report Insert Failed");
                 }
-                //seq : SETTING value (6) 인 경우 분기
+
+
+                //setting_seq : SETTING value (6) 인 경우 분기
             } else if (PacketFlag.SETTING.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -177,14 +200,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("setting request check : {}", request);
-                //seq : << Setting process 진행 >>
+
+                //setting_seq : << Setting process 진행 >>
+                //setting_seq : Setting 값 response 하기 위해 model 초기화.
                 settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
                 log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
 
                 byte[] nakResponse = new byte[45];
 
-                //seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
+                //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
                 if (settingDeviceInfos != null) {
                     SettingResponse response = new SettingResponse(
                             settingDeviceInfos.getTime1(),
@@ -208,7 +233,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             settingDeviceInfos.getDbPort(),
                             Integer.parseInt(settingDeviceInfos.getRadioTime())
                     );
-                    //seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
+                    //setting_seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
                     Packet<SettingResponse> responsePacket = new Packet<>(
                             PacketFlag.SETTING,
                             response.getSid(),
@@ -221,7 +246,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
 
 
-                    //seq : Nak 인 경우, byte[45] 의 첫 index에 NAK(9) 만 담아서 보냄.
+                    //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
                 } else {
                     nakResponse[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(nakResponse));
@@ -229,7 +254,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-                //seq : << Report 프로세스 진행 >>
+                //report_seq : << Report 프로세스 진행 >>, 주기보고
             } else if (PacketFlag.REPORT.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -237,21 +262,23 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                //seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
-                findResult = reportSensorListService.findDataExistence(serialNumber);
+                //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
+                reportFindResult = reportSensorListService.findDataExistence(serialNumber);
 
                 byte[] response = new byte[45];
 
-                if (Objects.isNull(findResult)) {
+                if (Objects.isNull(reportFindResult)) {
                     log.info("[FAIL] : 값이 존재하질 않습니다");
 
                 } else {
-                    log.info("reportFindResults:{}", findResult);
+                    log.info("reportFindResults:{}", reportFindResult);
 
-                    //memo : sid 공유변수인데 data process에서 쓰려고 만듦.
-//                    sid = request.getParameter().getSid();
-                    // 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
-                    if (reportSensorListService.insertUniqueInformation(dataInsertModel, findResult.getAsid(), findResult.getAproject(), findResult.getSsn(), request)) {
+                    // memo : 전역변수로 선언되어 있어서 여기로 가져옴.
+
+
+                    //report_seq : 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
+                    //report_seq : ACK or NAK
+                    if (reportSensorListService.insertUniqueInformation(reportFindResult.getAsid(), reportFindResult.getAproject(), reportFindResult.getSsn(), request)) {
                         response[0] = PacketFlag.ACK.getFlag();
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
@@ -266,6 +293,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("REPORT Process fail");
                     }
                 }
+                //request_seq : (device-> server) request
             } else if (PacketFlag.REQUEST.equals(flag)) {
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -273,19 +301,22 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("flag : {}", flag);
                 log.info("test length: {}", bytes.length);
-
+                //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
+
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("setting Response check : {}", request);
 
                 byte[] response = new byte[45];
-
+                //request_seq : find 값을 객체에 초기화
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
                 log.info("setting Response check : {}", requestFindResults);
 
+
                 byte[] test = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
-                log.info("request check : {}",test);
-                //memo : leak_send_data 에  저장
+                log.info("request check : {}", test);
+
+                //request_seq : requestSensorListService.saveData() 처리.
                 requestSensorListService.saveData(request, requestFindResults);
 
 

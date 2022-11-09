@@ -17,6 +17,8 @@ import java.util.Map;
 @Repository
 public class DataSensorReportRepositoryImpl implements DataSensorReportRepository {
 
+    //report_seq : 가변적인 테이블명 -> JDBC 로 DB 접근.
+    //report_seq : sensor_report_(sid)_(serialNumber) 테이블 insert.
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -41,49 +43,33 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         parameters.put("date", now);
         parameters.put("id", "admin");
         parameters.put("ip", "-1-1");
-
         parameters.put("px", dataInsertModel.getPx());
-
         parameters.put("sid", sid);
-
         parameters.put("py", dataInsertModel.getPy());
-
         parameters.put("pname", dataInsertModel.getPname());
-
         parameters.put("time1", dataInsertModel.getRecordTime1());
         parameters.put("time2", dataInsertModel.getRecordTime2());
         parameters.put("time3", dataInsertModel.getRecordTime3());
-
         parameters.put("end_record_time", dataInsertModel.getEndRecordTime());
-
         parameters.put("fm", dataInsertModel.getFmRadio());
-
         parameters.put("fver", dataInsertModel.getFirmwareVersion());
-
-
         parameters.put("rssi", dataInsertModel.getModernRssi());
-
         parameters.put("status", dataInsertModel.getDeviceStatus());
-
         parameters.put("sample", dataInsertModel.getSamplingTime());
-
         parameters.put("period", dataInsertModel.getPeriod());
         parameters.put("batt", dataInsertModel.getBatteryValue());
         parameters.put("project", project);
         parameters.put("server_url", dataInsertModel.getServerUrl());
         parameters.put("server_port", dataInsertModel.getServerPort());
-
         parameters.put("db_url", dataInsertModel.getDbUrl());
         parameters.put("db_port", dataInsertModel.getDbPort());
         parameters.put("fmtime", dataInsertModel.getRadioTime());
         parameters.put("creg", dataInsertModel.getCregCount());
-
         parameters.put("samplerate", dataInsertModel.getSampleRate());
         parameters.put("sleep", dataInsertModel.getSleep());
         parameters.put("active", dataInsertModel.getActive());
         parameters.put("reset", dataInsertModel.getReset());
         parameters.put("f_reset", dataInsertModel.getFReset());
-
 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         dataInsertModel.setCid(key.intValue());

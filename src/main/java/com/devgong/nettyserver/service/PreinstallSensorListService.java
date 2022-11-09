@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+/**
+ * @author devGong
+ * @version 1.0
+ * preinstall 에서  관련 테이블들을 Find / Insert  메서드 기능 구현
+ */
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -20,7 +26,19 @@ public class PreinstallSensorListService {
     private final PreInstallSensorListRepository preInstallSensorListRepository;
     private final ReportRepository reportRepository;
 
-    public PreInstallSetModel preInstallFindData(String modemnum) {
+
+    /**
+     * @param modemNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
+     * @return PreInstallSetModel 을 리턴함.
+     * @author devGong
+     * (1) modemNumber 로 DB에서 해당 값을 가져오고, preInstallSensorListAllModel 리턴합니다.
+     * (2) preInstallSensorListAllModel sid, project 값으로 leak_project 테이블 컬럼 가져오고, preinstallNetworkSetModel 리턴합니다.
+     * (3) preInstallSensorListAllModel serialNumber 값으로 leakset_bysensor 테이블 컬럼 가져오고, preinstallDeviceSetModel 리턴합니다.
+     * (4) preInstallSensorListAllModel serialNumber 값으로 sensor_list 테이블 컬럼 가져오고, preInstallSensorListModel 리턴합니다.
+     * (5) (1)~(4) 가져온 값을 preinstallSetModel에 초기화 후 리턴합니다.
+     */
+
+    public PreInstallSetModel preInstallFindData(String modemNumber) {
 
         PreInstallSetModel preinstallSetModel = new PreInstallSetModel();
 
@@ -29,23 +47,19 @@ public class PreinstallSensorListService {
         PreinstallNetworkSetModel preinstallNetworkSetModel;
         PreInstallSensorListModel preInstallSensorListModel;
 
-        //seq : sensor_list_all 에서 serialNum에 해당하는 값을 탐색 후,preInstallSensorListAllModel 이라는 객체에 담음.
-        preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemnum.trim());
-        //seq : 앞서 담은 preInstallSensorListAllModel 객체로 값을 get,set 할 수 있음.
-        //seq : preInstallSensorListAllModel의 Aproject,Asid 값으로 leak_project 테이블에서 값을 가져옴.
+        //preinstall_seq : sensor_list_all 에서 serialNum 해당하는 값을 탐색 후,preInstallSensorListAllModel 초기화.
+        preInstallSensorListAllModel = preInstallSensorListAllRepository.findPreInstallSensorListAllModelByMphone(modemNumber.trim());
+        //preinstall_seq : preInstallSensorListAllModel Aproject,Asid 값으로 leak_project 테이블에서 값을 get.
         preinstallNetworkSetModel = networkSetRepository.findAllByPnameAndSid(preInstallSensorListAllModel.getAproject(), preInstallSensorListAllModel.getAsid());
-        //seq : preInstallSensorListAllModel의 Ssn 값으로 leakset_bysensor 테이블에서 값을 가져옴.
+        //preinstall_seq : preInstallSensorListAllModel Ssn 값으로 leakset_bysensor 테이블에서 값을 get.
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
-        //seq : preInstallSensorListAllModel의 Ssn 값으로 sensor_list 테이블에서 값을 가져옴.
+        //preinstall_seq: preInstallSensorListAllModel Ssn 값으로 sensor_list 테이블에서 값을 가져옴.
         preInstallSensorListModel = preInstallSensorListRepository.findTopBySerialNumberOrderByCidDesc(preInstallSensorListAllModel.getSsn());
-
         log.info("-------------------------------");
         log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);
         log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
         log.info("-------------------------------");
-
-
-        //seq : preinstallSetModel 라는 객체에 4개의 테이블에서 가져온 값들을 채워넣어 객체를 리턴함.
+        //preinstall_seq : preinstallSetModel 라는 객체에 4개의 테이블에서 가져온 값들을 채워넣어 객체를 리턴함.
         preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
         preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
         preinstallSetModel.setTime3(preinstallDeviceSetModel.getTime3());
@@ -67,6 +81,15 @@ public class PreinstallSensorListService {
 
         return preinstallSetModel;
     }
+
+    /**
+     * @param bytes - 디바이스에서 넘겨주는 고유 모뎀 번호
+     * @return factory_report 테이블에 값을 저장하고 true 리턴, 그렇지 않다면 false 리턴
+     * @author devGong
+     * (1) bytes 에서 프로토콜 항목의 크기만큼 할당.
+     * (2) preinstallReportModel 객체에 담음.
+     * (3) factory_report 테이블에 preinstallReportModel값을 저장.
+     */
 
     public boolean insertReport(byte[] bytes) {
 
@@ -101,11 +124,10 @@ public class PreinstallSensorListService {
 
             log.info("preinstallReportModel : {}", preinstallReportModel);
 
-            //seq : factory_report 테이블에 값을 저장.
+            //preinstall_seq : factory_report 테이블에 값을 저장.
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return true;
-
 
         } else {
             log.error("[INSERT] : FAIL");

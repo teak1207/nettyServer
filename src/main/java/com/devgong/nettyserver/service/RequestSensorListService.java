@@ -39,6 +39,8 @@ public class RequestSensorListService {
 
 
     public RequestListAllModel findDataExistence(String serialNumber) {
+
+        //request_seq : sensor_list_all 값 존재여부 체크
         requestListAllModel = requestSensorListAllRepository.findAllBySsn(serialNumber);
         log.info("requestListAllModel : {}", requestListAllModel);
         return requestListAllModel;
@@ -78,6 +80,8 @@ public class RequestSensorListService {
         requestLeakDataModel.setFnum("");
         requestLeakDataModel.setInference("");
 
+
+        //request_seq : leak_send data Insert
         if (requestSendDataRepository.save(request, requestLeakDataModel)) {
             log.info("leak_send data Insert Success");
         } else {
@@ -89,7 +93,7 @@ public class RequestSensorListService {
 
     public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
-
+        //request_seq : sensor_list_all 테이블에서 가져온 값 체크
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
@@ -105,6 +109,7 @@ public class RequestSensorListService {
             File file3 = new File(path);
             Path filePathExistence = Paths.get(filePath);
 
+            //request_seq : 선언한 파일이 원하는 경로에 있는지 체크.
             if (file3.isDirectory()) {
 
                 //memo : 해당 경로에 파일 존재할 경우, NAK return
@@ -112,8 +117,9 @@ public class RequestSensorListService {
 
                 if (Files.exists(filePathExistence)) {
                     log.info("해당파일이 존재합니다. : {}", filePathExistence);
-                } else {
 
+                //request_seq : 해당 경로에 파일이 존재하지 않을 경우, 파일을 생성, ACK return
+                } else {
                     try {
                         if (initFilePath.createNewFile()) {
                             log.info("파일 생성 완료 : {} ", filePath);
@@ -123,10 +129,7 @@ public class RequestSensorListService {
                         e.printStackTrace();
                     }
                 }
-            } else {
-                //memo : 해당 경로에 파일이 없을 경우,File 생성후, ACK return
-                log.info("경로가 존재하지 않습니다. : {}", filePath);
-            }
+            } else {log.info("경로가 존재하지 않습니다. : {}", filePath);}
         }
         return false;
     }
