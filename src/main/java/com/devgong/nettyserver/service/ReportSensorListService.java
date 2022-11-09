@@ -26,8 +26,6 @@ public class ReportSensorListService {
 
     private final DataSensorReportRepository dataSensorReportRepository;
 
-    PreInstallSensorListAllModel dataSensorListAllModel = null;
-
 
     /**
      * @param serialNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
@@ -37,7 +35,10 @@ public class ReportSensorListService {
      */
 
     //report_seq : sensor_list_all 에서 serialNumber에 맞는 값을 탐색.
+//    public PreInstallSensorListAllModel findDataExistence(String serialNumber) {
     public PreInstallSensorListAllModel findDataExistence(String serialNumber) {
+
+        PreInstallSensorListAllModel dataSensorListAllModel = null;
 
         dataSensorListAllModel = dataSensorListAllRepository.findPreInstallSensorListAllModelBySsn(serialNumber);
 
@@ -78,16 +79,15 @@ public class ReportSensorListService {
     }
 
     /**
-     * @param sid             - 가변 테이블 이름을 처리하기 위함. save 메서드 파라미터로 사용.
-     * @param project         - 프로토콜 데이터 항목에 없음. sensor_list_all 에서 가져옴.
-     * @param serialNumber    - 가변 테이블 이름을 처리하기 위함. save 메서드 파라미터로 사용.
-     * @param request         - 프로토콜 데이터 항목을 담음.
-     * @return boolean 을 리턴함.
+     * @param sid          - 가변 테이블 이름을 처리하기 위함. save 메서드 파라미터로 사용.
+     * @param project      - 프로토콜 데이터 항목에 없음. sensor_list_all 에서 가져옴.
+     * @param serialNumber - 가변 테이블 이름을 처리하기 위함. save 메서드 파라미터로 사용.
+     * @param request      - 프로토콜 데이터 항목을 담음.
+     * @return 테이블에 insert 성공여부를 boolean 을 리턴함.
      * @author devGong
      * (1) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
      */
-//    public boolean insertUniqueInformation(DataInsertModel dataInsertModel, String sid, String project, String serialNumber, Packet<ReportRequest> request) {
-    public boolean insertUniqueInformation( String sid, String project, String serialNumber, Packet<ReportRequest> request) {
+    public boolean insertUniqueInformation(String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
         DataInsertModel dataInsertModel = new DataInsertModel();
 

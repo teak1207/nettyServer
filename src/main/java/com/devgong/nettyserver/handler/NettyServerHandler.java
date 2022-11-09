@@ -61,7 +61,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final DataService dataService;
 
 
-    PreInstallSensorListAllModel reportFindResult = new PreInstallSensorListAllModel();
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
@@ -263,6 +262,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
+
+                // danger  : 전역변수로 선언되어 있어서 여기로 가져옴!!!
+                PreInstallSensorListAllModel reportFindResult;
                 reportFindResult = reportSensorListService.findDataExistence(serialNumber);
 
                 byte[] response = new byte[45];
@@ -272,9 +274,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 } else {
                     log.info("reportFindResults:{}", reportFindResult);
-
-                    // memo : 전역변수로 선언되어 있어서 여기로 가져옴.
-
 
                     //report_seq : 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                     //report_seq : ACK or NAK
@@ -301,11 +300,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("flag : {}", flag);
                 log.info("test length: {}", bytes.length);
+
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("setting Response check : {}", request);
+
+                log.info("frame count check : {}",request.getParameter().getFrameCount());
+
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화

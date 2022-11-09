@@ -12,6 +12,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author devGong
+ * @version 1.0
+ * Report 에서 관련 테이블들을 참조.
+ */
+
+
 @Slf4j
 @RequiredArgsConstructor
 @Repository
@@ -20,6 +27,16 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
     //report_seq : 가변적인 테이블명 -> JDBC 로 DB 접근.
     //report_seq : sensor_report_(sid)_(serialNumber) 테이블 insert.
     private final JdbcTemplate jdbcTemplate;
+
+
+    /**
+     * @param dataInsertModel - 테이블의 저장 될 값.
+     * @param serialNumber    - 테이블 네임 조합을 위함.
+     * @param sid             - 테이블 네임 조합을 위함.
+     * @param project         - 테이블의 저장 될 값.
+     * @author devGong
+     * (1) serialNumber 로 DB에서 해당 값을 가져오고, preInstallSensorListAllModel 리턴합니다.
+     */
 
     @Override
     public DataInsertModel save(DataInsertModel dataInsertModel, String sid, String project, String serialNumber) {
@@ -32,11 +49,9 @@ public class DataSensorReportRepositoryImpl implements DataSensorReportRepositor
         String totalTableName = convertedSid + convertedSerialNum;
         simpleJdbcInsert.withTableName(totalTableName).usingGeneratedKeyColumns("cid");
 
-
         Map<String, Object> parameters = new HashMap<>();
 
         Date now = new Date();
-
 
         parameters.put("cid", 1);
         parameters.put("sn", dataInsertModel.getSn());
