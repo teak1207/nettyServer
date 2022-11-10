@@ -16,6 +16,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,13 +59,18 @@ public class RequestSensorListService {
     }
 
 
-    public void saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {
+    public String saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {
 
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
         String convertedFname = defaultPath + sensorListAll.getAsid() + "/" + sensorListAll.getAproject() + "/" + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
+
+
+        byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
+        String frameCount = String.valueOf(temp[1]);
+
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));
@@ -77,17 +83,20 @@ public class RequestSensorListService {
         requestLeakDataModel.setSn(sensorListAll.getSsn());
         requestLeakDataModel.setComplete("");
         requestLeakDataModel.setCompleteTime("");
-        requestLeakDataModel.setFnum("");
+        requestLeakDataModel.setFnum(frameCount);
         requestLeakDataModel.setInference("");
+
 
 
         //request_seq : leak_send data Insert
         if (requestSendDataRepository.save(request, requestLeakDataModel)) {
             log.info("leak_send data Insert Success");
+
+            return  frameCount;
         } else {
             log.info("leak_send data Insert fail");
         }
-
+        return frameCount;
     }
 
 

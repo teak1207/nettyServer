@@ -88,6 +88,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //seq : flag 값에 따른 분기 처리
         try {
             //seq : preinstall value (A) 인 경우 분기
+            String sibal = null;
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
                 //seq : mBuf 에서 읽을수 있는 바이트수를 반환해서 byte[] 에 담음. readableBytes()는 netty에서 사용되는 메서드
@@ -307,8 +308,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                log.info("Setting Readable bytes length : {}", bytes.length);
 //                log.info("setting Response check : {}", request);
 
-                log.info("frame count check : {}",request.getParameter().getFrameCount().length());
-                log.info("frame count check : {}",request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
+                log.info("frame count check : {}", request.getParameter().getFrameCount().length());
+                log.info("frame count check : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
 
 
                 byte[] response = new byte[45];
@@ -316,23 +317,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
                 log.info("setting Response check : {}", requestFindResults);
 
-
-                byte[] test = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
-                byte fname = test[1];
-
-                String fname2 = String.valueOf(fname);
-
-                log.info("request check : {}", test);
-                log.info("frame count check : {}", fname);
-                log.info("frame count check : {}", fname2);
-
-
-
-
-
-
                 //request_seq : requestSensorListService.saveData() 처리.
-                requestSensorListService.saveData(request, requestFindResults);
+                sibal = requestSensorListService.saveData(request, requestFindResults);
 
 
                 if (requestFindResults == null) {
@@ -362,6 +348,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
+
+
 
 
                 log.info("Data  길이 : {}", bytes.length);
