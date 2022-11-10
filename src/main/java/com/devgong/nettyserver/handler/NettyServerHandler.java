@@ -321,7 +321,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte fname = test[1];
 
                 log.info("request check : {}", test);
-                log.info("request check : {}", fname);
+                log.info("fname : {}", fname);
 
                 //request_seq : requestSensorListService.saveData() 처리.
                 requestSensorListService.saveData(request, requestFindResults);
