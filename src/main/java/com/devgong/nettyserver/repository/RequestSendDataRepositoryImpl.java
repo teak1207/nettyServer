@@ -38,6 +38,7 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
         Map<String, Object> parameters = new HashMap<>();
 
         log.info("complete : {}", requestLeakDataModel.getComplete());
+        log.info("fnum : {}", requestLeakDataModel.getFnum());
 
 
         parameters.put("cid", 1);
