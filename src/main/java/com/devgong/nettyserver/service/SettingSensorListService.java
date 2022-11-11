@@ -39,9 +39,6 @@ public class SettingSensorListService {
      * (5) factorySensorListModel 존재 유무에 따라 leakProjectModel Or factoryLeakProjectModel 리턴.
      * (6) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
      */
-
-
-
     public SettingResponseModel settingRequestData(String serialNumber) {
 
         //memo : 마지막에 response 하기 위한 객체
@@ -64,14 +61,12 @@ public class SettingSensorListService {
 
         //setting_seq : factorySensorListModel 존재 유무에 따른 참조테이블이 달라 분기 처리
         if (Objects.isNull(factorySensorListModel)) {
-
             //setting_seq : leak_project 에서  Asid, Aproject 해당하는 값을 탐색 후,leakProjectModel 이라는 객체에 담음.
             leakProjectModel = settingLeakProjectRepository.findAllBySidAndFactorypPname(sensorListAllModel.getAsid(), sensorListAllModel.getAproject());
 
         } else {
             //setting_seq : factory_leak_project 에서  factory_pname 해당하는 값을 탐색 후,factoryLeakProjectModel 이라는 객체에 담음.
             factoryLeakProjectModel = settingFactoryLeakprojectRepository.findAllByFactoryPname(factorySensorListModel.getFactorypname());
-
         }
 
         //setting_seq : 리턴해줄 settingResponse 값을 초기화.

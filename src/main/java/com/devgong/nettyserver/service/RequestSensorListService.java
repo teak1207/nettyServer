@@ -35,9 +35,20 @@ public class RequestSensorListService {
     private final RequestSensorListAllRepository requestSensorListAllRepository;
     private final RequestSendDataRepository requestSendDataRepository;
     private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
+
+    //danger : 만약 저장경로를 바꾼다하면 이걸 바꿔야하나???
     static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
     char underBar = '_';
 
+
+
+    /**
+     * @param serialNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
+     * @return RequestListAllModel 을 리턴.
+     * @author devGong
+     * (1) serialNumber 로 find.
+     * (2) RequestListAllModel 객체에 담아 리턴.
+     */
 
     public RequestListAllModel findDataExistence(String serialNumber) {
 

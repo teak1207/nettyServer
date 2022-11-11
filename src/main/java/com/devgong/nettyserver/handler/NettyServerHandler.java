@@ -88,7 +88,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //seq : flag 값에 따른 분기 처리
         try {
             //seq : preinstall value (A) 인 경우 분기
-            String sibal = null;
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
                 //seq : mBuf 에서 읽을수 있는 바이트수를 반환해서 byte[] 에 담음. readableBytes()는 netty에서 사용되는 메서드
@@ -156,7 +155,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-                //preinstall_seq :ACK or NAK + REPORT 전송
+            //preinstall_seq :ACK or NAK + REPORT 전송
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -261,7 +260,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
+                log.info("test check : {}",request.getSensorId());
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                log.info("serialNumber check : {}",serialNumber);
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
 
                 // danger  : 전역변수로 선언되어 있어서 여기로 가져옴!!!
@@ -308,8 +309,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                log.info("Setting Readable bytes length : {}", bytes.length);
 //                log.info("setting Response check : {}", request);
 
-                log.info("frame count check : {}", request.getParameter().getFrameCount().length());
-                log.info("frame count check : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
+                log.info("frame count check : {}",request.getParameter().getFrameCount().length());
+                log.info("frame count check : {}",request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
 
 
                 byte[] response = new byte[45];
@@ -318,7 +319,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("setting Response check : {}", requestFindResults);
 
                 //request_seq : requestSensorListService.saveData() 처리.
-                sibal = requestSensorListService.saveData(request, requestFindResults);
+                requestSensorListService.saveData(request, requestFindResults);
 
 
                 if (requestFindResults == null) {
@@ -350,13 +351,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
 
 
-
-
                 log.info("Data  길이 : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
 //                log.info("mBuf length : {}", mBuf);
 
                 //memo 1 : request에 참조 없음-> sensor_list_all에서 참조해옴.
+
                 //memo 2 : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
                 dataFindResults = requestSensorListService.findDataExistence(request.getSensorId(), "-1", "0");
                 log.info("dataFindResults : {}", dataFindResults);
@@ -365,7 +365,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
 
-                //memo 4 : dat file (frame amount * Data*size)에 저장.
+                //memo 4 : 테이블에서 fnum을 가져와서 그걸로 카운트 횟수를 처리하자.
 
 
                 // 순서 :

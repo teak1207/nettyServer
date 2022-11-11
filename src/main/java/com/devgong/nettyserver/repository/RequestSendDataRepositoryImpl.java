@@ -13,12 +13,27 @@ import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author devGong
+ * @version 1.0
+ * Request 에서 관련 테이블들을 참조.
+ */
+
 @Slf4j
 @RequiredArgsConstructor
 @Repository
 public class RequestSendDataRepositoryImpl implements RequestSendDataRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
+
+    /**
+     * @param request - 디바이스에서 넘겨주는 고유 모뎀 번호
+     * @param requestLeakDataModel - 디바이스에서 넘겨주는 고유 모뎀 번호
+     * @return boolean
+     * @author devGong
+     * (1)
+     */
 
     @Override
     public boolean save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel) {
@@ -33,13 +48,10 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
 
         String totalTableName = convertedSid + convertedSerialNum;
         simpleJdbcInsert.withTableName(totalTableName).usingGeneratedKeyColumns("cid");
-
-        simpleJdbcInsert.withTableName(totalTableName).usingGeneratedKeyColumns("cid");
+//        simpleJdbcInsert.withTableName(totalTableName).usingGeneratedKeyColumns("cid");
         Map<String, Object> parameters = new HashMap<>();
-
-        log.info("complete : {}", requestLeakDataModel.getComplete());
-        log.info("fnum : {}", requestLeakDataModel.getFnum());
-
+//        log.info("complete : {}", requestLeakDataModel.getComplete());
+//        log.info("fnum : {}", requestLeakDataModel.getFnum());
 
         parameters.put("cid", 1);
         parameters.put("pname", requestLeakDataModel.getPname());

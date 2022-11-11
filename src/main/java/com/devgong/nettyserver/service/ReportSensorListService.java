@@ -85,7 +85,9 @@ public class ReportSensorListService {
      * @param request      - 프로토콜 데이터 항목을 담음.
      * @return 테이블에 insert 성공여부를 boolean 을 리턴함.
      * @author devGong
+
      * (1) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
+
      */
     public boolean insertUniqueInformation(String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
