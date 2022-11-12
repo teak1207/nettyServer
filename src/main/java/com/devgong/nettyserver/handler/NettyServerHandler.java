@@ -356,16 +356,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //memo 3 : leak_send_data_(sid)_(sn)에서 fname 참조해야함. memo 5 에서 사용.
 
-                String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
+//                String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
 
                 //memo 4 : 테이블에서 fnum을 가져와서 그걸로 카운트 횟수를 처리하자.
 
 
                 // 순서 :
-                dataService.saveData(request.getSensorId(), request.getParameter().getData());
+                dataService.saveData(request.getSensorId(), dataFindResults.getAsid(), request.getParameter().getData());
 
                 //memo 5 : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
-                dataService.updateData(fname, dataFindResults.getAsid(), dataFindResults.getSsn());
+//                dataService.updateData(fname, dataFindResults.getAsid(), dataFindResults.getSsn());
 
 
                 response[0] = PacketFlag.ACK.getFlag();

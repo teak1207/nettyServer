@@ -5,9 +5,11 @@ import com.devgong.nettyserver.domain.PreInstallSensorListAllModel;
 import com.devgong.nettyserver.repository.DataUpdateRepository;
 import com.devgong.nettyserver.repository.PreInstallSensorListAllRepository;
 import com.devgong.nettyserver.repository.RequestSendDataJdbcRepository;
+import com.devgong.nettyserver.repository.RequestSendDataRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -25,12 +27,12 @@ public class DataService {
     private final DataUpdateRepository dataUpdateRepository;
     private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
 
-    public boolean updateData(String fname, String sid, String sn) {
-        return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
-    }
+//    public boolean updateData(String fname, String sid, String sn) {
+//        return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
+//    }
 
 
-    public void saveData(String sn, byte[] request) throws IOException {
+    public void saveData(String sn, String sid, byte[] request) throws IOException {
 //        int i = 0;
 
 //        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -59,6 +61,17 @@ public class DataService {
 
         //memo 3 : Files.write(path, outputStream.toByteArray());
         Files.write(path, request);
+
+        String fnum = requestSendDataJdbcRepository.getFnumOfReceivingSensorBySnAndSid(fname, sn, sid);
+
+        int count = Integer.parseInt(fnum);
+        if(count == 1) {
+            dataUpdateRepository.updateCompleteTime(fname, sid, sn);
+        } else {
+            dataUpdateRepository.decrementFnum(fname, sid, sn, count);
+        }
+
+
 
 
 //        i += 1;

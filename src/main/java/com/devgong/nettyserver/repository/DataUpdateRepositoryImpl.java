@@ -32,7 +32,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
 
         log.info("mixTableName update check : {}", convertedTableName);
 
-        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=?" + " where fname=?";
+        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=? " + "," + "fnum=?" + " where fname=?";
         log.info("update sql check : {}", sql);
 
         Connection conn = null;
@@ -49,10 +49,10 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
             pstmt.setString(1, "1");
             pstmt.setString(2, dateTime);
             pstmt.setString(3, fname);
+            pstmt.setString(4, "0");
             pstmt.executeUpdate();
 
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             close(conn, pstmt, rs);
@@ -60,6 +60,35 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
         return true;
     }
 
+    @Override
+    public boolean decrementFnum(String fname, String sid, String sn, int fnum) {
+        String mixTableName1 = "`" + "leak_send_data_" + sid;
+        String mixTableName2 = "_" + sn + "`";
+        String convertedTableName = mixTableName1 + mixTableName2;
+
+        log.info("mixTableName update check : {}", convertedTableName);
+
+        String sql = "update " + convertedTableName + " set fnum= ? " + " where fname=?";
+        log.info("update sql check : {}", sql);
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, String.valueOf(fnum - 1));
+            pstmt.setString(2, fname);
+            pstmt.executeUpdate();
+
+        } catch (
+                Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn, pstmt, null);
+        }
+        return true;
+    }
 
     private Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);

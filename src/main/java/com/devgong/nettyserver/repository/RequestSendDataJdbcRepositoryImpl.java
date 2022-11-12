@@ -18,9 +18,8 @@ import java.sql.SQLException;
 @Repository
 public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRepository {
 
-//    final private JdbcTemplate template;
+    //    final private JdbcTemplate template;
     private final DataSource dataSource;
-
 
 
     @Override
@@ -49,9 +48,10 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
-                dataLeakSendDataModel.setFname(rs.getString("fname"));
-                return dataLeakSendDataModel.getFname();
+//                DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
+//                dataLeakSendDataModel.setFname(rs.getString("fname"));
+//                return dataLeakSendDataModel.getFname();
+                return rs.getString("fname");
             }
 
         } catch (Exception e) {
@@ -64,6 +64,41 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
         return null;
     }
 
+    @Override
+    public String getFnumOfReceivingSensorBySnAndSid(String fname, String sn, String sid) {
+        String mixTableName1 = "`" + "leak_send_data_" + sid;
+        String mixTableName2 = "_" + sn + "`";
+
+        String convertedTableName = mixTableName1 + mixTableName2;
+
+        log.info("mixTableName check : {}", convertedTableName);
+
+        String sql = "select fname from " + convertedTableName + " where fname=? ";
+
+        log.info("sql check : {}", sql);
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, fname);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("fnum");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            close(conn, pstmt, rs);
+        }
+
+        return null;
+    }
 
     private Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);
