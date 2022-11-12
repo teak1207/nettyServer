@@ -31,9 +31,9 @@ public class DataService {
 
 
     public void saveData(String sn, byte[] request) throws IOException {
-        int i = 0;
+//        int i = 0;
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PreInstallSensorListAllModel sensorListAllModel;
 
 //        String filePath = requestSensorListService.referenceFilePath;
@@ -51,19 +51,19 @@ public class DataService {
 
 
         //memo 2 : outputStream.write 할때 temp 를 읽어줌
-        outputStream.write(request);
+//        outputStream.write(request);
 
 
         Path path = Paths.get(fname);
-        outputStream.write(request);
+//        outputStream.write(request);
 
         //memo 3 : Files.write(path, outputStream.toByteArray());
-        Files.write(path, outputStream.toByteArray());
+        Files.write(path, request);
 
 
-        i += 1;
-        log.info("iii :{}", i);
-        log.info("-----------");
+//        i += 1;
+//        log.info("iii :{}", i);
+//        log.info("-----------");
     }
 
 

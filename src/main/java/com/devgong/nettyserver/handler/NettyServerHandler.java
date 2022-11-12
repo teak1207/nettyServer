@@ -260,20 +260,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
-                log.info("test check : {}",request.getSensorId());
-                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                log.info("serialNumber check : {}",serialNumber);
+//                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
-
                 // danger  : 전역변수로 선언되어 있어서 여기로 가져옴!!!
                 PreInstallSensorListAllModel reportFindResult;
-                reportFindResult = reportSensorListService.findDataExistence(serialNumber);
+                reportFindResult = reportSensorListService.findDataExistence(request.getSensorId());
 
                 byte[] response = new byte[45];
 
                 if (Objects.isNull(reportFindResult)) {
                     log.info("[FAIL] : 값이 존재하질 않습니다");
-
                 } else {
                     log.info("reportFindResults:{}", reportFindResult);
 
@@ -305,9 +301,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
-
-//                log.info("Setting Readable bytes length : {}", bytes.length);
-//                log.info("setting Response check : {}", request);
 
                 log.info("frame count check : {}",request.getParameter().getFrameCount().length());
                 log.info("frame count check : {}",request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
