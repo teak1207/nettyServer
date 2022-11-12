@@ -40,13 +40,13 @@ public class SettingPhaseService {
      * (6) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
      */
 //    @Nullable
-    public SettingResponseModel getResponseData(String serialNumber) {
+    public Optional<SettingResponseModel> getResponseData(String serialNumber) {
         //setting_seq : sensorListAll 에서 serialNumber 해당하는 값을 탐색 후,sensorListAllModel 이라는 객체에 담음.
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
 
         SettingSensorListAllModel sensorInfo;
 
-        if (sensorListAllModel.isEmpty()) return null;
+        if (sensorListAllModel.isEmpty()) return Optional.empty();
         else sensorInfo = sensorListAllModel.get();
 
         //setting_seq : sensor_list 에서 Asid, Aproject 해당하는 값을 탐색 후,sensorListModel 이라는 객체에 담음.
@@ -97,8 +97,6 @@ public class SettingPhaseService {
                     .dbPort(factoryLeakProjectModel.getDbPORT());
         }
 
-        log.info("setting response data : {}", settingResponseModelBuilder.build().toString());
-
-        return settingResponseModelBuilder.build();
+        return Optional.of(settingResponseModelBuilder.build());
     }
 }

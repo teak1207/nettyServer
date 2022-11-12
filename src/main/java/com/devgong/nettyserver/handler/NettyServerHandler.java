@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * <p>
@@ -204,33 +205,34 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // danger : SettingResponseModel & SettingResponse 가 하는일이 똑같음
                 // danger : SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
-                SettingResponseModel settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
+                Optional<SettingResponseModel> settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
 
                 byte[] nakResponse = new byte[45];
 
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
-                if (settingDeviceInfos != null) {
+                if (settingDeviceInfos.isPresent()) {
+                    SettingResponseModel deviceInfo = settingDeviceInfos.get(); 
                     SettingResponse response = new SettingResponse(
-                            settingDeviceInfos.getTime1(),
-                            settingDeviceInfos.getTime2(),
-                            settingDeviceInfos.getTime3(),
-                            settingDeviceInfos.getFmRadio(),
-                            settingDeviceInfos.getSid(),
-                            settingDeviceInfos.getPname(),
-                            settingDeviceInfos.getSleep(),
-                            settingDeviceInfos.getReset(),
-                            Integer.parseInt(settingDeviceInfos.getPeriod()),
-                            Integer.parseInt(settingDeviceInfos.getSamplingTime()),
-                            settingDeviceInfos.getFReset(),
-                            settingDeviceInfos.getPx(),
-                            settingDeviceInfos.getPy(),
-                            settingDeviceInfos.getActive(),
-                            Integer.parseInt(settingDeviceInfos.getSampleRate()),
-                            settingDeviceInfos.getServerUrl(),
-                            settingDeviceInfos.getServerPort(),
-                            settingDeviceInfos.getDbUrl(),
-                            settingDeviceInfos.getDbPort(),
-                            Integer.parseInt(settingDeviceInfos.getRadioTime())
+                            deviceInfo.getTime1(),
+                            deviceInfo.getTime2(),
+                            deviceInfo.getTime3(),
+                            deviceInfo.getFmRadio(),
+                            deviceInfo.getSid(),
+                            deviceInfo.getPname(),
+                            deviceInfo.getSleep(),
+                            deviceInfo.getReset(),
+                            Integer.parseInt(deviceInfo.getPeriod()),
+                            Integer.parseInt(deviceInfo.getSamplingTime()),
+                            deviceInfo.getFReset(),
+                            deviceInfo.getPx(),
+                            deviceInfo.getPy(),
+                            deviceInfo.getActive(),
+                            Integer.parseInt(deviceInfo.getSampleRate()),
+                            deviceInfo.getServerUrl(),
+                            deviceInfo.getServerPort(),
+                            deviceInfo.getDbUrl(),
+                            deviceInfo.getDbPort(),
+                            Integer.parseInt(deviceInfo.getRadioTime())
                     );
                     //setting_seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
                     Packet<SettingResponse> responsePacket = new Packet<>(
