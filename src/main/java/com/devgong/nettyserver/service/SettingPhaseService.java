@@ -97,6 +97,8 @@ public class SettingPhaseService {
                     .dbPort(factoryLeakProjectModel.getDbPORT());
         }
 
+        log.info("setting response data : {}", settingResponseModelBuilder.build().toString());
+
         return settingResponseModelBuilder.build();
     }
 }

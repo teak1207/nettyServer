@@ -3,8 +3,10 @@ package com.devgong.nettyserver.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class SettingResponseModel {
 
     private final String time1;
