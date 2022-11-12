@@ -40,7 +40,7 @@ public class SettingPhaseService {
      * (5) factorySensorListModel 존재 유무에 따라 leakProjectModel Or factoryLeakProjectModel 리턴.
      * (6) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
      */
-    @Nullable
+//    @Nullable
     public SettingResponseModel getResponseData(String serialNumber) {
         //setting_seq : sensorListAll 에서 serialNumber 해당하는 값을 탐색 후,sensorListAllModel 이라는 객체에 담음.
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
