@@ -5,11 +5,12 @@ import com.devgong.nettyserver.domain.RequestLeakDataModel;
 import com.devgong.nettyserver.domain.RequestListAllModel;
 import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
+import com.devgong.nettyserver.repository.RequestSendDataJdbcRepository;
 import com.devgong.nettyserver.repository.RequestSendDataRepository;
 import com.devgong.nettyserver.repository.RequestSensorListAllRepository;
-import com.devgong.nettyserver.repository.RequestSendDataJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
@@ -28,18 +29,16 @@ import java.util.Date;
 @Service
 @Slf4j
 public class RequestSensorListService {
-
-
-    RequestListAllModel requestListAllModel = null;
-
     private final RequestSensorListAllRepository requestSensorListAllRepository;
     private final RequestSendDataRepository requestSendDataRepository;
     private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
 
     //danger : 만약 저장경로를 바꾼다하면 이걸 바꿔야하나???
-    static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
-    char underBar = '_';
+//    static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
+    @Value("${sensor.file-path}")
+    private String defaultPath;
 
+    char underBar = '_';
 
 
     /**
@@ -51,17 +50,11 @@ public class RequestSensorListService {
      */
 
     public RequestListAllModel findDataExistence(String serialNumber) {
-
-        //request_seq : sensor_list_all 값 존재여부 체크
-        requestListAllModel = requestSensorListAllRepository.findAllBySsn(serialNumber);
-        log.info("requestListAllModel : {}", requestListAllModel);
-        return requestListAllModel;
+        return requestSensorListAllRepository.findAllBySsn(serialNumber);
     }
 
     public RequestListAllModel findDataExistence(String serialNumber, String valid, String status) {
-        requestListAllModel = requestSensorListAllRepository.findAllBySsnAndStatusIsAndValidNot(serialNumber, status, valid);
-        log.info("requestListAllModel : {}", requestListAllModel);
-        return requestListAllModel;
+        return requestSensorListAllRepository.findAllBySsnAndStatusIsAndValidNot(serialNumber, status, valid);
     }
 
     public String findDataFname(String serialNumber, String sid) {
@@ -76,7 +69,20 @@ public class RequestSensorListService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
-        String convertedFname = defaultPath + sensorListAll.getAsid() + "/" + sensorListAll.getAproject() + "/" + request.getSensorId() + "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
+//        String convertedFname = defaultPath +
+//                sensorListAll.getAsid() +
+//                "/" + sensorListAll.getAproject() +
+//                "/" + request.getSensorId() +
+//                "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
+
+        String convertedFname = String.format("%s%s/%s/%s/%s_%s_%s.dat",
+                defaultPath,
+                sensorListAll.getAsid(),
+                sensorListAll.getAproject(),
+                request.getSensorId(),
+                request.getSensorId(),
+                convertDate(request.getDateTime()),
+                convertSampleRate(request.getParameter().getSampleRate()));
 
 
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
@@ -98,12 +104,11 @@ public class RequestSensorListService {
         requestLeakDataModel.setInference("");
 
 
-
         //request_seq : leak_send data Insert
         if (requestSendDataRepository.save(request, requestLeakDataModel)) {
             log.info("leak_send data Insert Success");
 
-            return  frameCount;
+            return frameCount;
         } else {
             log.info("leak_send data Insert fail");
         }
@@ -138,7 +143,7 @@ public class RequestSensorListService {
                 if (Files.exists(filePathExistence)) {
                     log.info("해당파일이 존재합니다. : {}", filePathExistence);
 
-                //request_seq : 해당 경로에 파일이 존재하지 않을 경우, 파일을 생성, ACK return
+                    //request_seq : 해당 경로에 파일이 존재하지 않을 경우, 파일을 생성, ACK return
                 } else {
                     try {
                         if (initFilePath.createNewFile()) {
@@ -149,7 +154,9 @@ public class RequestSensorListService {
                         e.printStackTrace();
                     }
                 }
-            } else {log.info("경로가 존재하지 않습니다. : {}", filePath);}
+            } else {
+                log.info("경로가 존재하지 않습니다. : {}", filePath);
+            }
         }
         return false;
     }

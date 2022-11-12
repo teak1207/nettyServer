@@ -55,7 +55,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
     private final PreinstallSensorListService preinstallSensorListService;
-    private final SettingSensorListService settingSensorListService;
+    private final SettingPhaseService settingPhaseService;
     private final ReportSensorListService reportSensorListService;
     private final RequestSensorListService requestSensorListService;
     private final DataService dataService;
@@ -81,8 +81,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         //memo : preinstall response 담을 객체 생성
         PreInstallSetModel preInstallDeviceInfos;
-        //memo : setting response 담을 객체 생성
-        SettingResponseModel settingDeviceInfos;
+
 
 
         //seq : flag 값에 따른 분기 처리
@@ -202,9 +201,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //setting_seq : << Setting process 진행 >>
                 //setting_seq : Setting 값 response 하기 위해 model 초기화.
-                settingDeviceInfos = settingSensorListService.settingRequestData(request.getSensorId());
-                log.info("settingDeviceInfos Check : {}", settingDeviceInfos);
 
+                // danger : SettingResponseModel & SettingResponse 가 하는일이 똑같음
+                // danger : SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
+                SettingResponseModel settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
 
                 byte[] nakResponse = new byte[45];
 
@@ -262,9 +262,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 //                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
-                // danger  : 전역변수로 선언되어 있어서 여기로 가져옴!!!
-                PreInstallSensorListAllModel reportFindResult;
-                reportFindResult = reportSensorListService.findDataExistence(request.getSensorId());
+                PreInstallSensorListAllModel reportFindResult = reportSensorListService.findDataExistence(request.getSensorId());
 
                 byte[] response = new byte[45];
 

@@ -1,9 +1,9 @@
 package com.devgong.nettyserver.domain;
 
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Getter
-@Setter
 @Entity
-@ToString
 @Table(name = "factory_sensor_list")
-public class
-SettingFactorySensorListModel {
+// danger: 다른 모델들도 살펴봐야 함 entity에는 무조건 붙어야 하는 애노테이션
+// danger: Set로 붙어야 하는게 웬만해서는 Getter, Entity, Table, NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class SettingFactorySensorListModel {
 
     @Id
     @Column(name = "cid")
