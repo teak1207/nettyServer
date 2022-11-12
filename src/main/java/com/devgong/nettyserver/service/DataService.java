@@ -13,9 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 @RequiredArgsConstructor
 @Service
@@ -60,7 +58,7 @@ public class DataService {
 //        outputStream.write(request);
 
         //memo 3 : Files.write(path, outputStream.toByteArray());
-        Files.write(path, request);
+        Files.write(path, request, StandardOpenOption.APPEND);
 
         String fnum = requestSendDataJdbcRepository.getFnumOfReceivingSensorBySnAndSid(fname, sn, sid);
 
