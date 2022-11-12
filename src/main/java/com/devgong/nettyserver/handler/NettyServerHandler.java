@@ -87,6 +87,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         //seq : flag 값에 따른 분기 처리
         try {
+            log.info("REQUEST FLAG : {}", (char) readFlag);
             //seq : preinstall value (A) 인 경우 분기
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
@@ -338,6 +339,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("flag : {}", flag);
                 byte[] response = new byte[45];
                 byte[] bytes = new byte[mBuf.readableBytes()];
+
+                log.info("DATA bytes : {}", Arrays.toString(bytes));
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
