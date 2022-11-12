@@ -73,7 +73,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 
         log.info("mixTableName check : {}", convertedTableName);
 
-        String sql = "select fname from " + convertedTableName + " where fname=? ";
+        String sql = "select fnum from " + convertedTableName + " where fname=? ";
 
         log.info("sql check : {}", sql);
 
