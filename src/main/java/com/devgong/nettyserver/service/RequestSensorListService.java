@@ -69,12 +69,6 @@ public class RequestSensorListService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         RequestLeakDataModel requestLeakDataModel = new RequestLeakDataModel();
 
-//        String convertedFname = defaultPath +
-//                sensorListAll.getAsid() +
-//                "/" + sensorListAll.getAproject() +
-//                "/" + request.getSensorId() +
-//                "/" + request.getSensorId() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
-
         String convertedFname = String.format("%s%s/%s/%s/%s_%s_%s.dat",
                 defaultPath,
                 sensorListAll.getAsid(),
@@ -123,11 +117,20 @@ public class RequestSensorListService {
             log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
         } else {
-            String path = defaultPath + requestFindResults.getAsid() + "/" + requestFindResults.getAproject() + "/" + requestFindResults.getSsn();
+            String path = String.format("%s%s/%s/%s",
+                    defaultPath,
+                    requestFindResults.getAsid(),
+                    requestFindResults.getAproject(),
+                    requestFindResults.getSsn());
 
             log.info("path : {}", path);
 
-            String filePath = path + "/" + requestFindResults.getSsn() + underBar + convertDate(request.getDateTime()) + underBar + convertSampleRate(request.getParameter().getSampleRate()) + ".dat";
+            String filePath = String.format("%s/%s_%s_%s.dat",
+                    path,
+                    requestFindResults.getSsn(),
+                    convertDate(request.getDateTime()),
+                    convertSampleRate(request.getParameter().getSampleRate()));
+
             log.info("filePath : {}", filePath);
 
             File initFilePath = new File(filePath);
