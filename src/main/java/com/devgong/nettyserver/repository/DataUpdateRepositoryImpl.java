@@ -48,8 +48,8 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, "1");
             pstmt.setString(2, dateTime);
-            pstmt.setString(4, "0");
-            pstmt.setString(3, fname);
+            pstmt.setString(3, "0");
+            pstmt.setString(4, fname);
             pstmt.executeUpdate();
 
         } catch (Exception e) {

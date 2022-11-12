@@ -65,13 +65,11 @@ public class DataService {
         String fnum = requestSendDataJdbcRepository.getFnumOfReceivingSensorBySnAndSid(fname, sn, sid);
 
         int count = Integer.parseInt(fnum);
-        if(count == 1) {
+        if (count == 1) {
             dataUpdateRepository.updateCompleteTime(fname, sid, sn);
         } else {
             dataUpdateRepository.decrementFnum(fname, sid, sn, count);
         }
-
-
 
 
 //        i += 1;
