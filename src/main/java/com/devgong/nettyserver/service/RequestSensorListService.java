@@ -119,7 +119,7 @@ public class RequestSensorListService {
         } else {
             String path = String.format("%s%s/%s/%s",
                     defaultPath,
-                    requestFindResults.getAsid().trim(),
+                    requestFindResults.getAsid(),
                     requestFindResults.getAproject(),
                     requestFindResults.getSsn());
 
