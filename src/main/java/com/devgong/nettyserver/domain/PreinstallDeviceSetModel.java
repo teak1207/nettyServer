@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Entity
 @ToString
 @Table(name = "leakset_bysensor")
-public class PreinstallDeviceSetModel {
+public class
+PreinstallDeviceSetModel {
 
     @Id
     @Column(name = "CID")

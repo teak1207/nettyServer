@@ -119,10 +119,11 @@ public class RequestSensorListService {
         } else {
             String path = String.format("%s%s/%s/%s",
                     defaultPath,
-                    requestFindResults.getAsid(),
+                    requestFindResults.getAsid().trim(),
                     requestFindResults.getAproject(),
                     requestFindResults.getSsn());
 
+            log.info("chekc path length : {}", path.length());
             log.info("path : {}", path);
 
             String filePath = String.format("%s/%s_%s_%s.dat",
