@@ -134,12 +134,13 @@ public class RequestSensorListService {
 
             log.info("filePath : {}", filePath);
 
+
             File initFilePath = new File(filePath);
-            File file3 = new File(path);
+            File folder = new File(path);
             Path filePathExistence = Paths.get(filePath);
 
             //request_seq : 선언한 파일이 원하는 경로에 있는지 체크.
-            if (file3.isDirectory()) {
+            if (folder.isDirectory()) {
 
                 //memo : 해당 경로에 파일 존재할 경우, NAK return
                 log.info("경로가 존재합니다. : {}", filePath);
@@ -160,6 +161,17 @@ public class RequestSensorListService {
                 }
             } else {
                 log.info("경로가 존재하지 않습니다. : {}", filePath);
+                folder.mkdir();
+                log.info(path + "경로에 폴더가 생성되었습니다");
+                try {
+                    if (initFilePath.createNewFile()) {
+                        log.info("파일 생성 완료 : {} ", filePath);
+                        return true;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
         return false;
