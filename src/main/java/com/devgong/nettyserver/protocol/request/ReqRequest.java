@@ -14,7 +14,6 @@ public class ReqRequest implements Serializable<ReqRequest> {
     String frameCount;
     String dataSize;
     String sampleRate;
-    String test;
     public ReqRequest(byte[] payload) {
 
         if (payload == null || payload.length != 5) {
@@ -23,7 +22,6 @@ public class ReqRequest implements Serializable<ReqRequest> {
         frameCount = new String(Arrays.copyOfRange(payload, 0, 2));
         dataSize = new String(Arrays.copyOfRange(payload, 2, 4));
         sampleRate = new String(Arrays.copyOfRange(payload, 4, 5));
-        test = new String(Arrays.copyOfRange(payload,2,5));
     }
 
     @Override

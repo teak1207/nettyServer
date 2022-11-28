@@ -305,7 +305,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("frame count check : {}",request.getParameter().getFrameCount().length());
                 log.info("frame count check : {}",request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8));
-                log.info("frame count check : {}",Integer.parseInt(String.valueOf(request.getParameter().getTest().getBytes(StandardCharsets.UTF_8))));
 
 
                 byte[] response = new byte[45];
