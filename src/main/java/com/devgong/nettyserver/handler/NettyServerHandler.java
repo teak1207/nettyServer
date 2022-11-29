@@ -84,7 +84,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreInstallSetModel preInstallDeviceInfos;
 
 
-
         //seq : flag 값에 따른 분기 처리
         try {
             log.info("REQUEST FLAG : {}", (char) readFlag);
@@ -156,7 +155,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-            //preinstall_seq :ACK or NAK + REPORT 전송
+                //preinstall_seq :ACK or NAK + REPORT 전송
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -212,7 +211,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
                 if (settingDeviceInfos.isPresent()) {
-                    SettingResponseModel deviceInfo = settingDeviceInfos.get(); 
+                    SettingResponseModel deviceInfo = settingDeviceInfos.get();
                     SettingResponse response = new SettingResponse(
                             deviceInfo.getTime1(),
                             deviceInfo.getTime2(),
@@ -303,9 +302,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
-                log.info("frame count check : {}",request.getParameter().getFrameCount().length());
-                log.info("frame count check : {}", Integer.parseInt(request.getParameter().getFrameCount()));
 
+                try {
+
+                    log.info("frame count check : {}", request.getParameter().getFrameCount().length());
+                    log.info("frame count check : {}", Integer.parseInt(request.getParameter().getFrameCount()));
+
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
