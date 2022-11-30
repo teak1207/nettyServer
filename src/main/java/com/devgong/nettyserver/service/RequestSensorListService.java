@@ -80,8 +80,11 @@ public class RequestSensorListService {
 
 
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
+
+
         String frameCount = String.valueOf(temp[1]);
 
+        log.info("parseInt test: {}", Integer.parseInt(frameCount));
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));

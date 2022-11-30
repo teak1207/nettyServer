@@ -84,7 +84,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         PreInstallSetModel preInstallDeviceInfos;
 
 
-
         //seq : flag 값에 따른 분기 처리
         try {
             log.info("REQUEST FLAG : {}", (char) readFlag);
@@ -156,7 +155,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-            //preinstall_seq :ACK or NAK + REPORT 전송
+                //preinstall_seq :ACK or NAK + REPORT 전송
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -303,10 +302,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
-                log.info("frame count check : {}",request.getParameter().getSampleRate());
+                log.info("frame count check : {}", request.getParameter().getSampleRate());
                 log.info("frame count check : {}", request.getParameter().getFrameCount());
                 log.info("frame count check : {}", request.getParameter().getDataSize());
-
 
 
                 byte[] response = new byte[45];
