@@ -82,6 +82,11 @@ public class RequestSensorListService {
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
 
         log.info("temp length: {}", temp.length);
+        log.info("temp length: {}", temp);
+        log.info("temp length: {}", temp[0]);
+        log.info("temp length: {}", temp[1]);
+        log.info("temp length: {}", temp[2]);
+        log.info("temp length: {}", temp[3]);
 
         String frameCount = String.valueOf(temp[1]);
 
