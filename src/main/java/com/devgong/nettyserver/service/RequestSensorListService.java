@@ -84,7 +84,19 @@ public class RequestSensorListService {
 
         String frameCount = String.valueOf(temp[1]);
 
-        log.info("parseInt test: {}",Integer.parseInt(frameCount) );
+        byte value = temp[1];
+        int nValue = 0;
+
+        if (value < 0) {
+
+            nValue = (int) value + 256;
+        } else {
+            nValue = (int) value;
+        }
+        frameCount = Integer.toString(nValue);
+
+
+        log.info("parseInt test: {}", Integer.parseInt(frameCount));
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));
