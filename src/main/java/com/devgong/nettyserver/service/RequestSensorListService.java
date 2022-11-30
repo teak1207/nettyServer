@@ -83,10 +83,16 @@ public class RequestSensorListService {
 
         log.info("temp length: {}", temp.length);
         log.info("temp length: {}", temp);
-        log.info("temp length: {}", temp[0]);
-        log.info("temp length: {}", temp[1]);
-        log.info("temp length: {}", temp[2]);
-        log.info("temp length: {}", temp[3]);
+        log.info("temp byte: {}", temp[0]);
+        log.info("temp byte: {}", temp[1]);
+        log.info("temp byte: {}", temp[2]);
+        log.info("temp byte: {}", temp[3]);
+
+        log.info("temp byte: {}", temp[0]&0xff);
+        log.info("temp byte: {}", temp[1]&0xff);
+        log.info("temp byte: {}", temp[2]&0xff);
+        log.info("temp byte: {}", temp[3]&0xff);
+
 
         String frameCount = String.valueOf(temp[1]);
 
