@@ -81,6 +81,14 @@ public class RequestSensorListService {
 
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
 
+        int test = Integer.parseInt(request.getParameter().getFrameCount());
+
+        log.info("temp test : {}", test);
+
+
+
+
+
         log.info("temp length: {}", temp.length);
         log.info("temp length: {}", temp);
         log.info("temp byte: {}", temp[0]);
@@ -88,8 +96,8 @@ public class RequestSensorListService {
 //        log.info("temp byte: {}", temp[2]);
 //        log.info("temp byte: {}", temp[3]);
 
-        log.info("temp byte: {}", temp[0]&0xff);
-        log.info("temp byte: {}", temp[1]&0xff);
+        log.info("temp byte: {}", temp[0] & 0xff);
+        log.info("temp byte: {}", temp[1] & 0xff);
 //        log.info("temp byte: {}", temp[2]&0xff);
 //        log.info("temp byte: {}", temp[3]&0xff);
 //
