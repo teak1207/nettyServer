@@ -103,7 +103,7 @@ public class RequestSensorListService {
 //        log.info("temp 111 : {}", test);
 
         // memo : string -> hex
-        String test1 = stringToHex(request.getParameter().getFrameCount());
+        String test1 = getStringToHex(request.getParameter().getFrameCount());
         log.info("string -> hex 1: {}", test1);
 
         // memo : hex -> decimal
@@ -255,7 +255,7 @@ public class RequestSensorListService {
         String result = "";
 
         for (int i = 0; i < s.length(); i++) {
-            result += String.format("0x%02%", (int) s.charAt(i));
+            result += String.format("%02%", (int) s.charAt(i));
         }
 
         return result;
