@@ -103,11 +103,11 @@ public class RequestSensorListService {
 //        log.info("temp 111 : {}", test);
 
         // memo : string -> hex
-        String test1 = getStringToHex(request.getParameter().getFrameCount());
+        String test1 = stringToHex(request.getParameter().getFrameCount());
         log.info("string -> hex 1: {}", test1);
 
         // memo : hex -> decimal
-        int test2 = Integer.parseInt(test1,16);
+        int test2 = Integer.parseInt(test1, 16);
         log.info("string -> hex 2: {}", test2);
         // memo : log
 
@@ -249,4 +249,18 @@ public class RequestSensorListService {
         byte[] Bytes = input.getBytes("utf-8");
         return DatatypeConverter.printHexBinary(Bytes);
     }
+
+    public String stringToHex(String s) {
+
+        String result = "";
+
+        for (int i = 0; i < s.length(); i++) {
+            result += String.format("0x%02%", (int) s.charAt(i));
+        }
+
+        return result;
+
+    }
+
+
 }
