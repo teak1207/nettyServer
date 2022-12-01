@@ -81,9 +81,9 @@ public class RequestSensorListService {
 
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
 
-        int test = Integer.valueOf(request.getParameter().getFrameCount());
+//        int test = Integer.valueOf(request.getParameter().getFrameCount());
 
-        log.info("temp test : {}", test);
+//        log.info("temp test : {}", test);
 
 
 
