@@ -104,10 +104,11 @@ public class RequestSensorListService {
 
         // memo : string -> hex
         String test1 = getStringToHex(request.getParameter().getFrameCount());
-        log.info("string -> hex : {}", test1);
+        log.info("string -> hex 1: {}", test1);
 
         // memo : hex -> decimal
-
+        int test2 = Integer.parseInt(test1,16);
+        log.info("string -> hex 2: {}", test2);
         // memo : log
 
 
@@ -244,8 +245,8 @@ public class RequestSensorListService {
         return result;
     }
 
-    public String getStringToHex(String test) throws UnsupportedEncodingException {
-        byte[] testBytes = test.getBytes("utf-8");
-        return DatatypeConverter.printHexBinary(testBytes);
+    public String getStringToHex(String input) throws UnsupportedEncodingException {
+        byte[] Bytes = input.getBytes("utf-8");
+        return DatatypeConverter.printHexBinary(Bytes);
     }
 }
