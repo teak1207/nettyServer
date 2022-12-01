@@ -98,9 +98,17 @@ public class RequestSensorListService {
 //
 
 
-        Integer test = Integer.valueOf(request.getParameter().getFrameCount());
+//        Integer test = Integer.valueOf(request.getParameter().getFrameCount());
 
-        log.info("temp 111 : {}", test);
+//        log.info("temp 111 : {}", test);
+
+        // memo : string -> hex
+        String test1 = getStringToHex(request.getParameter().getFrameCount());
+        log.info("string -> hex : {}", test1);
+
+        // memo : hex -> decimal
+
+        // memo : log
 
 
         String frameCount = String.valueOf(temp[1]);
