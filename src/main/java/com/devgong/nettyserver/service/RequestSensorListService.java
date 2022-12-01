@@ -98,9 +98,9 @@ public class RequestSensorListService {
 //
 
 
-        int test = Integer.parseInt(request.getParameter().getFrameCount());
+        Integer test = Integer.valueOf(request.getParameter().getFrameCount());
 
-        log.info("temp test : {}", test);
+        log.info("temp 111 : {}", test);
 
 
         String frameCount = String.valueOf(temp[1]);
