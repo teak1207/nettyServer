@@ -79,15 +79,10 @@ public class RequestSensorListService {
                 convertSampleRate(request.getParameter().getSampleRate()));
 
 
-        byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
-
-//        int test = Integer.valueOf(request.getParameter().getFrameCount());
-
-//        log.info("temp test : {}", test);
-
-
-
-
+        byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);  // '
+        // fnum = 3 --> temp.length == 2
+        // fnum = 4 --> temp.length == 2
+        // fnum = 5 --> temp.length == 4
 
         log.info("temp length: {}", temp.length);
         log.info("temp length: {}", temp);
@@ -101,6 +96,12 @@ public class RequestSensorListService {
 //        log.info("temp byte: {}", temp[2]&0xff);
 //        log.info("temp byte: {}", temp[3]&0xff);
 //
+
+
+        int test = Integer.parseInt(request.getParameter().getFrameCount());
+
+        log.info("temp test : {}", test);
+
 
         String frameCount = String.valueOf(temp[1]);
 
