@@ -98,6 +98,7 @@ public class RequestSensorListService {
 //
 
         byte[] temp2 = request.getParameter().getDataSize().getBytes(StandardCharsets.UTF_8);
+        log.info("fsize check  : {} ", temp2);
         log.info("fsize check  : {} ", temp2.length);
         log.info("fsize check  : {} ", temp2[0]);
         log.info("fsize check  : {} ", temp2[1]);
