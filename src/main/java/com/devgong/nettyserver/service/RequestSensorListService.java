@@ -97,6 +97,14 @@ public class RequestSensorListService {
 //        log.info("temp byte: {}", temp[3]&0xff);
 //
 
+        byte[] temp2 = request.getParameter().getDataSize().getBytes(StandardCharsets.UTF_8);
+        log.info("fsize check  : {} ", temp2.length);
+        log.info("fsize check  : {} ", temp2[0]);
+        log.info("fsize check  : {} ", temp2[1]);
+
+        log.info("fsize check  : {} ", temp2[0] & 0xff);
+        log.info("fsize check  : {} ", temp2[1] & 0xff);
+
 
 //        Integer test = Integer.valueOf(request.getParameter().getFrameCount());
 
@@ -168,7 +176,7 @@ public class RequestSensorListService {
                     requestFindResults.getAproject(),
                     requestFindResults.getSsn());
 
-            log.info("chekc path length : {}", path.length());
+            log.info("check path length : {}", path.length());
             log.info("path : {}", path);
 
             String filePath = String.format("%s/%s_%s_%s.dat",
@@ -250,7 +258,7 @@ public class RequestSensorListService {
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
-    public String stringToHex(String s) {
+/*    public String stringToHex(String s) {
 
         String result = "";
 
@@ -260,7 +268,7 @@ public class RequestSensorListService {
 
         return result;
 
-    }
+    }*/
 
 
 }
