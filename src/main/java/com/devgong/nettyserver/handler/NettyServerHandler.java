@@ -321,6 +321,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("datframecountasize : {}", temp2);
                 log.info("datasize : {}", temp3);
 
+                byte[] temp4 =  new java.math.BigInteger(request.getParameter().getSampleRate(), 16).toByteArray();
+                byte[] temp5 =  new java.math.BigInteger(request.getParameter().getFrameCount(), 16).toByteArray();
+                byte[] temp6 =  new java.math.BigInteger(request.getParameter().getDataSize(), 16).toByteArray();
+                log.info("--------------");
+                log.info("byte[]-2");
+                log.info("samplerate : {}", temp4);
+                log.info("datframecountasize : {}", temp5);
+                log.info("datasize : {}", temp6);
+
+
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
