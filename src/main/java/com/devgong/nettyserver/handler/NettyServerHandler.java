@@ -308,7 +308,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("datasize check : {}", request.getParameter().getDataSize());
 
                 byte[] temp1 = request.getParameter().getSampleRate().getBytes(StandardCharsets.UTF_8);
-                byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
+                byte[] temp2 = request.getParameter().getFrameCount().getBytes();
                 byte[] temp3 = request.getParameter().getDataSize().getBytes(StandardCharsets.UTF_8);
 
                 log.info("samplerate : {}", temp1);
