@@ -303,6 +303,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
 
+                log.info("string");
                 log.info("samplerate check : {}", request.getParameter().getSampleRate());  // 0
                 log.info("framecount check : {}", request.getParameter().getFrameCount()); //
                 log.info("datasize check : {}", request.getParameter().getDataSize());
@@ -310,11 +311,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] temp1 = request.getParameter().getSampleRate().getBytes(StandardCharsets.UTF_8);
                 byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
                 byte[] temp3 = request.getParameter().getDataSize().getBytes(StandardCharsets.UTF_8);
-                log.info("--------------");
+                log.info("length");
                 log.info("samplerate : {}", temp1.length);
                 log.info("framecount : {}", temp2.length);
                 log.info("datasize : {}", temp3.length);
                 log.info("--------------");
+                log.info("byte[]");
                 log.info("samplerate : {}", temp1);
                 log.info("datframecountasize : {}", temp2);
                 log.info("datasize : {}", temp3);
