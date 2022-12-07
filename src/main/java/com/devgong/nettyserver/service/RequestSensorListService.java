@@ -107,10 +107,6 @@ public class RequestSensorListService {
         log.info("fsize check  : {} ", temp2[1] & 0xff);
 
 
-//        Integer test = Integer.valueOf(request.getParameter().getFrameCount());
-
-//        log.info("temp 111 : {}", test);
-
         // memo : string -> hex
         String test1 = getStringToHex(request.getParameter().getFrameCount());
         log.info("string -> hex 1: {}", test1);
