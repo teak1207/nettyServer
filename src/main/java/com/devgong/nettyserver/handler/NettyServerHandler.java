@@ -317,11 +317,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                         log.info("(1)");
                         accumulation += (int) b + 256;
-                        log.info("accumulation : {}", b);
+                        log.info("accumulation : {}", (int) b + 256);
                     } else {
                         log.info("(2)");
                         accumulation += (int) b;
-                        log.info("accumulation : {}", b);
+                        log.info("accumulation : {}", (int) b);
 
 
                     }
