@@ -315,11 +315,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("sibal");
                     if (b < 0) {
 
-                        log.info("1");
-                        accumulation += (int) b + 256;
+                        log.info("(1)");
+                        accumulation += ((int) b & 0xff) + 256;
                         log.info("accumulation : {}", b);
                     } else {
-                        log.info("2");
+                        log.info("(2)");
                         accumulation += (int) b & 0xff;
                         log.info("accumulation : {}", b);
 
@@ -329,6 +329,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 }
 
+                log.info("finaltest :{}", accumulation);
                 log.info("finaltest :{}", accumulation);
 
                 byte[] response = new byte[45];
