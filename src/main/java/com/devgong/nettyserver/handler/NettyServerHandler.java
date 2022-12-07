@@ -302,6 +302,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
+                log.info("--------------");
                 int accumulation = 0;
                 log.info("string");
                 log.info("framecount check : {}", request.getParameter().getFrameCount()); //
@@ -328,9 +329,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 }
+                String hex = Integer.toHexString(accumulation);
 
                 log.info("finaltest :{}", accumulation);
-                log.info("finaltest :{}", accumulation);
+                log.info("hex :{}", hex);
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
