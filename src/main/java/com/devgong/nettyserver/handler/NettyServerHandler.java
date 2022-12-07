@@ -313,10 +313,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 for (byte b : temp2) {
                     accumulation += b & 0xff;
-                log.info("accumulation : {}", b);
-                log.info("accumulation : {}", (char)b);
+                    log.info("accumulation : {}", b);
+                    log.info("accumulation : {}", (char) b);
                 }
 
+                log.info("finaltest :{}", accumulation);
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
