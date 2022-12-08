@@ -310,18 +310,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("sampleRate  : {}", request.getParameter().getSampleRate());
 
 
-                log.info("framecount check2 : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)); // 48
+                log.info("test 1 : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)); // 48
                 log.info("--------------");
                 byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
-
-                log.info("length");
                 log.info("framecount length: {}", temp2.length);
                 log.info("--------------");
 
-                String hex = Integer.toHexString(accumulation);
-
-                log.info("finaltest :{}", accumulation);
-                log.info("hex :{}", hex);
                 // string --> int
               /*  try {
                     for (byte b : request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)) {
@@ -339,8 +333,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }*/
 
 
-
-               /* for (byte b : temp2) {
+                for (byte b : temp2) {
                     log.info("why");
                     if (b < 0) {
 
@@ -352,7 +345,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         accumulation += (int) b;
                         log.info("accumulation : {}", (int) b);
                     }
-                }*/
+
+
+                    String hex = Integer.toHexString(accumulation);
+                    log.info("accumulation :{}", accumulation);
+                    log.info("hex :{}", hex);
+                }
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
