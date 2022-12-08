@@ -313,7 +313,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("--------------");
 
                 for (byte b : temp2) {
-                    log.info("sibal");
+                    log.info("why");
                     if (b < 0) {
 
                         log.info("(1)");
