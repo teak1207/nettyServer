@@ -305,12 +305,21 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("--------------");
                 int accumulation = 0;
                 log.info("string");
-                log.info("framecount check : {}", request.getParameter().getFrameCount()); //
+                log.info("framecount check1 : {}", request.getParameter().getFrameCount()); // 0
+                log.info("framecount check2 : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)); // 48
                 log.info("--------------");
                 // string --> int
                 try {
-                    int framecount = Integer.parseInt(request.getParameter().getFrameCount());
-                    log.info("framecount : {}", framecount);
+                    for (byte b : request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)) {
+                        if (b < 0) {
+                            log.info("(1)");
+                            accumulation += Byte.toUnsignedInt(b);
+                        } else {
+                            log.info("(2)");
+                            accumulation += Byte.toUnsignedInt(b);
+                        }
+                        log.info("framecount check3 : {}", accumulation); // 0  error
+                    }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
