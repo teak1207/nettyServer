@@ -305,11 +305,25 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("--------------");
                 int accumulation = 0;
                 log.info("string");
-                log.info("framecount check1 : {}", request.getParameter().getFrameCount()); // 0
+                log.info("frameCount  : {}", request.getParameter().getFrameCount()); // 0
+                log.info("datasize  : {}", request.getParameter().getDataSize());
+                log.info("sampleRate  : {}", request.getParameter().getSampleRate());
+
+
                 log.info("framecount check2 : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)); // 48
                 log.info("--------------");
+                byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
+
+                log.info("length");
+                log.info("framecount length: {}", temp2.length);
+                log.info("--------------");
+
+                String hex = Integer.toHexString(accumulation);
+
+                log.info("finaltest :{}", accumulation);
+                log.info("hex :{}", hex);
                 // string --> int
-                try {
+              /*  try {
                     for (byte b : request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)) {
                         if (b < 0) {
                             log.info("(1)");
@@ -322,18 +336,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                }
-
-                //int --> byte []
-
-                byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
+                }*/
 
 
-                log.info("length");
-                log.info("framecount length: {}", temp2.length);
-                log.info("--------------");
 
-                String hex = Integer.toHexString(accumulation);
                /* for (byte b : temp2) {
                     log.info("why");
                     if (b < 0) {
@@ -345,15 +351,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("(2)");
                         accumulation += (int) b;
                         log.info("accumulation : {}", (int) b);
-
-
                     }
-
-
                 }*/
-
-                log.info("finaltest :{}", accumulation);
-                log.info("hex :{}", hex);
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
