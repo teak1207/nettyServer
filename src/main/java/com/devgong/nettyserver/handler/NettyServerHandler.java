@@ -324,17 +324,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     e.printStackTrace();
                 }
 
-
                 //int --> byte []
 
                 byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
 
 
                 log.info("length");
-                log.info("framecount : {}", temp2.length);
+                log.info("framecount length: {}", temp2.length);
                 log.info("--------------");
 
-                for (byte b : temp2) {
+                String hex = Integer.toHexString(accumulation);
+               /* for (byte b : temp2) {
                     log.info("why");
                     if (b < 0) {
 
@@ -350,8 +350,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
 
 
-                }
-                String hex = Integer.toHexString(accumulation);
+                }*/
 
                 log.info("finaltest :{}", accumulation);
                 log.info("hex :{}", hex);
