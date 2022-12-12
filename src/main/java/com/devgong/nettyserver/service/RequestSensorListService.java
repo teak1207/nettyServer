@@ -83,7 +83,7 @@ public class RequestSensorListService {
 
 
         //memo : string -> int , NumberFormatException -> 숫자의 값이 아닌 값이 넘어와서 (')
-        int tempFrame = Integer.parseInt(request.getParameter().getFrameCount());
+//        int tempFrame = Integer.parseInt(request.getParameter().getFrameCount());
         log.info("---------------");
         // memo : string -> hex
         String frame = getStringToHex(request.getParameter().getFrameCount());
