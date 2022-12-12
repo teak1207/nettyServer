@@ -84,7 +84,10 @@ public class RequestSensorListService {
         // memo : string -> hex
         String frame = getStringToHex(request.getParameter().getFrameCount());
 
-        log.info("string1 :{}", frame);
+        log.info("String : {}", request.getParameter().getFrameCount());
+        log.info("byte[] : {}", temp);
+
+        log.info("StringToHex :{}", frame);
 
         // memo : hex -> decimal
 
