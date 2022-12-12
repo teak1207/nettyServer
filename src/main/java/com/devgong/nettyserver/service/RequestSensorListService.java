@@ -83,12 +83,13 @@ public class RequestSensorListService {
 
         // memo : string -> hex
         String frame = getStringToHex(request.getParameter().getFrameCount());
+        int tempFrame = Integer.parseInt(request.getParameter().getFrameCount());
 
+        log.info("String to int :{}", tempFrame);
         log.info("String : {}", request.getParameter().getFrameCount());
-        log.info("byte[] : {}", temp);
-
-        log.info("StringToHex :{}", frame);
-
+        log.info("String To Hex :{}", frame);
+        log.info("String to byte[] : {}", temp);
+        log.info("int to byte[] : {}", intToByteArray(tempFrame));
         // memo : hex -> decimal
 
 
@@ -228,17 +229,19 @@ public class RequestSensorListService {
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
-/*    public String stringToHex(String s) {
 
-        String result = "";
+    public byte[] intToByteArray(int value) {
 
-        for (int i = 0; i < s.length(); i++) {
-            result += String.format("%02%", (int) s.charAt(i));
-        }
+        byte[] byteArray = new byte[4];
 
-        return result;
+        byteArray[0] = (byte) (value >> 24);
+        byteArray[1] = (byte) (value >> 16);
+        byteArray[2] = (byte) (value >> 8);
+        byteArray[3] = (byte) (value);
 
-    }*/
+
+        return byteArray;
+    }
 
 
 }
