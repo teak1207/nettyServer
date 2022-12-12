@@ -80,44 +80,14 @@ public class RequestSensorListService {
 
 
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);  // '
-        // fnum = 3 --> temp.length == 2
-        // fnum = 4 --> temp.length == 2
-        // fnum = 5 --> temp.length == 4
-
-        log.info("temp length: {}", temp.length);
-        log.info("temp length: {}", temp);
-        log.info("temp byte: {}", temp[0]);
-        log.info("temp byte: {}", temp[1]);
-//        log.info("temp byte: {}", temp[2]);
-//        log.info("temp byte: {}", temp[3]);
-
-        log.info("temp byte: {}", temp[0] & 0xff);
-        log.info("temp byte: {}", temp[1] & 0xff);
-//        log.info("temp byte: {}", temp[2]&0xff);
-//        log.info("temp byte: {}", temp[3]&0xff);
-//
-
-        byte[] temp2 = request.getParameter().getDataSize().getBytes(StandardCharsets.UTF_8);
-//        log.info("fsize check  : {} ", temp2);
-//        log.info("fsize check  : {} ", temp2.length);
-//        log.info("fsize check  : {} ", temp2[0]);
-//        log.info("fsize check  : {} ", temp2[1]);
-
-//        log.info("fsize check  : {} ", temp2[0] & 0xff);
-//        log.info("fsize check  : {} ", temp2[1] & 0xff);
-
 
         // memo : string -> hex
-        String test1 = getStringToHex(request.getParameter().getFrameCount());
-        log.info("string -> hex 1: {}", test1);
+        String frame = getStringToHex(request.getParameter().getFrameCount());
+
+        log.info("string1 :{}", frame);
 
         // memo : hex -> decimal
-        int test2 = Integer.parseInt(test1, 16);
-        log.info("string -> hex 2: {}", test2);
-        // memo : log
 
-
-        String frameCount = String.valueOf(temp[1]);
 
         byte value = temp[1];
         int nValue = 0;
@@ -128,7 +98,7 @@ public class RequestSensorListService {
         } else {
             nValue = (int) value;
         }
-        frameCount = Integer.toString(nValue);
+        String frameCount = Integer.toString(nValue);
 
 
         log.info("parseInt test: {}", Integer.parseInt(frameCount));
