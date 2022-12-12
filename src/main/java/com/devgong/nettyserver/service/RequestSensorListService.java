@@ -81,16 +81,21 @@ public class RequestSensorListService {
 
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);  // '
 
+
+        //memo : string -> int , NumberFormatException -> 숫자의 값이 아닌 값이 넘어와서 (')
+        int tempFrame = Integer.parseInt(request.getParameter().getFrameCount());
+        log.info("---------------");
         // memo : string -> hex
         String frame = getStringToHex(request.getParameter().getFrameCount());
-        int tempFrame = Integer.parseInt(request.getParameter().getFrameCount());
-
-        log.info("String to int :{}", tempFrame);
-        log.info("String : {}", request.getParameter().getFrameCount());
         log.info("String To Hex :{}", frame);
-        log.info("String to byte[] : {}", temp);
-        log.info("int to byte[] : {}", intToByteArray(tempFrame));
+        log.info("---------------");
         // memo : hex -> decimal
+//        log.info("hex to decimal : {}", Integer.toString());
+
+
+        log.info("---------------");
+
+
 
 
         byte value = temp[1];
