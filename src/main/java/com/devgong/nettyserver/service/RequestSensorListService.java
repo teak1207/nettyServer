@@ -85,7 +85,7 @@ public class RequestSensorListService {
         String frame = getStringToHex(request.getParameter().getFrameCount());
 
 
-        log.info("test : {}", bytesToInt(temp));
+        log.info("sib : {}", bytesToInt(temp));
 
 
 
