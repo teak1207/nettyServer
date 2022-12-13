@@ -41,6 +41,15 @@ public class ReqRequest implements Serializable<ReqRequest> {
         return serialized;
     }
 
+    public byte[] getFrameCountBytes(){
+
+        byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
+
+        return frameCountBytes;
+    }
+
+
+
     @Override
     public ReqRequest deserialize(byte[] byteArray) { return new ReqRequest(byteArray);
     }

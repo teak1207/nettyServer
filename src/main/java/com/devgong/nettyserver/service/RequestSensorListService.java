@@ -79,7 +79,7 @@ public class RequestSensorListService {
                 convertSampleRate(request.getParameter().getSampleRate()));
 
 
-        byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);  // '
+        byte[] temp = request.getParameter().getFrameCountBytes();  // '
 
 
         log.info("sib : {}", temp);
