@@ -227,9 +227,11 @@ public class RequestSensorListService {
 
     public int bytesToInt(byte[] bytes) {
 
-        int result = (int) bytes[1] & 0xFF ;
+        int result = (int) bytes[3] & 0xFF ;
 
-        result |= (int) bytes[0] << 8 & 0xFF00;
+        result |= (int) bytes[2] << 8 & 0xFF00;
+        result |= (int) bytes[1] << 16 & 0xFF0000;
+        result |= (int) bytes[0] << 24;
 
         return result;
     }
