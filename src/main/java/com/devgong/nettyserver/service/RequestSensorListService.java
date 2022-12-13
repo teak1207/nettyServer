@@ -82,9 +82,7 @@ public class RequestSensorListService {
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);  // '
 
 
-        String frame = getStringToHex(request.getParameter().getFrameCount());
-
-
+        log.info("sib : {}", temp);
         log.info("sib : {}", bytesToInt(temp));
 
 
