@@ -79,15 +79,26 @@ public class RequestSensorListService {
                 convertSampleRate(request.getParameter().getSampleRate()));
 
 
-        byte[] temp = request.getParameter().getFrameCountBytes();  // '
+        byte[] tempFrameCount = request.getParameter().getFrameCountBytes();  // '
+        byte[] tempDataSize = request.getParameter().getDataSizeBytes();
+        byte[] sampleRate = request.getParameter().getSampleRateBytes();
 
 
-        log.info("sib : {}", temp);
-        log.info("temp len : {}", temp.length);
-        log.info("sib : {}", bytesToInt(temp));
+        log.info("--------------------------------------");
+        log.info("sib : {}", tempFrameCount);
+        log.info("temp len : {}", tempFrameCount.length);
+        log.info("sib : {}", bytesToInt(tempFrameCount));
+        log.info("--------------------------------------");
+        log.info("sib : {}", tempDataSize);
+        log.info("temp len : {}", tempDataSize.length);
+        log.info("sib : {}", bytesToInt(tempDataSize));
+        log.info("--------------------------------------");
+        log.info("sib : {}", sampleRate);
+        log.info("temp len : {}", sampleRate.length);
+        log.info("sib : {}", bytesToInt(sampleRate));
 
 
-        byte value = temp[1];
+        byte value = tempFrameCount[1];
         int nValue = 0;
 
         if (value < 0) {
