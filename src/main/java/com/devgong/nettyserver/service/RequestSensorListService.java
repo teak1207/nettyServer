@@ -82,12 +82,12 @@ public class RequestSensorListService {
         byte[] temp = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);  // '
 
 
-        // memo : string -> hex
         String frame = getStringToHex(request.getParameter().getFrameCount());
-        log.info("String To Hex :{}", frame);
-        // memo : hex -> decimal
-        log.info("hexadecimalToDecimal : {}", hexadecimalToDecimal(frame));
-        log.info("byte[] getFrameCount : {}", temp);
+
+
+        log.info("test : {}", bytesToInt(temp));
+
+
 
         byte value = temp[1];
         int nValue = 0;
@@ -225,33 +225,13 @@ public class RequestSensorListService {
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
-    public byte[] intToByteArray(int value) {
+    public int bytesToInt(byte[] bytes) {
 
-        byte[] byteArray = new byte[4];
-        byteArray[0] = (byte) (value >> 24);
-        byteArray[1] = (byte) (value >> 16);
-        byteArray[2] = (byte) (value >> 8);
-        byteArray[3] = (byte) (value);
+        int result = (int) bytes[1] & 0xFF ;
 
-        return byteArray;
-    }
+        result |= (int) bytes[0] << 8 & 0xFF00;
 
-    public int hexadecimalToDecimal(String hexVal) {
-
-        int len = hexVal.length();
-        int base = 1;
-        int decVal = 0;
-
-        for (int i = len - 1; i >= 0; i--) {
-            if (hexVal.charAt(i) >= '0' && hexVal.charAt(i) <= '9') {
-                decVal += (hexVal.charAt(i) - 48) * base;
-                base = base * 16;
-            } else if (hexVal.charAt(i) >= 'A' && hexVal.charAt(i) <= 'F') {
-                decVal += (hexVal.charAt(i) - 55) * base;
-                base = base * 16;
-            }
-        }
-        return decVal;
+        return result;
     }
 
 
