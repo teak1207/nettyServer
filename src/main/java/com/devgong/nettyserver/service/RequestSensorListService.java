@@ -83,6 +83,7 @@ public class RequestSensorListService {
 
 
         log.info("sib : {}", temp);
+        log.info("temp len : {}", temp.length);
         log.info("sib : {}", bytesToInt(temp));
 
 
