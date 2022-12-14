@@ -85,17 +85,20 @@ public class RequestSensorListService {
 
 
         log.info("--------------------------------------");
-        log.info("sib : {}", tempFrameCount);
+        log.info("sc1 : {}", tempFrameCount);
+        log.info("sc2 : {}", byteArrayToHex(tempFrameCount));
         log.info("temp len : {}", tempFrameCount.length);
-        log.info("sib : {}", bytesToInt(tempFrameCount));
+        log.info("sc : {}", bytesToInt(tempFrameCount));
         log.info("--------------------------------------");
-        log.info("sib : {}", tempDataSize);
+        log.info("sc1 : {}", tempDataSize);
+        log.info("sc2 : {}", byteArrayToHex(tempDataSize));
         log.info("temp len : {}", tempDataSize.length);
-        log.info("sib : {}", bytesToInt(tempDataSize));
+        log.info("sc : {}", bytesToInt(tempDataSize));
         log.info("--------------------------------------");
-        log.info("sib : {}", sampleRate);
+        log.info("sc1 : {}", sampleRate);
+        log.info("sc2 : {}", byteArrayToHex(sampleRate));
         log.info("temp len : {}", sampleRate.length);
-        log.info("sib : {}", bytesToInt(sampleRate));
+        log.info("sc : {}", bytesToInt(sampleRate));
 
 
         byte value = tempFrameCount[1];
@@ -243,6 +246,14 @@ public class RequestSensorListService {
 //        result |= (int) bytes[0] << 24;
 
         return result;
+    }
+
+    public String byteArrayToHex(byte[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (final byte b : array)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
+
     }
 
 
