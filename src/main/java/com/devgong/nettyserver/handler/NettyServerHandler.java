@@ -307,13 +307,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("chk : {}", request.getFlag());
                 log.info("chk : {}", getStringToHex(request.getSensorId()));
 
-                 byte[] date =  request.getLocalDateBytes(bytes);
+                //danger : 밑에 date 사용후 지워야함
+                byte[] date = request.getLocalDateBytes(bytes);
 
 
-
-                log.info("chk : {}", date);
+                log.info("chk : {}", byteArrayToHex(date));
                 log.info("chk : {}", request.getRequestType());
-                log.info("chk : {}", String.format("%x",10000000000L));
+                log.info("chk : {}", String.format("%x", 10000000000L));
                 log.info("chk : {}", getStringToHex(request.getParameter().getFrameCount()));
                 log.info("chk : {}", getStringToHex(request.getParameter().getDataSize()));
                 log.info("chk : {}", getStringToHex(request.getParameter().getSampleRate()));
@@ -418,8 +418,18 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
+    //danger : 밑에 2개 메서드 사용후 지워야함
     public String getStringToHex(String input) throws UnsupportedEncodingException {
         byte[] Bytes = input.getBytes("utf-8");
         return DatatypeConverter.printHexBinary(Bytes);
     }
+
+    public String byteArrayToHex(byte[] array) {
+        StringBuilder sb = new StringBuilder();
+        for (final byte b : array)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
+
+    }
+
 }
