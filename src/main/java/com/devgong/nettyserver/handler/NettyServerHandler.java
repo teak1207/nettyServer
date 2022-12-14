@@ -265,6 +265,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 //                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+
+                    log.info("chk2 : {}", request.getParameterLength());
+                    log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
+
+
+
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
                 PreInstallSensorListAllModel reportFindResult = reportSensorListService.findDataExistence(request.getSensorId());
 
