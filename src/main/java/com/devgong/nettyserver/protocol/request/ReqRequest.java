@@ -49,31 +49,17 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
         byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
 
-        String s = Base64.getEncoder().encodeToString(frameCountBytes);
 
 
         return frameCountBytes;
     }
 
-    public String getFrameCountBytesIncoding() {
+
+    public int getFrameCountBytesConverted() {
 
         byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
 
-        String s = Base64.getEncoder().encodeToString(frameCountBytes);
-
-
-        return s;
-    }
-
-    public byte[] getFrameCountBytesDecoding() {
-
-        byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
-
-        String s = Base64.getEncoder().encodeToString(frameCountBytes);
-
-        byte[] decode = Base64.getDecoder().decode(s);
-
-        return decode;
+        return bytesToInt(frameCountBytes);
     }
 
 
@@ -89,6 +75,14 @@ public class ReqRequest implements Serializable<ReqRequest> {
         byte[] SampleRateBytes = Arrays.copyOfRange(sampleRate.getBytes(), 0, 1);
 
         return SampleRateBytes;
+    }
+
+
+    public int bytesToInt(byte[] bytes) {
+        int result = (int) bytes[1] & 0xFF;
+        result |= (int) bytes[0] << 8 & 0xFF00;
+
+        return result;
     }
 
 
