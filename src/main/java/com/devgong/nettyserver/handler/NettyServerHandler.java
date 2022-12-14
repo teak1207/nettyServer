@@ -304,14 +304,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
-                log.info("chk : {}", request.getFlag());
-                log.info("chk : {}", getStringToHex(request.getSensorId()));
 
                 //danger : 밑에 date 사용후 지워야함
                 byte[] date = request.getLocalDateBytes(bytes);
                 byte requestType = request.getRequestType(bytes);
 
-
+                log.info("chk : {}", request.getFlag());
+                log.info("chk : {}", getStringToHex(request.getSensorId()));
                 log.info("chk : {}", byteArrayToHex(date));
                 log.info("chk : {}", Integer.toHexString(requestType));
                 log.info("chk : {}", String.format("%x", 10000000000L));
@@ -425,6 +424,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
+    //danger
     public String byteArrayToHex(byte[] array) {
         StringBuilder sb = new StringBuilder();
         for (final byte b : array)

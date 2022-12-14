@@ -124,7 +124,7 @@ public class NewPacket<T extends Serializable<T>> {
         byte[] array = Arrays.copyOfRange(packet, 24, 39);
         return array;
     }
-
+    //danger
     public byte getRequestType(byte[] packet) {
 
         byte array = packet[39];
