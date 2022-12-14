@@ -35,7 +35,7 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
 
         for (int i = 0; i < bytes.length; i++)
-            log.info(bytes[i] + " ");
+            log.info(bytes[i] + "123 ");
         log.info("");
 
 
