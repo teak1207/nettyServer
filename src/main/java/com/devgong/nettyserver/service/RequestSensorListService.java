@@ -83,6 +83,8 @@ public class RequestSensorListService {
         byte[] tempDataSize = request.getParameter().getDataSizeBytes();
         byte[] sampleRate = request.getParameter().getSampleRateBytes();
 
+        String tempFrameCountConverted = request.getParameter().getFrameCountBytesConverted();
+
         log.info("--------------------------------------");
         log.info("sc1 : {}", tempFrameCount);
         log.info("sc2 : {}", byteArrayToHex(tempFrameCount));
@@ -98,7 +100,7 @@ public class RequestSensorListService {
         log.info("sc2 : {}", byteArrayToHex(sampleRate));
         log.info("temp len : {}", sampleRate.length);
         log.info("--------------------------------------");
-//        log.info("sc : {}", bytesToInt(sampleRate));
+        log.info("please : {}", tempFrameCountConverted);
 
 
         byte value = tempFrameCount[1];

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Base64;
 
 @Slf4j
 @Value
@@ -48,8 +49,22 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
         byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
 
+        String s = Base64.getEncoder().encodeToString(frameCountBytes);
+
+
         return frameCountBytes;
     }
+
+    public String getFrameCountBytesConverted() {
+
+        byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
+
+        String s = Base64.getEncoder().encodeToString(frameCountBytes);
+
+
+        return s;
+    }
+
 
     public byte[] getDataSizeBytes() {
 
