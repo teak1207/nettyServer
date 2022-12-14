@@ -233,7 +233,7 @@ public class RequestSensorListService {
     }
 
     public String getStringToHex(String input) throws UnsupportedEncodingException {
-        byte[] Bytes = input.getBytes("utf-8");
+        byte[] Bytes = input.getBytes("EUC-KR");
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
