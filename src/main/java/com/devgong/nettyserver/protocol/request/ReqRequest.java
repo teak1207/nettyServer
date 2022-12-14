@@ -27,6 +27,7 @@ public class ReqRequest implements Serializable<ReqRequest> {
         sampleRate = new String(Arrays.copyOfRange(payload, 4, 5));
 
         log.info("chk3 : {}", byteArrayToHex(payload));
+        log.info("chk4 : {}", frameCount );
 
     }
 
@@ -51,7 +52,6 @@ public class ReqRequest implements Serializable<ReqRequest> {
     public byte[] getFrameCountBytes() {
 
         byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
-
 
 
         return frameCountBytes;
@@ -82,11 +82,10 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
     String byteArrayToHex(byte[] a) {
         StringBuilder sb = new StringBuilder();
-        for(final byte b: a)
-            sb.append(String.format("%02x ", b&0xff));
+        for (final byte b : a)
+            sb.append(String.format("%02x ", b & 0xff));
         return sb.toString();
     }
-
 
 
     public int bytesToInt(byte[] bytes) {
