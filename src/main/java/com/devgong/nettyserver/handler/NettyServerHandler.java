@@ -313,10 +313,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("chk : {}", getStringToHex(request.getSensorId()));
                 log.info("chk : {}", byteArrayToHex(date));
                 log.info("chk : {}", Integer.toHexString(requestType));
-                log.info("chk : {}", String.format("%x", 10000000000L));
-                log.info("chk : {}", getStringToHex(request.getParameter().getFrameCount()));
-                log.info("chk : {}", getStringToHex(request.getParameter().getDataSize()));
-                log.info("chk : {}", getStringToHex(request.getParameter().getSampleRate()));
+                log.info("chk : {}", String.format("%x", 10000000000L)); // 2540be400
+                log.info("chk : {}", getStringToHex(request.getParameter().getFrameCount())); // 00EFBFBD
+                log.info("chk : {}", getStringToHex(request.getParameter().getDataSize())); // 0200
+                log.info("chk : {}", getStringToHex(request.getParameter().getSampleRate())); //04
 
 
                 byte[] response = new byte[45];
