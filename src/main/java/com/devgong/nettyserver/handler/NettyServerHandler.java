@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.DatatypeConverter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -303,15 +305,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
                 log.info("chk : {}", request.getFlag());
-                log.info("chk : {}", request.getSensorId());
+                log.info("chk : {}", getStringToHex(request.getSensorId()));
                 log.info("chk : {}", request.getDateTime());
                 log.info("chk : {}", request.getRequestType());
-                log.info("chk : {}", request.getParameterLength());
-                log.info("chk : {}", request.getParameter().getFrameCount());
-                log.info("chk : {}", request.getParameter().getDataSize());
-                log.info("chk : {}", request.getParameter().getSampleRate());
-
-
+                log.info("chk : {}", String.format("%x",10000000000L));
+                log.info("chk : {}", getStringToHex(request.getParameter().getFrameCount()));
+                log.info("chk : {}", getStringToHex(request.getParameter().getDataSize()));
+                log.info("chk : {}", getStringToHex(request.getParameter().getSampleRate()));
 
 
                 byte[] response = new byte[45];
@@ -411,5 +411,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
         ctx.close();
+    }
+
+    public String getStringToHex(String input) throws UnsupportedEncodingException {
+        byte[] Bytes = input.getBytes("utf-8");
+        return DatatypeConverter.printHexBinary(Bytes);
     }
 }
