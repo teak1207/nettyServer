@@ -43,6 +43,9 @@ public class NewPacket<T extends Serializable<T>> {
                 .orElseThrow(() -> new IllegalStateException("Invalid requestType error : " + packet[39]));
         parameterLength = byteArrayToInt(Arrays.copyOfRange(packet, 40, 44));
 
+        log.info("chk3 : {}", byteArrayToHex(packet));
+
+
         try {
             Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(byte[].class);
             parameter = declaredConstructor.newInstance((Object) Arrays.copyOfRange(packet, 44, packet.length));
@@ -118,17 +121,27 @@ public class NewPacket<T extends Serializable<T>> {
                 (byte) ((data >> 0) & 0xff),
         };
     }
+
     //danger : 밑에 메서드들은 사용후 지울 예정
     public byte[] getLocalDateBytes(byte[] packet) {
 
         byte[] array = Arrays.copyOfRange(packet, 24, 39);
         return array;
     }
+
     //danger
     public byte getRequestType(byte[] packet) {
 
         byte array = packet[39];
         return array;
+    }
+
+
+    String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (final byte b : a)
+            sb.append(String.format("%02x ", b & 0xff));
+        return sb.toString();
     }
 
 
