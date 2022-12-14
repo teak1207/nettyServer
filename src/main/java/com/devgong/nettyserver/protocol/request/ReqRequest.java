@@ -38,6 +38,8 @@ public class ReqRequest implements Serializable<ReqRequest> {
         System.arraycopy(dataSizeBytes, 0, serialized, 2, 2);
         System.arraycopy(sampleRateBytes, 0, serialized, 4, 1);
 
+        log.info("sc3 : {}" , serialized);
+
         return serialized;
     }
 
