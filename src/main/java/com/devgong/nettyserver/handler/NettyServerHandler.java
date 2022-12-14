@@ -310,7 +310,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
+                byte [] temp = new byte[2];
 
+                    System.arraycopy(bytes,45,temp,45,2);
+
+                    log.info("chk5 : {}", temp);
 
                 //danger : 밑에 date 사용후 지워야함
                 byte[] date = request.getLocalDateBytes(bytes);
