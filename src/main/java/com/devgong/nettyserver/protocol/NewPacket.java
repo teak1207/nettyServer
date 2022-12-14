@@ -119,4 +119,11 @@ public class NewPacket<T extends Serializable<T>> {
         };
     }
 
+    public byte[] getLocalDateBytes(byte[] packet) {
+
+
+        byte[] array = Arrays.copyOfRange(packet, 24, 39);
+        return array;
+    }
+
 }
