@@ -31,7 +31,7 @@ public class ReqRequest implements Serializable<ReqRequest> {
         log.info("chk3 : {}", byteArrayToHex(payload));
 
         byte[] Bytes = frameCount.getBytes();
-        log.info("chk4 : {}",  DatatypeConverter.printHexBinary(Bytes) );
+        log.info("chk4 : {}",  byteArrayToHex(Bytes) );
 
     }
 
