@@ -312,7 +312,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte [] temp = new byte[2];
 
-                    System.arraycopy(bytes,45,temp,0,2);
+                    System.arraycopy(bytes,44,temp,0,2);
 
                     log.info("chk5 : {}", temp);
 
