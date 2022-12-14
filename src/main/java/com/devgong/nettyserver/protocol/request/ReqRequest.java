@@ -55,7 +55,7 @@ public class ReqRequest implements Serializable<ReqRequest> {
         return frameCountBytes;
     }
 
-    public String getFrameCountBytesConverted() {
+    public String getFrameCountBytesIncoding() {
 
         byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
 
@@ -63,6 +63,17 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
 
         return s;
+    }
+
+    public byte[] getFrameCountBytesDecoding() {
+
+        byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
+
+        String s = Base64.getEncoder().encodeToString(frameCountBytes);
+
+        byte[] decode = Base64.getDecoder().decode(s);
+
+        return decode;
     }
 
 
