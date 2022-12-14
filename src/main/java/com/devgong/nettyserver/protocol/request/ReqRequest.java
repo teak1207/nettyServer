@@ -5,7 +5,9 @@ import com.devgong.nettyserver.protocol.Serializable;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -27,7 +29,9 @@ public class ReqRequest implements Serializable<ReqRequest> {
         sampleRate = new String(Arrays.copyOfRange(payload, 4, 5));
 
         log.info("chk3 : {}", byteArrayToHex(payload));
-        log.info("chk4 : {}", frameCount );
+
+        byte[] Bytes = frameCount.getBytes();
+        log.info("chk4 : {}",  DatatypeConverter.printHexBinary(Bytes) );
 
     }
 
@@ -94,6 +98,13 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
         return result;
     }
+
+    public String getStringToHex(String input) throws UnsupportedEncodingException {
+        byte[] Bytes = input.getBytes();
+        return DatatypeConverter.printHexBinary(Bytes);
+    }
+
+
 
 
     @Override
