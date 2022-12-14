@@ -428,7 +428,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     //danger : 밑에 2개 메서드 사용후 지워야함
     public String getStringToHex(String input) throws UnsupportedEncodingException {
-        byte[] Bytes = input.getBytes("utf-8");
+        byte[] Bytes = input.getBytes();
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
