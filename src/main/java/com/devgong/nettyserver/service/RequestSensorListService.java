@@ -97,6 +97,7 @@ public class RequestSensorListService {
         log.info("sc1 : {}", sampleRate);
         log.info("sc2 : {}", byteArrayToHex(sampleRate));
         log.info("temp len : {}", sampleRate.length);
+        log.info("--------------------------------------");
 //        log.info("sc : {}", bytesToInt(sampleRate));
 
 
