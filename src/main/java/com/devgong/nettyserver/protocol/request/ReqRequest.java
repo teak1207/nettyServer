@@ -30,8 +30,16 @@ public class ReqRequest implements Serializable<ReqRequest> {
 
         log.info("chk3 : {}", byteArrayToHex(payload));
 
-        byte[] Bytes = frameCount.getBytes();
-        log.info("chk4 : {}",  byteArrayToHex(Bytes) );
+        //danger : 여기서 문제가 생긴듯
+        byte[] bytes = frameCount.getBytes();
+
+
+        for (int i = 0; i < bytes.length; i++)
+            log.info(bytes[i] + " ");
+        log.info("");
+
+
+        log.info("chk4 : {}", byteArrayToHex(bytes));
 
     }
 
@@ -103,8 +111,6 @@ public class ReqRequest implements Serializable<ReqRequest> {
         byte[] Bytes = input.getBytes();
         return DatatypeConverter.printHexBinary(Bytes);
     }
-
-
 
 
     @Override
