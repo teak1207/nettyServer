@@ -33,7 +33,7 @@ public class ReqRequest implements Serializable<ReqRequest> {
         //danger : 여기서 문제가 생긴듯
         byte[] bytes = frameCount.getBytes();
 
-
+        log.info("chk3-1 :{}",bytes);
 
 
 
