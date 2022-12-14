@@ -311,7 +311,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
 
-                byteArrayToHex(request);
 
                 //danger : 밑에 date 사용후 지워야함
                 byte[] date = request.getLocalDateBytes(bytes);
