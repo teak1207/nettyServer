@@ -34,12 +34,10 @@ public class ReqRequest implements Serializable<ReqRequest> {
         byte[] bytes = frameCount.getBytes();
 
 
-        for (int i = 0; i < bytes.length; i++)
-            log.info(bytes[i] + "123 ");
-        log.info("");
 
 
-        log.info("chk4 : {}", byteArrayToHex(bytes));
+
+        log.info("chk4 : {}", stringToHex(frameCount));
 
     }
 
@@ -111,6 +109,17 @@ public class ReqRequest implements Serializable<ReqRequest> {
         byte[] Bytes = input.getBytes();
         return DatatypeConverter.printHexBinary(Bytes);
     }
+
+    public static String stringToHex(String s) {
+        String result = "";
+
+        for (int i = 0; i < s.length(); i++) {
+            result += String.format("%02X ", (int) s.charAt(i));
+        }
+
+        return result;
+    }
+
 
 
     @Override
