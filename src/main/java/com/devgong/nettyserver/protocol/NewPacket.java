@@ -118,12 +118,18 @@ public class NewPacket<T extends Serializable<T>> {
                 (byte) ((data >> 0) & 0xff),
         };
     }
-
+    //danger : 밑에 메서드들은 사용후 지울 예정
     public byte[] getLocalDateBytes(byte[] packet) {
-
 
         byte[] array = Arrays.copyOfRange(packet, 24, 39);
         return array;
     }
+
+    public byte getRequestType(byte[] packet) {
+
+        byte array = packet[39];
+        return array;
+    }
+
 
 }

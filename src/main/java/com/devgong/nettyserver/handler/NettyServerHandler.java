@@ -309,10 +309,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //danger : 밑에 date 사용후 지워야함
                 byte[] date = request.getLocalDateBytes(bytes);
+                byte requestType = request.getRequestType(bytes);
 
 
                 log.info("chk : {}", byteArrayToHex(date));
-                log.info("chk : {}", request.getRequestType());
+                log.info("chk : {}", Integer.toHexString(requestType));
                 log.info("chk : {}", String.format("%x", 10000000000L));
                 log.info("chk : {}", getStringToHex(request.getParameter().getFrameCount()));
                 log.info("chk : {}", getStringToHex(request.getParameter().getDataSize()));
