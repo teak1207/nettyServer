@@ -83,22 +83,21 @@ public class RequestSensorListService {
         byte[] tempDataSize = request.getParameter().getDataSizeBytes();
         byte[] sampleRate = request.getParameter().getSampleRateBytes();
 
-        log.info("test : {}",request.getParameter().getDataBytes());
-
-        log.info("--------------------------------------");
-        log.info("sc1 : {}", tempFrameCount);
-        log.info("sc2 : {}", byteArrayToHex(tempFrameCount));
-        log.info("temp len : {}", tempFrameCount.length);
-        log.info("sc : {}", bytesToInt(tempFrameCount));
-        log.info("--------------------------------------");
-        log.info("sc1 : {}", tempDataSize);
-        log.info("sc2 : {}", byteArrayToHex(tempDataSize));
-        log.info("temp len : {}", tempDataSize.length);
-        log.info("sc : {}", bytesToInt(tempDataSize));
-        log.info("--------------------------------------");
-        log.info("sc1 : {}", sampleRate);
-        log.info("sc2 : {}", byteArrayToHex(sampleRate));
-        log.info("temp len : {}", sampleRate.length);
+//
+//        log.info("--------------------------------------");
+//        log.info("sc1 : {}", tempFrameCount);
+//        log.info("sc2 : {}", byteArrayToHex(tempFrameCount));
+//        log.info("temp len : {}", tempFrameCount.length);
+//        log.info("sc : {}", bytesToInt(tempFrameCount));
+//        log.info("--------------------------------------");
+//        log.info("sc1 : {}", tempDataSize);
+//        log.info("sc2 : {}", byteArrayToHex(tempDataSize));
+//        log.info("temp len : {}", tempDataSize.length);
+//        log.info("sc : {}", bytesToInt(tempDataSize));
+//        log.info("--------------------------------------");
+//        log.info("sc1 : {}", sampleRate);
+//        log.info("sc2 : {}", byteArrayToHex(sampleRate));
+//        log.info("temp len : {}", sampleRate.length);
         log.info("sc : {}", bytesToInt(sampleRate));
 
 

@@ -5,6 +5,7 @@ import com.devgong.nettyserver.protocol.Serializable;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class ReqRequest implements Serializable<ReqRequest> {
         System.arraycopy(dataSizeBytes, 0, serialized, 2, 2);
         System.arraycopy(sampleRateBytes, 0, serialized, 4, 1);
 
-        log.info("sc3 : {}" , serialized);
+        log.info("sc3 : {}", serialized);
 
         return serialized;
     }
@@ -62,18 +63,6 @@ public class ReqRequest implements Serializable<ReqRequest> {
         byte[] SampleRateBytes = Arrays.copyOfRange(sampleRate.getBytes(), 0, 1);
 
         return SampleRateBytes;
-    }
-
-    public  byte[] getDataBytes(){
-
-        byte[] serialized = new byte[5];
-
-        serialized = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
-        serialized = Arrays.copyOfRange(dataSize.getBytes(), 2, 4);
-        serialized = Arrays.copyOfRange(sampleRate.getBytes(), 4, 5);
-
-
-        return serialized;
     }
 
 

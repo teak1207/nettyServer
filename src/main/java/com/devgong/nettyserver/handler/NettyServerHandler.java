@@ -302,55 +302,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
-               /* log.info("--------------");
-                int accumulation = 0;
-                log.info("string");
-                log.info("frameCount  : {}", request.getParameter().getFrameCount()); // 0
-                log.info("datasize  : {}", request.getParameter().getDataSize());
-                log.info("sampleRate  : {}", request.getParameter().getSampleRate());
+                log.info("c : {}", request.getFlag());
+                log.info("c : {}", request.getSensorId());
+                log.info("c : {}", request.getDateTime());
+                log.info("c : {}", request.getRequestType());
+                log.info("c : {}", request.getParameterLength());
+                log.info("c : {}", request.getParameter().getFrameCount());
+                log.info("c : {}", request.getParameter().getDataSize());
+                log.info("c : {}", request.getParameter().getSampleRate());
 
 
-                log.info("test 1 : {}", request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)); // 48
-                log.info("--------------");
-                byte[] temp2 = request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8);
-                log.info("framecount length: {}", temp2.length);
-                log.info("--------------");*/
 
-                // string --> int
-              /*  try {
-                    for (byte b : request.getParameter().getFrameCount().getBytes(StandardCharsets.UTF_8)) {
-                        if (b < 0) {
-                            log.info("(1)");
-                            accumulation += Byte.toUnsignedInt(b);
-                        } else {
-                            log.info("(2)");
-                            accumulation += Byte.toUnsignedInt(b);
-                        }
-                        log.info("framecount check3 : {}", accumulation); // 0  error
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }*/
-
-
-/*                for (byte b : temp2) {
-                    log.info("why");
-                    if (b < 0) {
-
-                        log.info("(1)");
-                        accumulation += (int) b + 256;
-                        log.info("accumulation : {}", (int) b + 256);
-                    } else {
-                        log.info("(2)");
-                        accumulation += (int) b;
-                        log.info("accumulation : {}", (int) b);
-                    }
-
-
-                    String hex = Integer.toHexString(accumulation);
-                    log.info("accumulation :{}", accumulation);
-                    log.info("hex :{}", hex);
-                }*/
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
