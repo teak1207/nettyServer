@@ -63,7 +63,7 @@ public class RequestSensorListService {
     }
 
 
-    public String saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll) throws UnsupportedEncodingException {
+    public String saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll, byte[] frameCountArr) throws UnsupportedEncodingException {
 
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -78,45 +78,11 @@ public class RequestSensorListService {
                 convertDate(request.getDateTime()),
                 convertSampleRate(request.getParameter().getSampleRate()));
 
-
-        byte[] tempFrameCount = request.getParameter().getFrameCountBytes();  // '
-        int tempFrameCountConverterd = request.getParameter().getFrameCountBytesConverted();  // '
-        byte[] tempDataSize = request.getParameter().getDataSizeBytes();
-        byte[] sampleRate = request.getParameter().getSampleRateBytes();
+        int frameCount = bytesToInt(frameCountArr);
 
 
-        log.info("--------------------------------------");
-        log.info("sc1 : {}", tempFrameCount);
-        log.info("sc2 : {}", byteArrayToHex(tempFrameCount));
-        log.info("temp len : {}", tempFrameCount.length);
-        log.info("sc : {}", bytesToInt(tempFrameCount));
-        log.info("--------------------------------------");
-        log.info("sc1 : {}", tempDataSize);
-        log.info("sc2 : {}", byteArrayToHex(tempDataSize));
-        log.info("temp len : {}", tempDataSize.length);
-        log.info("sc : {}", bytesToInt(tempDataSize));
-        log.info("--------------------------------------");
-        log.info("sc1 : {}", sampleRate);
-        log.info("sc2 : {}", byteArrayToHex(sampleRate));
-        log.info("temp len : {}", sampleRate.length);
-        log.info("--------------------------------------");
-        log.info("please: {}", tempFrameCountConverterd);
-        log.info("--------------------------------------");
+        String convertedFrameCount = Integer.toString(frameCount);
 
-
-        byte value = tempFrameCount[1];
-        int nValue = 0;
-
-        if (value < 0) {
-
-            nValue = (int) value + 256;
-        } else {
-            nValue = (int) value;
-        }
-        String frameCount = Integer.toString(nValue);
-
-
-        log.info("parseInt test: {}", Integer.parseInt(frameCount));
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));
@@ -129,7 +95,7 @@ public class RequestSensorListService {
         requestLeakDataModel.setSn(sensorListAll.getSsn());
         requestLeakDataModel.setComplete("");
         requestLeakDataModel.setCompleteTime("");
-        requestLeakDataModel.setFnum(frameCount);
+        requestLeakDataModel.setFnum(convertedFrameCount);
         requestLeakDataModel.setInference("");
 
 
@@ -137,11 +103,11 @@ public class RequestSensorListService {
         if (requestSendDataRepository.save(request, requestLeakDataModel)) {
             log.info("leak_send data Insert Success");
 
-            return frameCount;
+            return convertedFrameCount;
         } else {
             log.info("leak_send data Insert fail");
         }
-        return frameCount;
+        return convertedFrameCount;
     }
 
 
@@ -240,23 +206,14 @@ public class RequestSensorListService {
         return DatatypeConverter.printHexBinary(Bytes);
     }
 
+
+
+
     public int bytesToInt(byte[] bytes) {
 
         int result = (int) bytes[1] & 0xFF;
-
         result |= (int) bytes[0] << 8 & 0xFF00;
-//        result |= (int) bytes[1] << 16 & 0xFF0000;
-//        result |= (int) bytes[0] << 24;
-
         return result;
-    }
-
-    public String byteArrayToHex(byte[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (final byte b : array)
-            sb.append(String.format("%02x", b & 0xff));
-        return sb.toString();
-
     }
 
 

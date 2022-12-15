@@ -303,37 +303,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("flag : {}", flag);
-                log.info("test length: {}", bytes.length);
-
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
-
-                byte[] temp = new byte[2];
-
-                System.arraycopy(bytes, 44, temp, 0, 2);
-
-                log.info("chk5 : {}", temp);
-                log.info("chk5 : {}", temp[0] & 0xff);
-                log.info("chk5 : {}", temp[1] & 0xff);
-
-                log.info("chk5 : {}", bytesToInt(temp));
-
-
-                //danger : 밑에 date 사용후 지워야함
-                byte[] date = request.getLocalDateBytes(bytes);
-                byte requestType = request.getRequestType(bytes);
-
-                log.info("chk : {}", request.getFlag());
-                log.info("chk : {}", getStringToHex(request.getSensorId()));
-                log.info("chk : {}", byteArrayToHex(date));
-                log.info("chk : {}", Integer.toHexString(requestType));
-                log.info("chk : {}", Long.toHexString(request.getParameterLength())); // 2540be400
-
-                log.info("chk : {}", getStringToHex(request.getParameter().getFrameCount())); // 00EFBFBD
-                log.info("chk : {}", getStringToHex(request.getParameter().getDataSize())); // 0200
-                log.info("chk : {}", getStringToHex(request.getParameter().getSampleRate())); //04
-
+//                log.info("chk5 : {}", temp);
+//                log.info("chk5 : {}", temp[0] & 0xff);
+//                log.info("chk5 : {}", temp[1] & 0xff);
+                byte[] frameCountArr = new byte[2];
+                System.arraycopy(bytes, 44, frameCountArr, 0, 2);
 
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
@@ -341,7 +317,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("setting Response check : {}", requestFindResults);
 
                 //request_seq : requestSensorListService.saveData() 처리.
-                requestSensorListService.saveData(request, requestFindResults);
+                requestSensorListService.saveData(request, requestFindResults, frameCountArr);
 
 
                 if (requestFindResults == null) {
@@ -391,13 +367,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //memo 4 : 테이블에서 fnum을 가져와서 그걸로 카운트 횟수를 처리하자.
 
-
                 // 순서 :
                 dataService.saveData(request.getSensorId(), dataFindResults.getAsid(), request.getParameter().getData());
 
                 //memo 5 : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
 //                dataService.updateData(fname, dataFindResults.getAsid(), dataFindResults.getSsn());
-
 
                 response[0] = PacketFlag.ACK.getFlag();
                 ctx.write(Unpooled.copiedBuffer(response));
@@ -412,7 +386,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) {
     }
-
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
@@ -434,26 +407,4 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    //danger : 밑에 2개 메서드 사용후 지워야함
-    public String getStringToHex(String input) throws UnsupportedEncodingException {
-        byte[] Bytes = input.getBytes();
-        return DatatypeConverter.printHexBinary(Bytes);
-    }
-
-    //danger
-    public String byteArrayToHex(byte[] array) {
-        StringBuilder sb = new StringBuilder();
-        for (final byte b : array)
-            sb.append(String.format("%02x", b & 0xff));
-        return sb.toString();
-
-    }
-
-    //danger
-    public int bytesToInt(byte[] bytes) {
-        int result = (int) bytes[1] & 0xFF;
-        result |= (int) bytes[0] << 8 & 0xFF00;
-
-        return result;
-    }
 }

@@ -28,17 +28,9 @@ public class ReqRequest implements Serializable<ReqRequest> {
         dataSize = new String(Arrays.copyOfRange(payload, 2, 4));
         sampleRate = new String(Arrays.copyOfRange(payload, 4, 5));
 
-        log.info("chk3 : {}", byteArrayToHex(payload));
-
-        //danger : 여기서 문제가 생긴듯
-        byte[] bytes = frameCount.getBytes();
-
-        log.info("chk3-1 :{}",bytes);
-
-
-
-        log.info("chk4 : {}", stringToHex(frameCount));
-
+//        log.info("chk3 : {}", byteArrayToHex(payload));
+//        byte[] bytes = frameCount.getBytes();
+//        log.info("chk3-1 :{}",bytes);
     }
 
     @Override
@@ -54,72 +46,8 @@ public class ReqRequest implements Serializable<ReqRequest> {
         System.arraycopy(dataSizeBytes, 0, serialized, 2, 2);
         System.arraycopy(sampleRateBytes, 0, serialized, 4, 1);
 
-        log.info("sc3 : {}", serialized);
-
         return serialized;
     }
-
-    public byte[] getFrameCountBytes() {
-
-        byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
-
-
-        return frameCountBytes;
-    }
-
-
-    public int getFrameCountBytesConverted() {
-
-        byte[] frameCountBytes = Arrays.copyOfRange(frameCount.getBytes(), 0, 2);
-
-        return bytesToInt(frameCountBytes);
-    }
-
-
-    public byte[] getDataSizeBytes() {
-
-        byte[] DataSizeBytes = Arrays.copyOfRange(dataSize.getBytes(), 0, 2);
-
-        return DataSizeBytes;
-    }
-
-    public byte[] getSampleRateBytes() {
-
-        byte[] SampleRateBytes = Arrays.copyOfRange(sampleRate.getBytes(), 0, 1);
-
-        return SampleRateBytes;
-    }
-
-    String byteArrayToHex(byte[] a) {
-        StringBuilder sb = new StringBuilder();
-        for (final byte b : a)
-            sb.append(String.format("%02x ", b & 0xff));
-        return sb.toString();
-    }
-
-
-    public int bytesToInt(byte[] bytes) {
-        int result = (int) bytes[1] & 0xFF;
-        result |= (int) bytes[0] << 8 & 0xFF00;
-
-        return result;
-    }
-
-    public String getStringToHex(String input) throws UnsupportedEncodingException {
-        byte[] Bytes = input.getBytes();
-        return DatatypeConverter.printHexBinary(Bytes);
-    }
-
-    public static String stringToHex(String s) {
-        String result = "";
-
-        for (int i = 0; i < s.length(); i++) {
-            result += String.format("%02X ", (int) s.charAt(i));
-        }
-
-        return result;
-    }
-
 
 
     @Override
