@@ -314,6 +314,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 System.arraycopy(bytes, 44, temp, 0, 2);
 
                 log.info("chk5 : {}", temp);
+                log.info("chk5 : {}", temp[0] & 0xff);
                 log.info("chk5 : {}", temp[1] & 0xff);
 
 
