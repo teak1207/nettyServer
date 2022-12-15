@@ -317,6 +317,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("chk5 : {}", temp[0] & 0xff);
                 log.info("chk5 : {}", temp[1] & 0xff);
 
+                log.info("chk5 : {}", bytesToInt(temp));
+
 
                 //danger : 밑에 date 사용후 지워야함
                 byte[] date = request.getLocalDateBytes(bytes);
@@ -447,4 +449,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     }
 
+    //danger
+    public int bytesToInt(byte[] bytes) {
+        int result = (int) bytes[1] & 0xFF;
+        result |= (int) bytes[0] << 8 & 0xFF00;
+
+        return result;
+    }
 }
