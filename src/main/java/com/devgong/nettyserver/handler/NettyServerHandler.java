@@ -266,9 +266,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 //                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
 
-                    log.info("chk2 : {}", request.getParameterLength());
-                    log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
-
+                log.info("chk2 : {}", request.getParameterLength());
+                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
 
 
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
@@ -310,11 +309,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 
-                byte [] temp = new byte[2];
+                byte[] temp = new byte[2];
 
-                    System.arraycopy(bytes,44,temp,0,2);
+                System.arraycopy(bytes, 44, temp, 0, 2);
 
-                    log.info("chk5 : {}", temp);
+                log.info("chk5 : {}", temp);
+                log.info("chk5 : {}", temp[1] & 0xff);
+
 
                 //danger : 밑에 date 사용후 지워야함
                 byte[] date = request.getLocalDateBytes(bytes);
