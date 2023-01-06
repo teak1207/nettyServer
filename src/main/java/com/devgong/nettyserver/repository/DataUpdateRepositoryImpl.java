@@ -23,7 +23,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
     private final DataSource dataSource;
 
     @Override
-    public boolean updateCompleteTime(String fname, String sid, String sn) {
+    public void updateCompleteTime(Integer cid, String sid, String sn) {
 
         String mixTableName1 = "`" + "leak_send_data_" + sid;
         String mixTableName2 = "_" + sn + "`";
@@ -32,7 +32,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
 
         log.info("mixTableName update check : {}", convertedTableName);
 
-        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=? " + "," + "fnum=?" + " where fname=?";
+        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=? " + "," + "fnum=?" + " where cid=?";
         log.info("update sql check : {}", sql);
 
         Connection conn = null;
@@ -49,7 +49,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
             pstmt.setString(1, "1");
             pstmt.setString(2, dateTime);
             pstmt.setString(3, "0");
-            pstmt.setString(4, fname);
+            pstmt.setInt(4, cid);
             pstmt.executeUpdate();
 
         } catch (Exception e) {
@@ -57,38 +57,37 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
         } finally {
             close(conn, pstmt, rs);
         }
-        return true;
     }
-
-    @Override
-    public boolean decrementFnum(String fname, String sid, String sn, int fnum) {
-        String mixTableName1 = "`" + "leak_send_data_" + sid;
-        String mixTableName2 = "_" + sn + "`";
-        String convertedTableName = mixTableName1 + mixTableName2;
-
-        log.info("mixTableName update check : {}", convertedTableName);
-
-        String sql = "update " + convertedTableName + " set fnum= ? " + " where fname=?";
-        log.info("update sql check : {}", sql);
-
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try {
-            conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, String.valueOf(fnum - 1));
-            pstmt.setString(2, fname);
-            pstmt.executeUpdate();
-
-        } catch (
-                Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn, pstmt, null);
-        }
-        return true;
-    }
+//
+//    @Override
+//    public boolean decrementFnum(String fname, String sid, String sn, int fnum) {
+//        String mixTableName1 = "`" + "leak_send_data_" + sid;
+//        String mixTableName2 = "_" + sn + "`";
+//        String convertedTableName = mixTableName1 + mixTableName2;
+//
+//        log.info("mixTableName update check : {}", convertedTableName);
+//
+//        String sql = "update " + convertedTableName + " set fnum= ? " + " where fname=?";
+//        log.info("update sql check : {}", sql);
+//
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//
+//        try {
+//            conn = getConnection();
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, String.valueOf(fnum - 1));
+//            pstmt.setString(2, fname);
+//            pstmt.executeUpdate();
+//
+//        } catch (
+//                Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            close(conn, pstmt, null);
+//        }
+//        return true;
+//    }
 
     private Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);

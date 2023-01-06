@@ -22,6 +22,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.NumberUtils;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
@@ -62,6 +63,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     private final ReportSensorListService reportSensorListService;
     private final RequestSensorListService requestSensorListService;
     private final DataService dataService;
+    private final DataSequenceService dataSequenceService;
 
 
     RequestListAllModel requestFindResults;
@@ -317,7 +319,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("setting Response check : {}", requestFindResults);
 
                 //request_seq : requestSensorListService.saveData() 처리.
-                requestSensorListService.saveData(request, requestFindResults, frameCountArr);
+                RequestLeakDataModel model = requestSensorListService.saveData(request, requestFindResults, frameCountArr);
+                dataSequenceService.enrollDataSequence(model.getCid(), Integer.parseInt(model.getFnum()), LocalDateTime.now());
 
                 if (requestFindResults == null) {
                     log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");

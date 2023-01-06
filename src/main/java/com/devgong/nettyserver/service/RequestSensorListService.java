@@ -58,7 +58,7 @@ public class RequestSensorListService {
     }
 
 
-    public String saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll, byte[] frameCountArr) throws UnsupportedEncodingException {
+    public RequestLeakDataModel saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll, byte[] frameCountArr) throws UnsupportedEncodingException {
 
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -93,14 +93,7 @@ public class RequestSensorListService {
 
 
         //request_seq : leak_send data Insert
-        if (requestSendDataRepository.save(request, requestLeakDataModel)) {
-            log.info("leak_send data Insert Success");
-
-            return convertedFrameCount;
-        } else {
-            log.info("leak_send data Insert fail");
-        }
-        return convertedFrameCount;
+        return requestSendDataRepository.save(request, requestLeakDataModel);
     }
 
 

@@ -3,6 +3,8 @@ package com.devgong.nettyserver.repository;
 import com.devgong.nettyserver.domain.DataLeakSendDataModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
@@ -26,7 +28,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 
 
     @Override
-    public String selectBySnAndSid(String sn, String sid) {
+    public Pair<Integer, String> findCidAndFnameBySnAndSid(String sn, String sid) {
 
         String mixTableName1 = "`" + "leak_send_data_" + sid;
         String mixTableName2 = "_" + sn + "`";
@@ -35,7 +37,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 
         log.info("mixTableName check : {}", convertedTableName);
 
-        String sql = "select fname from " + convertedTableName + " where sid=? and sn =? " + " order by cid desc limit 1";
+        String sql = "select cid, fname from " + convertedTableName + " where sid=? and sn =? " + " order by cid desc limit 1";
 
         log.info("sql check : {}", sql);
 
@@ -54,7 +56,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 //                DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
 //                dataLeakSendDataModel.setFname(rs.getString("fname"));
 //                return dataLeakSendDataModel.getFname();
-                return rs.getString("fname");
+                return Pair.of(rs.getInt("cid"), rs.getString("fname"));
             }
 
         } catch (Exception e) {
@@ -67,41 +69,41 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
         return null;
     }
 
-    @Override
-    public String getFnumOfReceivingSensorBySnAndSid(String fname, String sn, String sid) {
-        String mixTableName1 = "`" + "leak_send_data_" + sid;
-        String mixTableName2 = "_" + sn + "`";
-
-        String convertedTableName = mixTableName1 + mixTableName2;
-
-        log.info("mixTableName check : {}", convertedTableName);
-
-        String sql = "select fnum from " + convertedTableName + " where fname=? ";
-
-        log.info("sql check : {}", sql);
-
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, fname);
-            rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getString("fnum");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn, pstmt, rs);
-        }
-
-        return null;
-    }
+//    @Override
+//    public String getFnumOfReceivingSensorBySnAndSid(String fname, String sn, String sid) {
+//        String mixTableName1 = "`" + "leak_send_data_" + sid;
+//        String mixTableName2 = "_" + sn + "`";
+//
+//        String convertedTableName = mixTableName1 + mixTableName2;
+//
+//        log.info("mixTableName check : {}", convertedTableName);
+//
+//        String sql = "select fnum from " + convertedTableName + " where fname=? ";
+//
+//        log.info("sql check : {}", sql);
+//
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//        ResultSet rs = null;
+//
+//        try {
+//            conn = getConnection();
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, fname);
+//            rs = pstmt.executeQuery();
+//
+//            if (rs.next()) {
+//                return rs.getString("fnum");
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            close(conn, pstmt, rs);
+//        }
+//
+//        return null;
+//    }
 
 
     private Connection getConnection() {
@@ -132,39 +134,39 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
         }
     }
 
-    @Override
-    public Boolean updateFnum(String fname, String sn, String sid) {
-
-        String mixTableName1 = "`" + "leak_send_data_" + sid;
-        String mixTableName2 = "_" + sn + "`";
-        String convertedTableName = mixTableName1 + mixTableName2;
-
-
-        log.info("mixTableName update check : {}", convertedTableName);
-
-        String sql = "update " + convertedTableName + " set fnum= ? " + " where fname=?";
-        log.info("update sql check : {}", sql);
-
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "0");
-            pstmt.setString(2, fname);
-            pstmt.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            close(conn, pstmt, rs);
-        }
-        return true;
-
-
-    }
+//    @Override
+//    public Boolean updateFnum(String fname, String sn, String sid) {
+//
+//        String mixTableName1 = "`" + "leak_send_data_" + sid;
+//        String mixTableName2 = "_" + sn + "`";
+//        String convertedTableName = mixTableName1 + mixTableName2;
+//
+//
+//        log.info("mixTableName update check : {}", convertedTableName);
+//
+//        String sql = "update " + convertedTableName + " set fnum= ? " + " where fname=?";
+//        log.info("update sql check : {}", sql);
+//
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//        ResultSet rs = null;
+//
+//        try {
+//            conn = getConnection();
+//            pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, "0");
+//            pstmt.setString(2, fname);
+//            pstmt.executeUpdate();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            close(conn, pstmt, rs);
+//        }
+//        return true;
+//
+//
+//    }
 
 
     private void close(Connection conn) throws SQLException {

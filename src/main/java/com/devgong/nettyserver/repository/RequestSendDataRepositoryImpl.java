@@ -36,7 +36,7 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
      */
 
     @Override
-    public boolean save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel) {
+    public RequestLeakDataModel save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel) {
 
         log.info("repository : {}", request);
         log.info("repository : {}", requestLeakDataModel);
@@ -53,7 +53,7 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
 //        log.info("complete : {}", requestLeakDataModel.getComplete());
 //        log.info("fnum : {}", requestLeakDataModel.getFnum());
 
-        parameters.put("cid", 1);
+//        parameters.put("cid", 1);
         parameters.put("pname", requestLeakDataModel.getPname());
         parameters.put("date", requestLeakDataModel.getDate());
         parameters.put("id", requestLeakDataModel.getId());
@@ -73,6 +73,6 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         requestLeakDataModel.setCid(key.intValue());
 
-        return true;
+        return requestLeakDataModel;
     }
 }

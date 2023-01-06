@@ -1,10 +1,12 @@
 package com.devgong.nettyserver.repository;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 public interface RequestSendDataJdbcRepository {
 
-    String selectBySnAndSid(String sn, String sid);
+    Pair<Integer, String> findCidAndFnameBySnAndSid(String sn, String sid);
 
-    String getFnumOfReceivingSensorBySnAndSid(String fname, String sn, String sid);
+//    String getFnumOfReceivingSensorBySnAndSid(String fname, String sn, String sid);
 
-    Boolean updateFnum(String fname, String sn, String sid);
+//    Boolean updateFnum(String fname, String sn, String sid);
 }
