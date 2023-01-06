@@ -32,7 +32,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
 
         log.info("mixTableName update check : {}", convertedTableName);
 
-        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=? " + "," + "fnum=?" + " where cid=?";
+        String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=? " + " where cid=?";
         log.info("update sql check : {}", sql);
 
         Connection conn = null;
@@ -48,8 +48,7 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, "1");
             pstmt.setString(2, dateTime);
-            pstmt.setString(3, "0");
-            pstmt.setInt(4, cid);
+            pstmt.setInt(3, cid);
             pstmt.executeUpdate();
 
         } catch (Exception e) {
