@@ -32,7 +32,7 @@ public class DataSequenceService {
 
         public boolean isDeprecated(LocalDateTime now) {
 //            return now.isAfter(accessTime.plusMinutes(10));
-            return now.isAfter(accessTime.plusMinutes(10));
+            return now.isAfter(accessTime.plusMinutes(2));
 //            return accessTime.plusMinutes(10).isBefore(now);
         }
     }
@@ -51,7 +51,7 @@ public class DataSequenceService {
             dataUpdateRepository.updateCompleteTime(cid, sid, sn);
         } else {
             dataSequenceManagingMap.put(cid, afterSequence);
-            log.info("cid : {} is decremented", cid);
+            log.info("cid : {} is decremented {}", cid, afterSequence.getSequence());
         }
     }
 
@@ -62,9 +62,9 @@ public class DataSequenceService {
         log.info("리프레시 시작");
         LocalDateTime now = LocalDateTime.now();
         for (Map.Entry<Integer, DataSequence> dataSequence : dataSequences) {
-            log.info("검사해보자 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue());
+            log.info("검사해보자 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
             if (dataSequence.getValue().isDeprecated(now)) {
-                log.info("Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue());
+                log.info("Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
                 dataSequenceManagingMap.remove(dataSequence.getKey());
             }
         }
