@@ -57,11 +57,6 @@ public class RequestSensorListService {
         return requestSensorListAllRepository.findAllBySsnAndStatusIsAndValidNot(serialNumber, status, valid);
     }
 
-    public String findDataFname(String serialNumber, String sid) {
-
-        return requestSendDataJdbcRepository.selectBySnAndSid(serialNumber, sid);
-    }
-
 
     public String saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll, byte[] frameCountArr) throws UnsupportedEncodingException {
 
@@ -80,9 +75,7 @@ public class RequestSensorListService {
 
         int frameCount = bytesToInt(frameCountArr);
 
-
         String convertedFrameCount = Integer.toString(frameCount);
-
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));
@@ -205,8 +198,6 @@ public class RequestSensorListService {
         byte[] Bytes = input.getBytes(StandardCharsets.UTF_8);
         return DatatypeConverter.printHexBinary(Bytes);
     }
-
-
 
 
     public int bytesToInt(byte[] bytes) {

@@ -157,7 +157,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
-                //preinstall_seq :ACK or NAK + REPORT 전송
+                // preinstall_seq :ACK or NAK + REPORT 전송
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
                 /*==== Header ====*/
                 log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
@@ -168,7 +168,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("ACK/NAK FLAG : {}", (char) readFlag);
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
-                //preinstall_seq : 기기에서 보내준 값을 factory_report 테이블에 저장하는 작업.
+                // preinstall_seq : 기기에서 보내준 값을 factory_report 테이블에 저장하는 작업.
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
 
                 byte[] result = new byte[45];
@@ -202,8 +202,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("Setting Readable bytes length : {}", bytes.length);
                 log.info("setting request check : {}", request);
 
-                //setting_seq : << Setting process 진행 >>
-                //setting_seq : Setting 값 response 하기 위해 model 초기화.
+                // setting_seq : << Setting process 진행 >>
+                // setting_seq : Setting 값 response 하기 위해 model 초기화.
 
                 // danger : SettingResponseModel & SettingResponse 가 하는일이 똑같음
                 // danger : SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
@@ -303,7 +303,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksumcheck 하는부분 걷어냄.
+                //request_seq : request 부터는 체크썸이 없음.이유는 데이터의 길이가 짧기에 -> NewPacket 추가, checksum check 하는부분 걷어냄.
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
 //                log.info("chk5 : {}", temp);
 //                log.info("chk5 : {}", temp[0] & 0xff);
@@ -318,7 +318,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //request_seq : requestSensorListService.saveData() 처리.
                 requestSensorListService.saveData(request, requestFindResults, frameCountArr);
-
 
                 if (requestFindResults == null) {
                     log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
@@ -337,7 +336,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
-
             } else if (PacketFlag.DATA.equals(flag)) {
 
                 log.info("flag : {}", flag);
@@ -350,24 +348,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
 
-
                 log.info("Data  길이 : {}", bytes.length);
                 log.info("Data FLAG : {}", (char) readFlag);
-//                log.info("mBuf length : {}", mBuf);
-
                 //memo 1 : request에 참조 없음-> sensor_list_all에서 참조해옴.
-
                 //memo 2 : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
                 dataFindResults = requestSensorListService.findDataExistence(request.getSensorId(), "-1", "0");
                 log.info("dataFindResults : {}", dataFindResults);
-
                 //memo 3 : leak_send_data_(sid)_(sn)에서 fname 참조해야함. memo 5 에서 사용.
-
 //                String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
-
                 //memo 4 : 테이블에서 fnum을 가져와서 그걸로 카운트 횟수를 처리하자.
-
-                // 순서 :
                 dataService.saveData(request.getSensorId(), dataFindResults.getAsid(), request.getParameter().getData());
 
                 //memo 5 : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
