@@ -56,7 +56,7 @@ public class DataSequenceService {
     }
 
     // 매 분마다 실행
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "* /30 * * * *")
     public void refreshDataSource() {
         Set<Map.Entry<Integer, DataSequence>> dataSequences = dataSequenceManagingMap.entrySet();
         log.info("리프레시 시작");
