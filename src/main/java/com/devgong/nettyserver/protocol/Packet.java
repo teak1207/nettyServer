@@ -94,8 +94,8 @@ public class Packet<T extends Serializable<T>> {
 
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
-            log.info("accumulation : {}", b);
-            log.info("accumulation : {}", (char) b);
+//            log.info("accumulation : {}", b);
+//            log.info("accumulation : {}", (char) b);
         }
 
 //        log.info("validateChecksum accumulation : {}", accumulation);
@@ -116,22 +116,22 @@ public class Packet<T extends Serializable<T>> {
 //            log.info("accumulation byte(char) : {}", (char) b & 0xff);
 //            log.info("accumulation byte(char) : {}", accumulation);
         }
-        log.info("accumulation : {}", accumulation);
+//        log.info("accumulation : {}", accumulation);
 
 
         String hex = Integer.toHexString(accumulation);
         String first = "";
         String second = "";
 
-        log.info("hex : {}", hex);
+//        log.info("hex : {}", hex);
         if (hex.length() == 3) {
             first = hex.substring(0, 1);
             second = hex.substring(1, 3);
-            log.info("first , 1 : {} {}", first, second);
+//            log.info("first , 1 : {} {}", first, second);
         } else if (hex.length() == 4) {
             first = hex.substring(0, 2);
             second = hex.substring(2, 4);
-            log.info("first , 2 : {} {}", first, second);
+//            log.info("first , 2 : {} {}", first, second);
         }
 
         // "c" -> "0x0c" (byte)

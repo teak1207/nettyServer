@@ -32,7 +32,7 @@ public class DataRequest implements Serializable<DataRequest> {
         byte[] dataBytes = Arrays.copyOfRange(data, 0, 512);
 
         System.arraycopy(dataBytes, 0, serialized, 0, 512);
-        log.info("serialized check : {}", serialized);
+//        log.info("serialized check : {}", serialized);
         return serialized;
     }
 
