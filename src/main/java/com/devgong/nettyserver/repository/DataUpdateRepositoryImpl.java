@@ -30,10 +30,10 @@ public class DataUpdateRepositoryImpl implements DataUpdateRepository {
         String convertedTableName = mixTableName1 + mixTableName2;
 
 
-        log.info("mixTableName update check : {}", convertedTableName);
+//        log.info("mixTableName update check : {}", convertedTableName);
 
         String sql = "update " + convertedTableName + " set complete= ? " + "," + "complete_time=? " + " where cid=?";
-        log.info("update sql check : {}", sql);
+//        log.info("update sql check : {}", sql);
 
         Connection conn = null;
         PreparedStatement pstmt = null;

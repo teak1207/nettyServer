@@ -34,9 +34,9 @@ public class PreInstallRequest implements Serializable<PreInstallRequest> {
         byte[] serialized = new byte[29];
 
         byte[] modemPhoneNumberBytes = Arrays.copyOfRange(modemPhoneNumber.getBytes(), 0, 16);
-        log.info("modemPhoneNumberBytes length : {}", modemPhoneNumberBytes.length);
+//        log.info("modemPhoneNumberBytes length : {}", modemPhoneNumberBytes.length);
         byte[] debugMessageBytes  = Arrays.copyOfRange(debugMessage.getBytes(), 0, 13);
-        log.info("debugMessageBytes length : {}", debugMessageBytes.length);
+//        log.info("debugMessageBytes length : {}", debugMessageBytes.length);
 
         System.arraycopy(modemPhoneNumberBytes, 0, serialized, 0, 16);
         System.arraycopy(debugMessageBytes, 0, serialized, 16, 13);

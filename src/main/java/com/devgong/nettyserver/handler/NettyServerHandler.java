@@ -98,8 +98,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-                log.info("PreInstall  readable bytes length : {}", bytes.length);
-                log.info("PreInstall FLAG : {}", (char) readFlag);
+//                log.info("PreInstall  readable bytes length : {}", bytes.length);
+//                log.info("PreInstall FLAG : {}", (char) readFlag);
 
                 //seq : <<장치에서 보낸 값과 서버에서 받은 값이 타당한지를 수행하는 과정 ,바이트배열->객체 >>
                 //seq : packet 이라는 클래스를 해두었음. 생성자의 파라미터로  flag, bytes, PreInstallRequest.class 줌.
@@ -139,8 +139,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //seq : preInstallDeviceInfos null 체크 후, 객체-> 바이트배열 변환
                 if (preInstallDeviceInfos != null) {
-                    log.info("response.serialize() : {}", response.serialize().length);
-                    log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
+//                    log .info("response.serialize() : {}", response.serialize().length);
+//                    log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
                             response.getSn(),
@@ -166,8 +166,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
-                log.info("ACK/NAK FLAG : {}", (char) readFlag);
+//                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
+//                log.info("ACK/NAK FLAG : {}", (char) readFlag);
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
                 // preinstall_seq : 기기에서 보내준 값을 factory_report 테이블에 저장하는 작업.
@@ -201,8 +201,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
 
-                log.info("Setting Readable bytes length : {}", bytes.length);
-                log.info("setting request check : {}", request);
+//                log.info("Setting Readable bytes length : {}", bytes.length);
+//                log.info("setting request check : {}", request);
 
                 // setting_seq : << Setting process 진행 >>
                 // setting_seq : Setting 값 response 하기 위해 model 초기화.
@@ -268,8 +268,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 //                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
 
-                log.info("chk2 : {}", request.getParameterLength());
-                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
+//                log.info("chk2 : {}", request.getParameterLength());
+//                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
 
 
                 //report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
@@ -316,7 +316,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
-                log.info("setting Response check : {}", requestFindResults);
+//                log.info("setting Response check : {}", requestFindResults);
 
                 //request_seq : requestSensorListService.saveData() 처리.
                 RequestLeakDataModel model = requestSensorListService.saveData(request, requestFindResults, frameCountArr);
@@ -345,18 +345,18 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] response = new byte[45];
                 byte[] bytes = new byte[mBuf.readableBytes()];
 
-                log.info("DATA bytes : {}", Arrays.toString(bytes));
+//                log.info("DATA bytes : {}", Arrays.toString(bytes));
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
 
-                log.info("Data  길이 : {}", bytes.length);
-                log.info("Data FLAG : {}", (char) readFlag);
+//                log.info("Data  길이 : {}", bytes.length);
+//                log.info("Data FLAG : {}", (char) readFlag);
                 //memo 1 : request에 참조 없음-> sensor_list_all에서 참조해옴.
                 //memo 2 : sensor_list_all에서 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
                 dataFindResults = requestSensorListService.findDataExistence(request.getSensorId(), "-1", "0");
-                log.info("dataFindResults : {}", dataFindResults);
+//                log.info("dataFindResults : {}", dataFindResults);
                 //memo 3 : leak_send_data_(sid)_(sn)에서 fname 참조해야함. memo 5 에서 사용.
 //                String fname = requestSensorListService.findDataFname(dataFindResults.getSsn(), dataFindResults.getAsid());
                 //memo 4 : 테이블에서 fnum을 가져와서 그걸로 카운트 횟수를 처리하자.

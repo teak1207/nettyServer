@@ -55,10 +55,10 @@ public class PreinstallSensorListService {
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
         //preinstall_seq: preInstallSensorListAllModel Ssn 값으로 sensor_list 테이블에서 값을 가져옴.
         preInstallSensorListModel = preInstallSensorListRepository.findTopBySerialNumberOrderByCidDesc(preInstallSensorListAllModel.getSsn());
-        log.info("-------------------------------");
-        log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);
-        log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
-        log.info("-------------------------------");
+//        log.info("-------------------------------");
+//        log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);
+//        log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
+//        log.info("-------------------------------");
         //preinstall_seq : preinstallSetModel 라는 객체에 4개의 테이블에서 가져온 값들을 채워넣어 객체를 리턴함.
         preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
         preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
@@ -122,7 +122,7 @@ public class PreinstallSensorListService {
             preinstallReportModel.setBaudrate(String.valueOf(bytes[217]));
             preinstallReportModel.setPcbVersion(String.valueOf(bytes[218]));
 
-            log.info("preinstallReportModel : {}", preinstallReportModel);
+//            log.info("preinstallReportModel : {}", preinstallReportModel);
 
             //preinstall_seq : factory_report 테이블에 값을 저장.
             reportRepository.save(preinstallReportModel);

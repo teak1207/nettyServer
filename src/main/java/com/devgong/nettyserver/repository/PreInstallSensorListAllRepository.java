@@ -6,8 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PreInstallSensorListAllRepository extends JpaRepository<PreInstallSensorListAllModel, Integer> {
-
-
     PreInstallSensorListAllModel findPreInstallModelBySsn(String sn);
-      PreInstallSensorListAllModel findPreInstallSensorListAllModelByMphone(String modemNum);
+
+    PreInstallSensorListAllModel findPreInstallSensorListAllModelByMphone(String modemNum);
 }

@@ -41,7 +41,7 @@ public class DataService {
         //memo: 명확한 구분값으로 fname을 select 해옴.
         Pair<Integer, String> result = requestSendDataJdbcRepository.findCidAndFnameBySnAndSid(sensorListAllModel.getSsn(), sensorListAllModel.getAsid());
 
-        log.info("fname check : {}", result.getRight());
+//        log.info("fname check : {}", result.getRight());
 
         Path path = Paths.get(result.getRight());
 

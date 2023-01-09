@@ -124,7 +124,7 @@ public class ReportSensorListService {
 
         if (dataInsertModel != null) {
 
-            log.info("dataInsertModel check final : {} ", dataInsertModel);
+//            log.info("dataInsertModel check final : {} ", dataInsertModel);
             //report_seq : dataSensorReportRepositoryImpl 에 save 구현.
             dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
             log.info("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");

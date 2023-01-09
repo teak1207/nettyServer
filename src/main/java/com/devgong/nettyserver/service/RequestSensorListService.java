@@ -110,8 +110,8 @@ public class RequestSensorListService {
                     requestFindResults.getAproject(),
                     requestFindResults.getSsn());
 
-            log.info("check path length : {}", path.length());
-            log.info("path : {}", path);
+//            log.info("check path length : {}", path.length());
+//            log.info("path : {}", path);
 
             String filePath = String.format("%s/%s_%s_%s.dat",
                     path,
