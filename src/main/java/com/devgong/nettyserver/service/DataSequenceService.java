@@ -70,12 +70,8 @@ public class DataSequenceService {
             }
         }
     }
-    @Scheduled(cron = "0 0 0/1 * * *")
-    public void hourCheck(){
-        log.info("한시간 지났음");
-    }
 
-    @Scheduled(cron = "* 5 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void fiveMinCheck(){
         log.info("5분v 지났음");
     }
