@@ -75,7 +75,7 @@ public class DataSequenceService {
         log.info("한시간 지났음");
     }
 
-    @Scheduled(cron = "0 5 * * * *")
+    @Scheduled(cron = "* 5 * * * *")
     public void fiveMinCheck(){
         log.info("5분v 지났음");
     }
