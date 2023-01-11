@@ -39,6 +39,7 @@ public class DataSequenceService {
 
     public void enrollDataSequence(Integer cid, Integer fnum, LocalDateTime now) {
         dataSequenceManagingMap.put(cid, new DataSequence(fnum, now));
+        log.info("등록 : {} - {} - {} ",cid,fnum,now);
     }
 
     public void decrementDataSequence(Integer cid, String sid, String sn, LocalDateTime now) {
