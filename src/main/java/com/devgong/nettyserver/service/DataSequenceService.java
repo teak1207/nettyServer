@@ -39,7 +39,7 @@ public class DataSequenceService {
 
     public void enrollDataSequence(Integer cid, Integer fnum, LocalDateTime now) {
         dataSequenceManagingMap.put(cid, new DataSequence(fnum, now));
-        log.info("등록 : {} - {} - {} ",cid,fnum,now);
+        log.info("등록: {} - {} - {} ",cid,fnum,now);
     }
 
     public void decrementDataSequence(Integer cid, String sid, String sn, LocalDateTime now) {
@@ -57,12 +57,13 @@ public class DataSequenceService {
     }
 
     // 매 분 정각마다 실행
-    @Scheduled(cron = "5 * * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void refreshDataSource() {
         Set<Map.Entry<Integer, DataSequence>> dataSequences = dataSequenceManagingMap.entrySet();
         log.info("리프레시 시작");
         LocalDateTime now = LocalDateTime.now();
         for (Map.Entry<Integer, DataSequence> dataSequence : dataSequences) {
+
             log.info("검사해보자 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
             if (dataSequence.getValue().isDeprecated(now)) {
                 log.info("Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
