@@ -23,7 +23,7 @@ public class DataSequenceService {
     @Getter
     @RequiredArgsConstructor
     static class DataSequence {
-        private final Integer sequence;
+        private final Integer sequence;  // frameCount number
         private final LocalDateTime accessTime;
 
         public DataSequence decrement(LocalDateTime accessTime) {
@@ -39,24 +39,33 @@ public class DataSequenceService {
 
     public void enrollDataSequence(Integer cid, Integer fnum, LocalDateTime now) {
         dataSequenceManagingMap.put(cid, new DataSequence(fnum, now));
-        log.info("등록: {} - {} - {} ",cid,fnum,now);
+        log.info("등록: {} - {} - {} ", cid, fnum, now);
     }
 
     public void decrementDataSequence(Integer cid, String sid, String sn, LocalDateTime now) {
         // TODO : decrement 하려고 했는데, 메뉴판에 등록되어있지 않은 경우 어떻게 처리할까?, Tube
+
+        // memo : request에서 등록한 값을 담음.
         DataSequence beforeSequence = dataSequenceManagingMap.get(cid);
+
+        // memo : beforeSequence 의 sequence -1
         DataSequence afterSequence = beforeSequence.decrement(now);
+
+        //memo : 만약 sequence == 0 이라면
         if (afterSequence.sequence == 0) {
             dataSequenceManagingMap.remove(cid);
             log.info("cid : {} is removed", cid);
+
+            //memo : leak_send_data 의 complete / completeTime 을 update.
             dataUpdateRepository.updateCompleteTime(cid, sid, sn);
+
         } else {
             dataSequenceManagingMap.put(cid, afterSequence);
             log.info("cid : {} is decremented {}", cid, afterSequence.getSequence());
         }
     }
 
-    // 매 분 정각마다 실행
+    //check : 메뉴판 관리자, 매 분 정각마다 실행
     @Scheduled(cron = "0 * * * * *")
     public void refreshDataSource() {
         Set<Map.Entry<Integer, DataSequence>> dataSequences = dataSequenceManagingMap.entrySet();
@@ -64,18 +73,11 @@ public class DataSequenceService {
         LocalDateTime now = LocalDateTime.now();
         for (Map.Entry<Integer, DataSequence> dataSequence : dataSequences) {
 
-            log.info("검사해보자 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
+            log.info("검사해보자 => key: {}3 , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
             if (dataSequence.getValue().isDeprecated(now)) {
                 log.info("Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
                 dataSequenceManagingMap.remove(dataSequence.getKey());
             }
         }
     }
-
-    @Scheduled(cron = "0 */5 * * * *")
-    public void fiveMinCheck(){
-        log.info("5분v 지났음");
-    }
-
-
 }
