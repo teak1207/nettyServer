@@ -49,6 +49,8 @@ public class SettingPhaseService {
         if (sensorListAllModel.isEmpty()) return Optional.empty();
         else sensorInfo = sensorListAllModel.get();
 
+        log.info("freset : {}", sensorInfo.getFreset());
+
         //setting_seq : sensor_list 에서 Asid, Aproject 해당하는 값을 탐색 후,sensorListModel 이라는 객체에 담음.
         SettingSensorListModel sensorListModel = settingSensorListRepository.findBySidAndPnameAndSerialNumber(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
 

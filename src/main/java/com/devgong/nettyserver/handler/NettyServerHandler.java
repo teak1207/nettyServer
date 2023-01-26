@@ -202,8 +202,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
 
-//                log.info("Setting Readable bytes length : {}", bytes.length);
-//                log.info("setting request check : {}", request);
 
                 // setting_seq : << Setting process 진행 >>
                 // setting_seq : Setting 값 response 하기 위해 model 초기화.
