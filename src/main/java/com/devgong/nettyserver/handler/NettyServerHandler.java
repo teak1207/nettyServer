@@ -37,15 +37,16 @@ import java.util.Optional;
  * <p>
  * develop Spec
  * (추가 기입 해야함.)
+ *
  * </p>
  *
  * @author devgong
  * 디바이스와의 통신관련 통제는 핸들러에서 이루어진다
- * (1) Preinstall
- * (2) Setting
- * (3) Report
- * (4) Requaest
- * (5) Data
+ * (1) Preinstall - 디바이스에 기기 설정 값에 대한 정보를 서버에서 내려주는 프로세스
+ * (2) Setting -
+ * (3) Report -
+ * (4) Request -
+ * (5) Data - fnum의 값만큼 디바이스에서 값을 요청, 서버에서 응답
  * @version 1.0
  */
 
@@ -267,7 +268,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
 //                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-
 //                log.info("chk2 : {}", request.getParameterLength());
 //                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
 

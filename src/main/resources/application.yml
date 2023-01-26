@@ -20,5 +20,17 @@ spring:
           generate-ddl: false
           show-sql: true
 
+          format_sql: true
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL=DEBUG
+        type.descriptor.sql.BasicBinder=TRACE
+
+
+
 sensor:
     file-path: /home/scsol/public_html/leak_data_gong/
