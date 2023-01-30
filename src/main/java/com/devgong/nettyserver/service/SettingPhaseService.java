@@ -49,7 +49,6 @@ public class SettingPhaseService {
         if (sensorListAllModel.isEmpty()) return Optional.empty();
         else sensorInfo = sensorListAllModel.get();
 
-        log.info("freset123 : {}", sensorInfo.getFreset());
 
         //setting_seq : sensor_list 에서 Asid, Aproject 해당하는 값을 탐색 후,sensorListModel 이라는 객체에 담음.
         SettingSensorListModel sensorListModel = settingSensorListRepository.findBySidAndPnameAndSerialNumber(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
@@ -98,6 +97,11 @@ public class SettingPhaseService {
                     .dbUrl(factoryLeakProjectModel.getDbURL())
                     .dbPort(factoryLeakProjectModel.getDbPORT());
         }
+
+
+        //setting_seq : 만약 sensor_list_all 의 F-reset 의  값이 1이면 0으로 Update
+
+
 
         return Optional.of(settingResponseModelBuilder.build());
     }

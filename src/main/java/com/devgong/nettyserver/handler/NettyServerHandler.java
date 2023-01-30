@@ -185,6 +185,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.info("Report Response Success");
 
+                    //preinstall_seq : sensor_list_all 의  fReset 값을 update
+                    log.info("sid : {}",request.getParameter().getSid());
+
                 } else {
                     result[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(result));
@@ -212,11 +215,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] nakResponse = new byte[45];
 
-                log.info("test : {}", settingDeviceInfos.get());
 
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
                 if (settingDeviceInfos.isPresent()) {
                     SettingResponseModel deviceInfo = settingDeviceInfos.get();
+
 
 
                     SettingResponse response = new SettingResponse(
