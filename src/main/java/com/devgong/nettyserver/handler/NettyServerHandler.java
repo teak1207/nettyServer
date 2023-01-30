@@ -186,7 +186,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("Report Response Success");
 
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
-                    log.info("sid : {}",request.getParameter().getSid());
+                    log.info("danger : {}",request.getParameter().getSid());
 
                 } else {
                     result[0] = PacketFlag.NAK.getFlag();
