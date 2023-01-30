@@ -215,6 +215,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] nakResponse = new byte[45];
 
+                log.info("테스트 : {}",settingDeviceInfos.get().getFReset() );
 
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
                 if (settingDeviceInfos.isPresent()) {
