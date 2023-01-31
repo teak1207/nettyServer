@@ -235,12 +235,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             deviceInfo.getTime2(),
                             deviceInfo.getTime3(),
                             deviceInfo.getFmRadio(),
+
+
                             deviceInfo.getSid(),
                             deviceInfo.getPname(),
                             deviceInfo.getSleep(),
                             deviceInfo.getReset(),
                             Integer.parseInt(deviceInfo.getPeriod()),
                             Integer.parseInt(deviceInfo.getSamplingTime()),
+//                            deviceInfo.getFReset(),
                             deviceInfo.getFReset(),
                             deviceInfo.getPx(),
                             deviceInfo.getPy(),
@@ -261,6 +264,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response.serialize().length + 2,  //4 byte
                             response
                     );
+
+                    log.info("테스트2 : {}", responsePacket);
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
