@@ -227,6 +227,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     SettingResponseModel deviceInfo = settingDeviceInfos.get();
 //&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
 
+
+                    log.info("테스트 : {}" , deviceInfo.getFReset() );
+
                     SettingResponse response = new SettingResponse(
                             deviceInfo.getTime1(),
                             deviceInfo.getTime2(),
