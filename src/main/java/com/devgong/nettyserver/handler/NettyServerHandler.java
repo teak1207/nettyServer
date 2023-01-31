@@ -99,9 +99,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
-//                log.info("PreInstall  readable bytes length : {}", bytes.length);
-//                log.info("PreInstall FLAG : {}", (char) readFlag);
-
                 //seq : <<장치에서 보낸 값과 서버에서 받은 값이 타당한지를 수행하는 과정 ,바이트배열->객체 >>
                 //seq : packet 이라는 클래스를 해두었음. 생성자의 파라미터로  flag, bytes, PreInstallRequest.class 줌.
                 //seq : 프로토콜헤더 항목 길이별로 맞게 할당하는 처리수행.
@@ -140,8 +137,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 //seq : preInstallDeviceInfos null 체크 후, 객체-> 바이트배열 변환
                 if (preInstallDeviceInfos != null) {
+
 //                    log .info("response.serialize() : {}", response.serialize().length);
 //                    log.info("response.serialize().length + 2: {}", response.serialize().length + 2);
+
                     Packet<PreInstallResponse> responsePacket = new Packet<>(
                             PacketFlag.PREINSTALL,
                             response.getSn(),
@@ -186,7 +185,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("Report Response Success");
 
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
-                    log.info("danger : {}",request.getParameter().getSid());
+                    log.info("테스트2 : {}" , request.getSensorId());
+                    preinstallSensorListService.update(request.getSensorId(),0);
+                    log.info("12341234");
+
+
 
                 } else {
                     result[0] = PacketFlag.NAK.getFlag();
@@ -215,14 +218,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] nakResponse = new byte[45];
 
-                log.info("테스트 : {}",settingDeviceInfos.get().getFReset() );
+//                log.info("테스트 : {}",settingDeviceInfos.get().getFReset() );
 
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
 
                 //setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
-                if (settingDeviceInfos.isPresent() && Integer.parseInt(settingDeviceInfos.get().getFReset())!= 1  ) {
+                if (settingDeviceInfos.isPresent() && Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1) {
                     SettingResponseModel deviceInfo = settingDeviceInfos.get();
-
 
 
                     SettingResponse response = new SettingResponse(
@@ -317,7 +319,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
                 byte[] frameCountArr = new byte[2];
                 System.arraycopy(bytes, 44, frameCountArr, 0, 2);
- 
+
                 byte[] response = new byte[45];
                 //request_seq : find 값을 객체에 초기화
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());

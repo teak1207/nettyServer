@@ -4,7 +4,11 @@ import com.devgong.nettyserver.domain.*;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -82,6 +86,12 @@ public class PreinstallSensorListService {
         return preinstallSetModel;
     }
 
+    @Modifying
+    @Query("update sensor_list_all  m set m.f_reset = :freset where ssn = :ssn ")
+    public void update(@Param("ssn") String ssn,@Param("freset") int freset) {
+    }
+
+
     /**
      * @param bytes - 디바이스에서 넘겨주는 고유 모뎀 번호
      * @return factory_report 테이블에 값을 저장하고 true 리턴, 그렇지 않다면 false 리턴
@@ -128,7 +138,6 @@ public class PreinstallSensorListService {
             reportRepository.save(preinstallReportModel);
             log.info("[INSERT] : SUCCESS ");
             return true;
-
         } else {
             log.error("[INSERT] : FAIL");
             return false;

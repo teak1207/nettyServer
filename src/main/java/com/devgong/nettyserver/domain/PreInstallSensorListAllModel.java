@@ -1,6 +1,7 @@
 package com.devgong.nettyserver.domain;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @ToString
 @Table(name = "sensor_list_all")
 @NoArgsConstructor
+@DynamicUpdate
 public class PreInstallSensorListAllModel {
 
     @Id

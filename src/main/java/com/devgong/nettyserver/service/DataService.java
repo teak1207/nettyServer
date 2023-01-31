@@ -44,4 +44,9 @@ public class DataService {
         dataSequenceService.decrementDataSequence(result.getLeft(), sid, sn, LocalDateTime.now());
 
     }
+
+/*    public boolean updateData(String fname, String sid, String sn) {
+
+        return dataUpdateRepository.updateCompleteTime(fname, sid, sn);
+    }*/
 }
