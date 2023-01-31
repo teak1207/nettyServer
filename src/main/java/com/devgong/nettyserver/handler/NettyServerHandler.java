@@ -223,9 +223,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
 
                 //setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
-                if (settingDeviceInfos.isPresent() && Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1) {
+                if (settingDeviceInfos.isPresent() ) {
                     SettingResponseModel deviceInfo = settingDeviceInfos.get();
-
+//&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
 
                     SettingResponse response = new SettingResponse(
                             deviceInfo.getTime1(),
