@@ -99,8 +99,7 @@ public class SettingPhaseService {
         }
 
 
-        //setting_seq : 만약 sensor_list_all 의 F-reset 의  값이 1이면 0으로 Update
-
+        log.info("테스트1 service,select -> 객체에 담음.: {}", settingResponseModelBuilder);
 
 
         return Optional.of(settingResponseModelBuilder.build());

@@ -64,11 +64,12 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
         System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
 
-        log.info("테스트3 : {}",serialized);
+        log.info("테스트3-1, serialized 체크 : {}",serialized);
         return serialized;
     }
 
     private byte[] serializeExceptChecksum() {
+        log.info("테스트3-2, parameter 찍어보기 {}", parameter);
         byte[] serializedParameter = parameter.serialize();
         byte[] serialized = new byte[45 + serializedParameter.length];
 

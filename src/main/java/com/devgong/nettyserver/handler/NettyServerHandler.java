@@ -185,7 +185,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("Report Response Success");
 
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
-                    log.info("테스트2 : {}" , request.getSensorId());
                     preinstallSensorListService.update(request.getSensorId(),0);
                     log.info("12341234");
 
@@ -218,32 +217,25 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 byte[] nakResponse = new byte[45];
 
-//                log.info("테스트 : {}",settingDeviceInfos.get().getFReset() );
-
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
 
                 //setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
                 if (settingDeviceInfos.isPresent() ) {
                     SettingResponseModel deviceInfo = settingDeviceInfos.get();
-//&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
-
-
-                    log.info("테스트 : {}" , deviceInfo.getFReset() );
+                    //&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
 
                     SettingResponse response = new SettingResponse(
                             deviceInfo.getTime1(),
                             deviceInfo.getTime2(),
                             deviceInfo.getTime3(),
                             deviceInfo.getFmRadio(),
-
-
                             deviceInfo.getSid(),
                             deviceInfo.getPname(),
                             deviceInfo.getSleep(),
                             deviceInfo.getReset(),
                             Integer.parseInt(deviceInfo.getPeriod()),
                             Integer.parseInt(deviceInfo.getSamplingTime()),
-//                            deviceInfo.getFReset(),
+                            //check : fReset
                             deviceInfo.getFReset(),
                             deviceInfo.getPx(),
                             deviceInfo.getPy(),
@@ -255,6 +247,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             deviceInfo.getDbPort(),
                             Integer.parseInt(deviceInfo.getRadioTime())
                     );
+
                     //setting_seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
                     Packet<SettingResponse> responsePacket = new Packet<>(
                             PacketFlag.SETTING,
