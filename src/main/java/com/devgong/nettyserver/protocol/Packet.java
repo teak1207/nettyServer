@@ -65,6 +65,7 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
 
         log.info("테스트3-1, serialized 체크 : {}",serialized);
+        log.info("테스트3-1, serialized 체크 : {}",byteArrayToHex(serialized));
         return serialized;
     }
 
@@ -75,18 +76,18 @@ public class Packet<T extends Serializable<T>> {
 
         byte[] sensorIdBytes = Arrays.copyOfRange(sensorId.getBytes(), 0, 24);
         byte[] dateTimeBytes = Arrays.copyOfRange(dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd HHmmss")).getBytes(), 0, 15);
-        byte[] paramterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
+        byte[] parameterLengthBytes = Arrays.copyOfRange(intToByteArray((int) parameterLength), 0, 4);
 
         int res = 0;
-        for (int i = 0; i < paramterLengthBytes.length; i++) {
-            res = (res * 10) + ((paramterLengthBytes[i] & 0xff));
+        for (int i = 0; i < parameterLengthBytes.length; i++) {
+            res = (res * 10) + ((parameterLengthBytes[i] & 0xff));
         }
 
         serialized[0] = flag.getFlag();
         System.arraycopy(sensorIdBytes, 0, serialized, 1, 24);
         System.arraycopy(dateTimeBytes, 0, serialized, 25, 15);
         serialized[40] = requestType.getType();
-        System.arraycopy(paramterLengthBytes, 0, serialized, 41, 4);
+        System.arraycopy(parameterLengthBytes, 0, serialized, 41, 4);
         System.arraycopy(serializedParameter, 0, serialized, 45, serializedParameter.length);
 
         return serialized;
@@ -177,5 +178,18 @@ public class Packet<T extends Serializable<T>> {
                 (byte) ((data >> 0) & 0xff),
         };
     }
+
+    public String byteArrayToHex(byte [] a){
+
+        StringBuilder sb = new StringBuilder();
+
+        for(final byte b : a)
+
+            sb.append(String.format("%02x",b&0xff));
+
+
+        return sb.toString();
+    }
+
 
 }
