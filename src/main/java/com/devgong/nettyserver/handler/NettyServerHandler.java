@@ -134,7 +134,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         Integer.parseInt((preInstallDeviceInfos.getBaudrate()).substring(0, 3))
                 );
 
-
                 //seq : preInstallDeviceInfos null 체크 후, 객체-> 바이트배열 변환
                 if (preInstallDeviceInfos != null) {
 
@@ -166,12 +165,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-//                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
-//                log.info("ACK/NAK FLAG : {}", (char) readFlag);
+                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
+                log.info("ACK/NAK FLAG : {}", (char) readFlag);
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
+
+
+
                 // preinstall_seq : 기기에서 보내준 값을 factory_report 테이블에 저장하는 작업.
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
+
+
 
                 byte[] result = new byte[45];
 
@@ -186,7 +190,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
                     preinstallSensorListService.update(request.getSensorId(),0);
-                    log.info("12341234");
 
 
 
