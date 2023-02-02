@@ -70,6 +70,19 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
+    public String byteArrayToHex(byte [] a){
+
+        StringBuilder sb = new StringBuilder();
+
+        for(final byte b : a)
+
+            sb.append(String.format("%02x ",b&0xff));
+
+
+        return sb.toString();
+    }
+
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -167,6 +180,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
                 log.info("ACK/NAK FLAG : {}", (char) readFlag);
+                log.info("테스트, preinstall byte check : {}",byteArrayToHex(bytes));
+
+
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
