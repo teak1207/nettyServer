@@ -178,7 +178,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 log.info("테스트, preinstall byte check : {}",byteArrayToHex(bytes));
 
 
-
+                // memo : 여기서 에러
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
 
@@ -272,7 +272,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response
                     );
 
-                    log.info("테스트2 : {}", responsePacket);
+                    log.info("테스트2 : {}", responsePacket.getParameter().getFReset());
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
