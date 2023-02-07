@@ -104,8 +104,8 @@ public class SettingResponse implements Serializable<SettingResponse> {
         byte[] sidBytes = Arrays.copyOfRange(sid.getBytes(), 0, 16);
         byte[] pnameBytes = Arrays.copyOfRange(pname.getBytes(), 0, 16);
         byte[] sleepBytes = Arrays.copyOfRange(sleep.getBytes(), 0, 1);
-        byte[] resetBytes = Arrays.copyOfRange(sleep.getBytes(), 0, 1);
-        byte[] fResetBytes = Arrays.copyOfRange(sleep.getBytes(), 0, 1);
+        byte[] resetBytes = Arrays.copyOfRange(reset.getBytes(), 0, 1);
+        byte[] fResetBytes = Arrays.copyOfRange(fReset.getBytes(), 0, 1);
         byte[] pxBytes = Arrays.copyOfRange(px.getBytes(), 0, 10);
         byte[] pyBytes = Arrays.copyOfRange(py.getBytes(), 0, 10);
         byte[] activeBytes = Arrays.copyOfRange(active.getBytes(), 0, 1);
