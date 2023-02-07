@@ -15,5 +15,7 @@ public interface PreInstallSensorListAllRepository extends JpaRepository<PreInst
 
     PreInstallSensorListAllModel findPreInstallSensorListAllModelByMphone(String modemNum) throws NoResultException;
 
-//    PreInstallSensorListAllModel findAllBySsn(String ssn) ;
+
+
+
 }

@@ -31,6 +31,31 @@ public class PreinstallSensorListService {
     private final ReportRepository reportRepository;
 
 
+
+    public String FindDataBySerialNumber (String ssn){
+
+
+        PreInstallSensorListAllModel sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(ssn);
+
+        log.info("preinstall : {}" , sensorListAllModel );
+        log.info("preinstall : {}" , sensorListAllModel.getFreset() );
+
+
+        return sensorListAllModel.getFreset();
+    }
+
+    public void update() {
+
+        PreInstallSensorListAllModel preInstallSensorListAllModel = new PreInstallSensorListAllModel();
+
+        preInstallSensorListAllModel.setFreset("0");
+
+        preInstallSensorListAllRepository.save(preInstallSensorListAllModel);
+
+    }
+
+
+
     /**
      * @param modemNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
      * @return PreInstallSetModel 을 리턴함.
@@ -59,10 +84,6 @@ public class PreinstallSensorListService {
         preinstallDeviceSetModel = deviceSetRepository.findBySn(preInstallSensorListAllModel.getSsn());
         //preinstall_seq: preInstallSensorListAllModel Ssn 값으로 sensor_list 테이블에서 값을 가져옴.
         preInstallSensorListModel = preInstallSensorListRepository.findTopBySerialNumberOrderByCidDesc(preInstallSensorListAllModel.getSsn());
-//        log.info("-------------------------------");
-//        log.info("PREINSTALL[NETWORK] : {}", preinstallNetworkSetModel);
-//        log.info("PREINSTALL[DEVICE] : {}", preinstallDeviceSetModel);
-//        log.info("-------------------------------");
         //preinstall_seq : preinstallSetModel 라는 객체에 4개의 테이블에서 가져온 값들을 채워넣어 객체를 리턴함.
         preinstallSetModel.setTime1(preinstallDeviceSetModel.getTime1());
         preinstallSetModel.setTime2(preinstallDeviceSetModel.getTime2());
@@ -84,11 +105,6 @@ public class PreinstallSensorListService {
         preinstallSetModel.setBaudrate(preinstallDeviceSetModel.getBaudrate());//new
 
         return preinstallSetModel;
-    }
-
-    @Modifying
-    @Query("update sensor_list_all  m set m.f_reset = :freset where ssn = :ssn ")
-    public void update(@Param("ssn") String ssn,@Param("freset") int freset) {
     }
 
 
