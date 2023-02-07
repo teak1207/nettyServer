@@ -196,8 +196,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                     log.info("Report Response Success");
 
+                    PreInstallSensorListAllModel sensorListAllModel = preinstallSensorListService.FindDataBySerialNumber(request.getSensorId());
+
+
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
-                    if (preinstallSensorListService.FindDataBySerialNumber(request.getSensorId()).equals("1")) {
+                    if (sensorListAllModel.getFreset().equals("1")) {
                         log.info("test111");
                         preinstallSensorListService.update();
 

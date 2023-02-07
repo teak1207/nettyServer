@@ -31,7 +31,7 @@ public class PreinstallSensorListService {
     private final ReportRepository reportRepository;
 
 
-    public String FindDataBySerialNumber(String ssn) {
+    public PreInstallSensorListAllModel FindDataBySerialNumber(String ssn) {
 
 
         PreInstallSensorListAllModel sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(ssn);
@@ -40,7 +40,7 @@ public class PreinstallSensorListService {
         log.info("preinstall : {}", sensorListAllModel.getFreset());
 
 
-        return sensorListAllModel.getFreset();
+        return sensorListAllModel;
     }
 
     public void update() {
@@ -49,6 +49,7 @@ public class PreinstallSensorListService {
         PreInstallSensorListAllModel preInstallSensorListAllModel = new PreInstallSensorListAllModel();
 
         preInstallSensorListAllModel.setFreset("0");
+        preInstallSensorListAllModel.setAproject("test_gong");
 
         preInstallSensorListAllRepository.save(preInstallSensorListAllModel);
 
