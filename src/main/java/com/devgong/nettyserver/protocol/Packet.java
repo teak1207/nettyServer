@@ -64,13 +64,12 @@ public class Packet<T extends Serializable<T>> {
         System.arraycopy(serializeExceptChecksum, 0, serialized, 0, serializeExceptChecksum.length);
         System.arraycopy(checksum, 0, serialized, serializeExceptChecksum.length, 2);
 
-        log.info("테스트3-1, serialized 체크 : {}",serialized);
-        log.info("테스트3-1, serialized 체크 : {}",byteArrayToHex(serialized));
+//        log.info("테스트3-1, serialized 체크 : {}",serialized);
+//        log.info("테스트3-1, serialized 체크 : {}",byteArrayToHex(serialized));
         return serialized;
     }
 
     private byte[] serializeExceptChecksum() {
-        log.info("테스트3-2, parameter 찍어보기 {}", parameter);
         byte[] serializedParameter = parameter.serialize();
         byte[] serialized = new byte[45 + serializedParameter.length];
 
@@ -98,8 +97,8 @@ public class Packet<T extends Serializable<T>> {
 
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
-            log.info("accumulation : {}", b);
-            log.info("accumulation : {}", (char) b);
+//            log.info("accumulation : {}", b);
+//            log.info("accumulation : {}", (char) b);
         }
 
 //        log.info("validateChecksum accumulation : {}", accumulation);

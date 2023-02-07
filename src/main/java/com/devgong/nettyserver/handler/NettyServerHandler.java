@@ -65,18 +65,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
-    public String byteArrayToHex(byte [] a){
+    public String byteArrayToHex(byte[] a) {
 
         StringBuilder sb = new StringBuilder();
 
-        for(final byte b : a)
+        for (final byte b : a)
 
-            sb.append(String.format("%02x ",b&0xff));
+            sb.append(String.format("%02x ", b & 0xff));
 
 
         return sb.toString();
     }
-
 
 
     @Override
@@ -175,17 +174,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
                 log.info("ACK/NAK FLAG : {}", (char) readFlag);
-                log.info("테스트, preinstall byte check : {}",byteArrayToHex(bytes));
+//                log.info("테스트, preinstall byte check : {}",byteArrayToHex(bytes));
 
 
                 // memo : 여기서 에러
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
 
-
                 // preinstall_seq : 기기에서 보내준 값을 factory_report 테이블에 저장하는 작업.
                 boolean reportResult = preinstallSensorListService.insertReport(bytes);
-
 
 
                 byte[] result = new byte[45];
@@ -200,9 +197,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     log.info("Report Response Success");
 
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
-                    if (preinstallSensorListService.FindDataBySerialNumber(request.getSensorId()).equals("1")){
-
-                    preinstallSensorListService.update();
+                    if (preinstallSensorListService.FindDataBySerialNumber(request.getSensorId()).equals("1")) {
+                        log.info("test111");
+                        preinstallSensorListService.update();
 
                     }
 
@@ -237,7 +234,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 //setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
 
                 //setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
-                if (settingDeviceInfos.isPresent() ) {
+                if (settingDeviceInfos.isPresent()) {
                     SettingResponseModel deviceInfo = settingDeviceInfos.get();
                     //&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
 
