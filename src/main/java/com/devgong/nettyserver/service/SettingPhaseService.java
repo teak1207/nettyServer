@@ -99,7 +99,7 @@ public class SettingPhaseService {
         }
 
 
-        log.info("테스트1 service,select -> 객체에 담음.: {}", settingResponseModelBuilder);
+//        log.info("테스트1 service,select -> 객체에 담음.: {}", settingResponseModelBuilder);
 
 
         return Optional.of(settingResponseModelBuilder.build());

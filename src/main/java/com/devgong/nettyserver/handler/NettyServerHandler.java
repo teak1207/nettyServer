@@ -174,7 +174,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
                 log.info("ACK/NAK FLAG : {}", (char) readFlag);
-//                log.info("테스트, preinstall byte check : {}",byteArrayToHex(bytes));
+//                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
 
 
                 // memo : 여기서 에러
@@ -202,6 +202,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
                     if (sensorListAllModel.getFreset().equals("1")) {
                         log.info("test111");
+                        log.info("test111 : {}", sensorListAllModel);
                         preinstallSensorListService.update();
 
                     }
@@ -275,7 +276,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                             response
                     );
 
-                    log.info("테스트2 : {}", responsePacket.getParameter().getFReset());
+//                    log.info("테스트2 : {}", responsePacket.getParameter().getFReset());
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 

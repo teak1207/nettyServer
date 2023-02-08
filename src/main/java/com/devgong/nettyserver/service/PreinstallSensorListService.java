@@ -48,8 +48,6 @@ public class PreinstallSensorListService {
         log.info("test222");
         PreInstallSensorListAllModel preInstallSensorListAllModel = new PreInstallSensorListAllModel();
 
-        preInstallSensorListAllModel.setFreset("0");
-        preInstallSensorListAllModel.setAproject("test_gong");
 
         preInstallSensorListAllRepository.save(preInstallSensorListAllModel);
 
