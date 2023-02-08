@@ -203,7 +203,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     if (sensorListAllModel.getFreset().equals("1")) {
                         log.info("test111");
                         log.info("test111 : {}", sensorListAllModel);
-                        preinstallSensorListService.update();
+                        preinstallSensorListService.update(sensorListAllModel);
 
                     }
 

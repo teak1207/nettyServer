@@ -43,14 +43,14 @@ public class PreinstallSensorListService {
         return sensorListAllModel;
     }
 
-    public void update() {
+    public void update(PreInstallSensorListAllModel deviceInfos ) {
 
         log.info("test222");
-        PreInstallSensorListAllModel preInstallSensorListAllModel = new PreInstallSensorListAllModel();
 
 
-        preInstallSensorListAllRepository.save(preInstallSensorListAllModel);
+        preInstallSensorListAllRepository.save(deviceInfos);
 
+        log.info("test 333");
     }
 
 
