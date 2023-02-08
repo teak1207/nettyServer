@@ -47,6 +47,7 @@ public class PreinstallSensorListService {
 
         log.info("test222");
 
+        deviceInfos.setFreset("0");
 
         preInstallSensorListAllRepository.save(deviceInfos);
 
