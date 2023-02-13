@@ -1,28 +1,36 @@
 server:
-    host: 192.168.10.98
-    port: 9999
-    netty:
-        bossCount : 1
-        workerCount : 10
-        keep-alive : true
-        backlog : 512
+  host: 192.168.10.98
+  port: 9999
+  netty:
+    bossCount: 1
+    workerCount: 10
+    keep-alive: true
+    backlog: 512
 
 spring:
   datasource:
-      url: jdbc:mysql://localhost:3306/leakmaster_db
-      username: root
-      password: scsol92595
-      driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/leakmaster_db
+    username: root
+    password: scsol92595
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-      show-sql: true
+    show-sql: true
 
-      properties:
-          hibernate:
-              ddl-auto: none
-              generate-ddl: false
-              show-sql: true
-              format_sql : true
-              use_sql_comments : true
+    properties:
+      hibernate:
+        ddl-auto: none
+        generate-ddl: false
+        show-sql: true
+        format_sql: true
+        use_sql_comments: true
+
+  logging:
+    level:
+      org:
+        hibernate:
+          type:
+            descriptor:
+              sql: trace
 
 
 
@@ -30,4 +38,4 @@ spring:
 
 
 sensor:
-    file-path: /home/scsol/public_html/leak_data_gong/
+  file-path: /home/scsol/public_html/leak_data_gong/
