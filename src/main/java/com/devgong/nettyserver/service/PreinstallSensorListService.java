@@ -37,21 +37,20 @@ public class PreinstallSensorListService {
         PreInstallSensorListAllModel sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(ssn);
 
         log.info("preinstall : {}", sensorListAllModel);
-        log.info("preinstall : {}", sensorListAllModel.getFreset());
-
 
         return sensorListAllModel;
     }
 
-    public void update(PreInstallSensorListAllModel deviceInfos ) {
+    public void updateFactoryReset(PreInstallSensorListAllModel deviceInfos) {
 
-        log.info("test222");
+        if (deviceInfos.getFreset().equals("1")) {
+            deviceInfos.setFreset("0");
 
-        deviceInfos.setFreset("0");
+            preInstallSensorListAllRepository.save(deviceInfos);
 
-        preInstallSensorListAllRepository.save(deviceInfos);
+        }
 
-        log.info("test 333");
+
     }
 
 
