@@ -101,7 +101,7 @@ public class RequestSensorListService {
 
         //request_seq : sensor_list_all 테이블에서 가져온 값 체크
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {
-            log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
+            log.info("[REQUEST][FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하질 않습니다");
 
         } else {
             String path = String.format("%s%s/%s/%s",

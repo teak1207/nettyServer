@@ -44,17 +44,17 @@ public class ReportSensorListService {
 
         if (dataSensorListAllModel.getRegdate() == null || dataSensorListAllModel.getRegdate().equals("")) {
 
-            log.info("[feat] : regdate 값이 없습니다");
+            log.info("[REPORT][CAUTION]: regdate 값이 없습니다");
         } else if (dataSensorListAllModel.getSsn() == null || dataSensorListAllModel.getSsn().equals("")) {
-            log.info("[feat] : serialnum 값이 없습니다");
+            log.info("[REPORT][CAUTION]: serialNum 값이 없습니다");
         } else if (dataSensorListAllModel.getAsid() == null || dataSensorListAllModel.getAsid().equals("")) {
-            log.info("[feat] : sid 값이 없습니다");
+            log.info("[REPORT][CAUTION]: sid 값이 없습니다");
         } else if (dataSensorListAllModel.getAproject() == null || dataSensorListAllModel.getAproject().equals("")) {
-            log.info("[feat] : aproject 값이 없습니다");
+            log.info("[REPORT][CAUTION]: aProject 값이 없습니다");
         } else if (dataSensorListAllModel.getMphone() == null || dataSensorListAllModel.getMphone().equals("")) {
-            log.info("[feat] : phone 값이 없습니다");
+            log.info("[REPORT][CAUTION]: phoneNumber 값이 없습니다");
         } else if (dataSensorListAllModel.getFreset() == null || dataSensorListAllModel.getFreset().equals("")) {
-            log.info("[feat] : F-Reset 값이 없습니다");
+            log.info("[REPORT][CAUTION]: F-Reset 값이 없습니다");
         }
         log.info("dataSensorListAllModel : {}", dataSensorListAllModel);
 
@@ -127,10 +127,10 @@ public class ReportSensorListService {
 //            log.info("dataInsertModel check final : {} ", dataInsertModel);
             //report_seq : dataSensorReportRepositoryImpl 에 save 구현.
             dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
-            log.info("[INSERT SUCCESS ] : SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
+            log.info("[INSERT][SUCCESS]: SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
 
         } else {
-            log.info("[INSERT FAIL] :  SENSOR_REPORT_(SID)_(SN) 추가 X.");
+            log.info("[INSERT][FAIL]: SENSOR_REPORT_(SID)_(SN) 추가되지 않았습니다.");
             return false;
         }
 

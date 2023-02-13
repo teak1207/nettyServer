@@ -38,8 +38,8 @@ public class RequestSendDataRepositoryImpl implements RequestSendDataRepository 
     @Override
     public RequestLeakDataModel save(NewPacket<ReqRequest> request, RequestLeakDataModel requestLeakDataModel) {
 
-        log.info("repository : {}", request);
-        log.info("repository : {}", requestLeakDataModel);
+//        log.info("repository : {}", request);
+//        log.info("repository : {}", requestLeakDataModel);
 
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
 

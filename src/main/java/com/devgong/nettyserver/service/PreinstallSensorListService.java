@@ -150,10 +150,10 @@ public class PreinstallSensorListService {
 
             //preinstall_seq : factory_report 테이블에 값을 저장.
             reportRepository.save(preinstallReportModel);
-            log.info("[INSERT] : SUCCESS ");
+            log.info("[REPORT][INSERT] : SUCCESS ");
             return true;
         } else {
-            log.error("[INSERT] : FAIL");
+            log.error("[REPORT][INSERT] : FAIL");
             return false;
         }
     }

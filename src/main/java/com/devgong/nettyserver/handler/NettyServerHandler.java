@@ -97,7 +97,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
         try {
-            log.info("REQUEST FLAG : {}", (char) readFlag);
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
                 // packet_info : mBuf 에서 읽을수 있는 바이트수를 반환해서 byte[] 에 담음. readableBytes()는 netty에서 사용되는 메서드
@@ -172,8 +171,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
-                log.info("ACK/NAK FLAG : {}", (char) readFlag);
+//                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
+//                log.info("ACK/NAK FLAG : {}", (char) readFlag);
 //                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
 
 
@@ -303,7 +302,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] response = new byte[45];
 
                 if (Objects.isNull(reportFindResult)) {
-                    log.info("[FAIL] : 값이 존재하질 않습니다");
+                    log.info("[REPORT][FAIL] : 값이 존재하질 않습니다");
                 } else {
                     log.info("reportFindResults:{}", reportFindResult);
 
@@ -314,14 +313,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
                         mBuf.release();
-                        log.info("REPORT Process Success");
+                        log.info("[REPORT][PASS] Process Success");
 
                     } else {
                         response[0] = PacketFlag.NAK.getFlag();
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
                         mBuf.release();
-                        log.info("REPORT Process fail");
+                        log.info("[REPORT][FAIL] Process fail");
                     }
                 }
                 // request_seq : (device-> server) request
@@ -343,7 +342,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 dataSequenceService.enrollDataSequence(model.getCid(), Integer.parseInt(model.getFnum()), LocalDateTime.now());
 
                 if (requestFindResults == null) {
-                    log.info("[FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
+                    log.info("[REQUEST][FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
                 } else {
                     if (requestSensorListService.confirmPath(requestFindResults, request)) {
                         response[0] = PacketFlag.ACK.getFlag();
