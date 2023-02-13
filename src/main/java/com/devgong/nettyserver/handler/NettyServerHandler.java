@@ -65,17 +65,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
-    public String byteArrayToHex(byte[] a) {
-
-        StringBuilder sb = new StringBuilder();
-
-        for (final byte b : a)
-
-            sb.append(String.format("%02x ", b & 0xff));
-
-
-        return sb.toString();
-    }
 
 
     @Override
@@ -225,8 +214,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 // setting_seq : << Setting process 진행 >>
                 // setting_seq : Setting 값 response 하기 위해 model 초기화.
 
-                // danger : SettingResponseModel & SettingResponse 가 하는일이 똑같음
-                // danger : SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
+                // danger :(아키텍쳐수정) SettingResponseModel & SettingResponse 가 하는일이 똑같음
+                // danger :(아키텍쳐수정) SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
                 Optional<SettingResponseModel> settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
 
                 byte[] nakResponse = new byte[45];

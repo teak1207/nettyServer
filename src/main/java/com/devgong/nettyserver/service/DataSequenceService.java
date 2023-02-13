@@ -61,7 +61,7 @@ public class DataSequenceService {
 
         } else {
             dataSequenceManagingMap.put(cid, afterSequence);
-            log.info("[REQUEST][SEQ]: {} is decremented {}", cid, afterSequence.getSequence());
+            log.info("[DATA][SEQ]: {} is decremented {}", cid, afterSequence.getSequence());
         }
     }
 
