@@ -193,7 +193,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.write(Unpooled.copiedBuffer(result));
                     ctx.flush();
                     mBuf.release();
-                    log.info("Report Response Success");
+                    log.info("[REPORT][SUCCESS] Report Response Success");
 
                     //preinstall_seq : sensor_list_all 의 값을 find
                     PreInstallSensorListAllModel sensorListAllModel = preinstallSensorListService.FindDataBySerialNumber(request.getSensorId());

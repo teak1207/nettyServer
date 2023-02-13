@@ -36,7 +36,6 @@ public class PreinstallSensorListService {
 
         PreInstallSensorListAllModel sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(ssn);
 
-        log.info("preinstall : {}", sensorListAllModel);
 
         return sensorListAllModel;
     }

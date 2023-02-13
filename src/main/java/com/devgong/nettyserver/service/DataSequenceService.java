@@ -39,7 +39,7 @@ public class DataSequenceService {
 
     public void enrollDataSequence(Integer cid, Integer fnum, LocalDateTime now) {
         dataSequenceManagingMap.put(cid, new DataSequence(fnum, now));
-        log.info("등록: {} - {} - {} ", cid, fnum, now);
+        log.info("[REQUEST] : 등록 {} - {} - {} ", cid, fnum, now);
     }
 
     public void decrementDataSequence(Integer cid, String sid, String sn, LocalDateTime now) {
@@ -54,14 +54,14 @@ public class DataSequenceService {
         //memo : 만약 sequence == 0 이라면
         if (afterSequence.sequence == 0) {
             dataSequenceManagingMap.remove(cid);
-            log.info("cid : {} is removed", cid);
+            log.info("[REQUEST][SEQ]: cid {} is removed", cid);
 
             //memo : leak_send_data 의 complete / completeTime 을 update.
             dataUpdateRepository.updateCompleteTime(cid, sid, sn);
 
         } else {
             dataSequenceManagingMap.put(cid, afterSequence);
-            log.info("cid : {} is decremented {}", cid, afterSequence.getSequence());
+            log.info("[REQUEST][SEQ]: {} is decremented {}", cid, afterSequence.getSequence());
         }
     }
 
@@ -73,9 +73,9 @@ public class DataSequenceService {
         LocalDateTime now = LocalDateTime.now();
         for (Map.Entry<Integer, DataSequence> dataSequence : dataSequences) {
 
-            log.info("검사해보자 => key: {}3 , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
+            log.info("[REQUEST][SEQ]: 검사시작 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
             if (dataSequence.getValue().isDeprecated(now)) {
-                log.info("Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
+                log.info("[REQUEST][SEQ]: Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
                 dataSequenceManagingMap.remove(dataSequence.getKey());
             }
         }
