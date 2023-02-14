@@ -88,7 +88,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         try {
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
-
+                double beforeTime = System.currentTimeMillis();
 
                 // packet_info : mBuf 에서 읽을수 있는 바이트수를 반환해서 byte[] 에 담음. readableBytes()는 netty에서 사용되는 메서드
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -155,10 +155,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
                 }
 
+                double afterTime = System.currentTimeMillis();
+                double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                log.info("[PREINSTALL][TIME] secDiffTime : {}", secDiffTime);
+
+
+
                 // preinstall_seq :ACK or NAK + REPORT 전송
             } else if (PacketFlag.ACK.equals(flag) || PacketFlag.NAK.equals(flag)) {
-                /*==== Header ====*/
-                log.info("=== [PREINSTALL REPORT PROCESS RECEIVE START ] ===");
+
+                double beforeTime = System.currentTimeMillis();
+
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
@@ -193,7 +200,15 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     if (sensorListAllModel.getFreset().equals("1")) {
                         preinstallSensorListService.updateFactoryReset(sensorListAllModel);
 
+
+
+                        double afterTime = System.currentTimeMillis();
+                        double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                        log.info("[PREINSTALL REPORT][TIME] secDiffTime : {}", secDiffTime);
+
+
                     }
+
 
 
                 } else {
@@ -270,10 +285,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
 
                     double afterTime = System.currentTimeMillis();
-
                     double secDiffTime = (afterTime -  beforeTime)/1000 ;
-
                     log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
+
                     //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
                 } else {
                     nakResponse[0] = PacketFlag.NAK.getFlag();
