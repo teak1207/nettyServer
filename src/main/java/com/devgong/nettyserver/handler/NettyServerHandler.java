@@ -88,6 +88,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         try {
             if (PacketFlag.PREINSTALL.equals(flag)) {
 
+
+
                 // packet_info : mBuf 에서 읽을수 있는 바이트수를 반환해서 byte[] 에 담음. readableBytes()는 netty에서 사용되는 메서드
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
@@ -190,6 +192,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     //preinstall_seq : sensor_list_all 의  fReset 값을 update
                     if (sensorListAllModel.getFreset().equals("1")) {
                         preinstallSensorListService.updateFactoryReset(sensorListAllModel);
+
                     }
 
 
@@ -204,6 +207,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // setting_seq : SETTING value (6) 인 경우 분기
             } else if (PacketFlag.SETTING.equals(flag)) {
+
+                double beforeTime = System.currentTimeMillis();
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
@@ -264,7 +269,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
                     mBuf.release();
 
+                    double afterTime = System.currentTimeMillis();
 
+                    double secDiffTime = (afterTime -  beforeTime)/1000 ;
+
+                    log.info("secDiffTime : {}", secDiffTime);
                     //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
                 } else {
                     nakResponse[0] = PacketFlag.NAK.getFlag();
