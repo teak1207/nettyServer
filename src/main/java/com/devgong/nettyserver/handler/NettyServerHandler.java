@@ -273,7 +273,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     double secDiffTime = (afterTime -  beforeTime)/1000 ;
 
-                    log.info("secDiffTime : {}", secDiffTime);
+                    log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
                     //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
                 } else {
                     nakResponse[0] = PacketFlag.NAK.getFlag();
@@ -284,6 +284,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // report_seq : << Report 프로세스 진행 >>, 주기보고
             } else if (PacketFlag.REPORT.equals(flag)) {
+
+                double beforeTime = System.currentTimeMillis();
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
@@ -313,6 +315,13 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         mBuf.release();
                         log.info("[REPORT][PASS] Process Success");
 
+
+
+                        double afterTime = System.currentTimeMillis();
+                        double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                        log.info("[REPORT][TIME] secDiffTime : {}", secDiffTime);
+
+
                     } else {
                         response[0] = PacketFlag.NAK.getFlag();
                         ctx.write(Unpooled.copiedBuffer(response));
@@ -323,6 +332,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
                 // request_seq : (device-> server) request
             } else if (PacketFlag.REQUEST.equals(flag)) {
+
+                double beforeTime = System.currentTimeMillis();
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
@@ -356,7 +367,16 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
+                double afterTime = System.currentTimeMillis();
+                double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                log.info("[REQUEST][TIME] secDiffTime : {}", secDiffTime);
+
+
+
+
             } else if (PacketFlag.DATA.equals(flag)) {
+
+                double beforeTime = System.currentTimeMillis();
 
                 log.info("Data flag : {}", flag);
                 byte[] response = new byte[45];
@@ -385,6 +405,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 ctx.write(Unpooled.copiedBuffer(response));
                 ctx.flush();
                 mBuf.release();
+
+                double afterTime = System.currentTimeMillis();
+                double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                log.info("[DATA][TIME] secDiffTime : {}", secDiffTime);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
