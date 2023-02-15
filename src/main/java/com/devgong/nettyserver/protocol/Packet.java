@@ -36,7 +36,7 @@ public class Packet<T extends Serializable<T>> {
 
     public Packet(PacketFlag flag, byte[] packet, Class<T> clazz) {
         if (packet == null) {
-            throw new IllegalArgumentException("Packet error!");
+            throw new IllegalArgumentException("Packet length error!");
         }
         this.flag = flag;
         sensorId = new String(Arrays.copyOfRange(packet, 0, 24));

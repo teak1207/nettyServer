@@ -74,8 +74,9 @@ public class RequestSensorListService {
                 convertSampleRate(request.getParameter().getSampleRate()));
 
         int frameCount = bytesToInt(frameCountArr);
-
+        log.info("fnum : {}", frameCount);
         String convertedFrameCount = Integer.toString(frameCount);
+        log.info("fnum : {}", convertedFrameCount);
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));
