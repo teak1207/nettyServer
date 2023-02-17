@@ -28,6 +28,29 @@ public class SettingPhaseService {
     private final SettingLeakProjectRepository settingLeakProjectRepository;
 
 
+
+
+
+    public boolean getCheckLiveOperation(String serialNumber) throws Null{
+
+        // setting_seq : sensorListALl 에서 Asid 와 Aproject가 없다면  false Return
+        Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
+
+        if(sensorListAllModel.isEmpty()){
+
+            return false;
+        }
+
+        // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
+
+       // setting_seq : sensorListALl 에서 Asid 와 Aproject가 있다면  false Return
+
+
+
+
+        return true;
+    }
+
     /**
      * @param serialNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
      * @return SettingResponseModel 을 리턴함.
@@ -56,13 +79,14 @@ public class SettingPhaseService {
 
         log.info("test1 : {} ", sensorInfo.getAsid());
         log.info("test1 : {} ", sensorInfo.getAproject());
+        //setting_seq : 미할당센서 인 경우 ( Asid && Aproject  == null )
+
 
         //setting_seq : leakset 에서 Asid, Aproject,fReset 해당하는 값을 탐색 후,leakSetModel 이라는 객체에 담음.
         SettingLeaksetModel leakSetModel = settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
 
         log.info("test1 : {} ", sensorInfo);
         log.info("test1 : {} ", leakSetModel);
-
 
 
         //setting_seq : factory_sensor_list 에서  Asid, Aproject,Ssn 해당하는 값을 탐색 후,factorySensorListModel 이라는 객체에 담음.

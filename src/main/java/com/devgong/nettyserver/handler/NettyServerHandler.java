@@ -66,7 +66,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel dataFindResults;
 
 
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         // packet_info : 장치에서 전송해주는 바이트를 byteBuf 타입으로 형변환하여 초기화
@@ -156,9 +155,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 double afterTime = System.currentTimeMillis();
-                double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                double secDiffTime = (afterTime - beforeTime) / 1000;
                 log.info("[PREINSTALL][TIME] secDiffTime : {}", secDiffTime);
-
 
 
                 // preinstall_seq :ACK or NAK + REPORT 전송
@@ -201,7 +199,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         preinstallSensorListService.updateFactoryReset(sensorListAllModel);
 
                         double afterTime = System.currentTimeMillis();
-                        double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                        double secDiffTime = (afterTime - beforeTime) / 1000;
                         log.info("[PREINSTALL REPORT][TIME] secDiffTime : {}", secDiffTime);
 
                     }
@@ -225,15 +223,27 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
 
+                byte[] nakResponse = new byte[45];
 
                 // setting_seq : << Setting process 진행 >>
                 // setting_seq : Setting 값 response 하기 위해 model 초기화.
+
+
+                boolean result = settingPhaseService.getCheckLiveOperation(request.getSensorId());
+
+                if (!result) {
+                    log.info("미할당체크");
+                    nakResponse[0] = PacketFlag.NAK.getFlag();
+                    ctx.write(Unpooled.copiedBuffer(nakResponse));
+                    ctx.flush();
+                    mBuf.release();
+                }
+
 
                 // danger :(아키텍쳐수정) SettingResponseModel & SettingResponse 가 하는일이 똑같음
                 // danger :(아키텍쳐수정) SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
                 Optional<SettingResponseModel> settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
 
-                byte[] nakResponse = new byte[45];
 
                 // setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
 
@@ -280,7 +290,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     mBuf.release();
 
                     double afterTime = System.currentTimeMillis();
-                    double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                    double secDiffTime = (afterTime - beforeTime) / 1000;
                     log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
 
                     //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
@@ -325,9 +335,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("[REPORT][PASS] Process Success");
 
 
-
                         double afterTime = System.currentTimeMillis();
-                        double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                        double secDiffTime = (afterTime - beforeTime) / 1000;
                         log.info("[REPORT][TIME] secDiffTime : {}", secDiffTime);
 
 
@@ -377,10 +386,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 }
 
                 double afterTime = System.currentTimeMillis();
-                double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                double secDiffTime = (afterTime - beforeTime) / 1000;
                 log.info("[REQUEST][TIME] secDiffTime : {}", secDiffTime);
-
-
 
 
             } else if (PacketFlag.DATA.equals(flag)) {
@@ -416,7 +423,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.release();
 
                 double afterTime = System.currentTimeMillis();
-                double secDiffTime = (afterTime -  beforeTime)/1000 ;
+                double secDiffTime = (afterTime - beforeTime) / 1000;
                 log.info("[DATA][TIME] secDiffTime : {}", secDiffTime);
 
             }
