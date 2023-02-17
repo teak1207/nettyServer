@@ -31,7 +31,7 @@ public class SettingPhaseService {
 
 
 
-    public boolean getCheckLiveOperation(String serialNumber) throws Null{
+    public boolean getCheckLiveOperation(String serialNumber){
 
         // setting_seq : sensorListALl 에서 Asid 와 Aproject가 없다면  false Return
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
@@ -63,7 +63,8 @@ public class SettingPhaseService {
      * (6) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
      */
 //    @Nullable
-    public Optional<SettingResponseModel> getResponseData(String serialNumber) {
+    public Optional<SettingResponseModel> getResponseData(String serialNumber) throws  NullPointerException
+    {
 
         //setting_seq : sensorListAll 에서 serialNumber 해당하는 값을 탐색 후,sensorListAllModel 이라는 객체에 담음.
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
