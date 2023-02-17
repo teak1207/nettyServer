@@ -237,70 +237,70 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.write(Unpooled.copiedBuffer(nakResponse));
                     ctx.flush();
                     mBuf.release();
-                }
+                } else {
 
 
-                // danger :(아키텍쳐수정) SettingResponseModel & SettingResponse 가 하는일이 똑같음
-                // danger :(아키텍쳐수정) SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
-                Optional<SettingResponseModel> settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
+                    // danger :(아키텍쳐수정) SettingResponseModel & SettingResponse 가 하는일이 똑같음
+                    // danger :(아키텍쳐수정) SettingResponse 에 구현된 deserialize 같은 메서드를 SettingResponseModel 로 옮기거나, 아니면 반대로 옮겨야 함
+                    Optional<SettingResponseModel> settingDeviceInfos = settingPhaseService.getResponseData(request.getSensorId());
 
 
-                // setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
+                    // setting_seq : 리턴받은 값을 settingDeviceInfos 객체에 채워넣음.
 
-                // setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
-                if (settingDeviceInfos.isPresent()) {
-                    SettingResponseModel deviceInfo = settingDeviceInfos.get();
-                    //&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
+                    // setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
+                    if (settingDeviceInfos.isPresent()) {
+                        SettingResponseModel deviceInfo = settingDeviceInfos.get();
+                        //&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
 
-                    SettingResponse response = new SettingResponse(
-                            deviceInfo.getTime1(),
-                            deviceInfo.getTime2(),
-                            deviceInfo.getTime3(),
-                            deviceInfo.getFmRadio(),
-                            deviceInfo.getSid(),
-                            deviceInfo.getPname(),
-                            deviceInfo.getSleep(),
-                            deviceInfo.getReset(),
-                            Integer.parseInt(deviceInfo.getPeriod()),
-                            Integer.parseInt(deviceInfo.getSamplingTime()),
-                            deviceInfo.getFReset(),
-                            deviceInfo.getPx(),
-                            deviceInfo.getPy(),
-                            deviceInfo.getActive(),
-                            Integer.parseInt(deviceInfo.getSampleRate()),
-                            deviceInfo.getServerUrl(),
-                            deviceInfo.getServerPort(),
-                            deviceInfo.getDbUrl(),
-                            deviceInfo.getDbPort(),
-                            Integer.parseInt(deviceInfo.getRadioTime())
-                    );
+                        SettingResponse response = new SettingResponse(
+                                deviceInfo.getTime1(),
+                                deviceInfo.getTime2(),
+                                deviceInfo.getTime3(),
+                                deviceInfo.getFmRadio(),
+                                deviceInfo.getSid(),
+                                deviceInfo.getPname(),
+                                deviceInfo.getSleep(),
+                                deviceInfo.getReset(),
+                                Integer.parseInt(deviceInfo.getPeriod()),
+                                Integer.parseInt(deviceInfo.getSamplingTime()),
+                                deviceInfo.getFReset(),
+                                deviceInfo.getPx(),
+                                deviceInfo.getPy(),
+                                deviceInfo.getActive(),
+                                Integer.parseInt(deviceInfo.getSampleRate()),
+                                deviceInfo.getServerUrl(),
+                                deviceInfo.getServerPort(),
+                                deviceInfo.getDbUrl(),
+                                deviceInfo.getDbPort(),
+                                Integer.parseInt(deviceInfo.getRadioTime())
+                        );
 
-                    //setting_seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
-                    Packet<SettingResponse> responsePacket = new Packet<>(
-                            PacketFlag.SETTING,
-                            response.getSid(),
-                            LocalDateTime.now(),
-                            RequestType.SERVER,
-                            response.serialize().length + 2,  //4 byte
-                            response
-                    );
+                        //setting_seq : settingDeviceInfos 객체 -> 바이트 배열로 변환
+                        Packet<SettingResponse> responsePacket = new Packet<>(
+                                PacketFlag.SETTING,
+                                response.getSid(),
+                                LocalDateTime.now(),
+                                RequestType.SERVER,
+                                response.serialize().length + 2,  //4 byte
+                                response
+                        );
 
 //                    log.info("테스트2 : {}", responsePacket.getParameter().getFReset());
-                    ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
-                    mBuf.release();
+                        ctx.writeAndFlush(Unpooled.copiedBuffer(responsePacket.serialize()));
+                        mBuf.release();
 
-                    double afterTime = System.currentTimeMillis();
-                    double secDiffTime = (afterTime - beforeTime) / 1000;
-                    log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
+                        double afterTime = System.currentTimeMillis();
+                        double secDiffTime = (afterTime - beforeTime) / 1000;
+                        log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
 
-                    //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
-                } else {
-                    nakResponse[0] = PacketFlag.NAK.getFlag();
-                    ctx.write(Unpooled.copiedBuffer(nakResponse));
-                    ctx.flush();
-                    mBuf.release();
+                        //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
+                    } else {
+                        nakResponse[0] = PacketFlag.NAK.getFlag();
+                        ctx.write(Unpooled.copiedBuffer(nakResponse));
+                        ctx.flush();
+                        mBuf.release();
+                    }
                 }
-
                 // report_seq : << Report 프로세스 진행 >>, 주기보고
             } else if (PacketFlag.REPORT.equals(flag)) {
 
