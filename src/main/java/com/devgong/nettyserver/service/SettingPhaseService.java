@@ -41,6 +41,7 @@ public class SettingPhaseService {
      */
 //    @Nullable
     public Optional<SettingResponseModel> getResponseData(String serialNumber) {
+
         //setting_seq : sensorListAll 에서 serialNumber 해당하는 값을 탐색 후,sensorListAllModel 이라는 객체에 담음.
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
 
@@ -53,8 +54,14 @@ public class SettingPhaseService {
         //setting_seq : sensor_list 에서 Asid, Aproject 해당하는 값을 탐색 후,sensorListModel 이라는 객체에 담음.
         SettingSensorListModel sensorListModel = settingSensorListRepository.findBySidAndPnameAndSerialNumber(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
 
+        log.info("test : {} ", sensorInfo.getAsid());
+        log.info("test : {} ", sensorInfo.getAproject());
+
         //setting_seq : leakset 에서 Asid, Aproject,fReset 해당하는 값을 탐색 후,leakSetModel 이라는 객체에 담음.
         SettingLeaksetModel leakSetModel = settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
+
+
+
 
         //setting_seq : factory_sensor_list 에서  Asid, Aproject,Ssn 해당하는 값을 탐색 후,factorySensorListModel 이라는 객체에 담음.
         Optional<SettingFactorySensorListModel> factorySensorListModel = settingFactorySensorListRepository.findBySidAndPnameAndSn(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());

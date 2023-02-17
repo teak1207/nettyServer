@@ -200,16 +200,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     if (sensorListAllModel.getFreset().equals("1")) {
                         preinstallSensorListService.updateFactoryReset(sensorListAllModel);
 
-
-
                         double afterTime = System.currentTimeMillis();
                         double secDiffTime = (afterTime -  beforeTime)/1000 ;
                         log.info("[PREINSTALL REPORT][TIME] secDiffTime : {}", secDiffTime);
 
-
                     }
-
-
 
                 } else {
                     result[0] = PacketFlag.NAK.getFlag();
