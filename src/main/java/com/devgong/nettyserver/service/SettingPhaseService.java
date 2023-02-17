@@ -28,24 +28,20 @@ public class SettingPhaseService {
     private final SettingLeakProjectRepository settingLeakProjectRepository;
 
 
-
-
-
-    public boolean getCheckLiveOperation(String serialNumber){
+    public boolean getCheckLiveOperation(String serialNumber) {
 
         // setting_seq : sensorListALl 에서 Asid 와 Aproject가 없다면  false Return
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
 
-        if(sensorListAllModel.isEmpty()){
+        if ((sensorListAllModel.get().getAsid().isBlank()))  {
 
+            log.info("empty");
             return false;
-        }
+        }else
 
         // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
 
-       // setting_seq : sensorListALl 에서 Asid 와 Aproject가 있다면  false Return
-
-
+        // setting_seq : sensorListALl 에서 Asid 와 Aproject가 있다면  false Return
 
 
         return true;
@@ -63,8 +59,7 @@ public class SettingPhaseService {
      * (6) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
      */
 //    @Nullable
-    public Optional<SettingResponseModel> getResponseData(String serialNumber) throws  NullPointerException
-    {
+    public Optional<SettingResponseModel> getResponseData(String serialNumber) {
 
         //setting_seq : sensorListAll 에서 serialNumber 해당하는 값을 탐색 후,sensorListAllModel 이라는 객체에 담음.
         Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
