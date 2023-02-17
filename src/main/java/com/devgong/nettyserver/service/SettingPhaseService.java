@@ -54,12 +54,14 @@ public class SettingPhaseService {
         //setting_seq : sensor_list 에서 Asid, Aproject 해당하는 값을 탐색 후,sensorListModel 이라는 객체에 담음.
         SettingSensorListModel sensorListModel = settingSensorListRepository.findBySidAndPnameAndSerialNumber(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
 
-        log.info("test : {} ", sensorInfo.getAsid());
-        log.info("test : {} ", sensorInfo.getAproject());
+        log.info("test1 : {} ", sensorInfo.getAsid());
+        log.info("test1 : {} ", sensorInfo.getAproject());
 
         //setting_seq : leakset 에서 Asid, Aproject,fReset 해당하는 값을 탐색 후,leakSetModel 이라는 객체에 담음.
         SettingLeaksetModel leakSetModel = settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
 
+        log.info("test1 : {} ", sensorInfo);
+        log.info("test1 : {} ", leakSetModel);
 
 
 
