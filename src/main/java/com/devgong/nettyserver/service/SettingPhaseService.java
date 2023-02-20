@@ -34,23 +34,19 @@ public class SettingPhaseService {
         Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
 
 
-        log.info("tire : {}" ,assignResult);
-        log.info("px : {}" ,assignResult.get().getPx());
-        log.info("pytest : {}" ,assignResult.get().getPy());
-
-
-
         // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
         if ((installResult.get().getAsid().equals("-")) && installResult.get().getAproject().equals("미배치")) {
             log.info("해당 센서의 SID And Project Value 존재하지 않음");
             return false;
 
-        // setting_seq : sensorListALl 에서 Asid 와 Aproject가 둘다 없어도  false Return
+            // setting_seq : sensorListALl 에서 Asid 와 Aproject가 둘다 없어도  false Return
         } else if (installResult.get().getAproject().equals("미배치") || installResult.get().getAsid().equals("-")) {
             log.info(". 해당 센서의 SID Or Project Value 존재하는지 확인바람. ");
             return false;
 
-        // setting_seq : 미배치센서 -> 밸브번호가 없는거? --> 좌표존재유무
+        } else if (assignResult.get().getPx().isBlank() || assignResult.get().getPy().isBlank()) {
+
+            log.info("blank");
         }
 
 
