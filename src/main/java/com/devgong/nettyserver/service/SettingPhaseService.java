@@ -35,12 +35,12 @@ public class SettingPhaseService {
 
         // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
         if ((sensorListAllModel.get().getAsid().equals("-")) || sensorListAllModel.get().getAproject().equals("미배치")) {
-            log.info("empty1");
+            log.info("해당 센서의 SID Or Project Value가 존재하는지 확인바람.");
             return false;
 
             // setting_seq : sensorListALl 에서 Asid 와 Aproject가 둘다 없어도  false Return
         } else if (sensorListAllModel.get().getAproject().equals("미배치") && sensorListAllModel.get().getAsid().equals("-")) {
-            log.info("empty2");
+            log.info("해당 센서의 SID And Project Value가 존재하지 않음.");
             return false;
         }
 
