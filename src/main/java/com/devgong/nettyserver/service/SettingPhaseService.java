@@ -31,7 +31,7 @@ public class SettingPhaseService {
     public boolean getCheckLiveOperation(String serialNumber) {
 
         Optional<SettingSensorListAllModel> installResult = settingSensorListAllRepository.findBySsn(serialNumber);
-        Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
+        SettingSensorListModel assignResult = settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn());
 
 
         log.info("blank : {}" ,assignResult);
@@ -46,7 +46,7 @@ public class SettingPhaseService {
             log.info(". 해당 센서의 SID Or Project Value 존재하는지 확인바람. ");
             return false;
 
-        } else if (assignResult.get().getPx().equals(" ") || assignResult.get().getPy().equals(" ")) {
+        } else if (assignResult.getPx().equals(" ") || assignResult.getPy().equals(" ")) {
 
             log.info("blank");
         }
