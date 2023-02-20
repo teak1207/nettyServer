@@ -44,7 +44,7 @@ public class SettingPhaseService {
             log.info(". 해당 센서의 SID Or Project Value 존재하는지 확인바람. ");
             return false;
 
-        } else if (assignResult.get().getPx().equals("") || assignResult.get().getPy().equals("")) {
+        } else if (assignResult.get().getPx().equals(" ") || assignResult.get().getPy().equals(" ")) {
 
             log.info("blank");
         }
