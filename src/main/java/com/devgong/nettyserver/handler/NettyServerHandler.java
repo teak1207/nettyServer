@@ -228,11 +228,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 // setting_seq : << Setting process 진행 >>
                 // setting_seq : Setting 값 response 하기 위해 model 초기화.
 
+                // setting_seq : 미설정센서 -> 설정값이 없는거? --> 현재 개발 서버 버젼에서는 초기값이 설정이 안된다카던대.....
 
                 boolean result = settingPhaseService.getCheckLiveOperation(request.getSensorId());
 
                 if (!result) {
-                    log.info("미할당체크");
                     nakResponse[0] = PacketFlag.NAK.getFlag();
                     ctx.write(Unpooled.copiedBuffer(nakResponse));
                     ctx.flush();

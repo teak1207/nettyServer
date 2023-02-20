@@ -30,18 +30,26 @@ public class SettingPhaseService {
 
     public boolean getCheckLiveOperation(String serialNumber) {
 
-        // setting_seq : sensorListALl 에서 Asid 와 Aproject가 없다면  false Return
-        Optional<SettingSensorListAllModel> sensorListAllModel = settingSensorListAllRepository.findBySsn(serialNumber);
+        Optional<SettingSensorListAllModel> installResult = settingSensorListAllRepository.findBySsn(serialNumber);
+        Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
+
+
+        log.info("test : {}" ,assignResult.get().getPx());
+        log.info("test : {}" ,assignResult.get().getPy());
+
+
 
         // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
-        if ((sensorListAllModel.get().getAsid().equals("-")) && sensorListAllModel.get().getAproject().equals("미배치")) {
+        if ((installResult.get().getAsid().equals("-")) && installResult.get().getAproject().equals("미배치")) {
             log.info("해당 센서의 SID And Project Value 존재하지 않음");
             return false;
 
-            // setting_seq : sensorListALl 에서 Asid 와 Aproject가 둘다 없어도  false Return
-        } else if (sensorListAllModel.get().getAproject().equals("미배치") || sensorListAllModel.get().getAsid().equals("-")) {
+        // setting_seq : sensorListALl 에서 Asid 와 Aproject가 둘다 없어도  false Return
+        } else if (installResult.get().getAproject().equals("미배치") || installResult.get().getAsid().equals("-")) {
             log.info(". 해당 센서의 SID Or Project Value 존재하는지 확인바람. ");
             return false;
+
+        // setting_seq : 미배치센서 -> 밸브번호가 없는거? --> 좌표존재유무
         }
 
 
@@ -70,21 +78,11 @@ public class SettingPhaseService {
         if (sensorListAllModel.isEmpty()) return Optional.empty();
         else sensorInfo = sensorListAllModel.get();
 
-
         //setting_seq : sensor_list 에서 Asid, Aproject 해당하는 값을 탐색 후,sensorListModel 이라는 객체에 담음.
         SettingSensorListModel sensorListModel = settingSensorListRepository.findBySidAndPnameAndSerialNumber(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
 
-        log.info("test1 : {} ", sensorInfo.getAsid());
-        log.info("test1 : {} ", sensorInfo.getAproject());
-        //setting_seq : 미할당센서 인 경우 ( Asid && Aproject  == null )
-
-
         //setting_seq : leakset 에서 Asid, Aproject,fReset 해당하는 값을 탐색 후,leakSetModel 이라는 객체에 담음.
         SettingLeaksetModel leakSetModel = settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
-
-        log.info("test1 : {} ", sensorInfo);
-        log.info("test1 : {} ", leakSetModel);
-
 
         //setting_seq : factory_sensor_list 에서  Asid, Aproject,Ssn 해당하는 값을 탐색 후,factorySensorListModel 이라는 객체에 담음.
         Optional<SettingFactorySensorListModel> factorySensorListModel = settingFactorySensorListRepository.findBySidAndPnameAndSn(sensorInfo.getAsid(), sensorInfo.getAproject(), sensorInfo.getSsn());
