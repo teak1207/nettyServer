@@ -34,6 +34,8 @@ public class SettingPhaseService {
         Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
 
 
+        log.info("blank : {}" ,assignResult);
+
         // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
         if ((installResult.get().getAsid().equals("-")) && installResult.get().getAproject().equals("미배치")) {
             log.info("해당 센서의 SID And Project Value 존재하지 않음");
