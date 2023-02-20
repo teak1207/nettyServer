@@ -34,6 +34,7 @@ public class SettingPhaseService {
         Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
 
 
+        log.info("tire : {}" ,assignResult);
         log.info("px : {}" ,assignResult.get().getPx());
         log.info("pytest : {}" ,assignResult.get().getPy());
 
