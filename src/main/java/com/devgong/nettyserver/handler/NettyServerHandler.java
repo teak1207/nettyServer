@@ -66,6 +66,20 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel dataFindResults;
 
 
+    public String byteArrayToHex(byte [] a){
+
+        StringBuilder sb = new StringBuilder();
+
+        for(final byte b : a)
+
+            sb.append(String.format("%02x ",b&0xff));
+
+
+        return sb.toString();
+    }
+
+
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         // packet_info : 장치에서 전송해주는 바이트를 byteBuf 타입으로 형변환하여 초기화
@@ -167,9 +181,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-//                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
-//                log.info("ACK/NAK FLAG : {}", (char) readFlag);
-//                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
+                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
+                log.info("ACK/NAK FLAG : {}", (char) readFlag);
+                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
 
 
 
