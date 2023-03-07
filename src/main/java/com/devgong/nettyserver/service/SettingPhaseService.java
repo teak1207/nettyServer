@@ -6,6 +6,7 @@ import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -28,11 +29,20 @@ public class SettingPhaseService {
     private final SettingLeakProjectRepository settingLeakProjectRepository;
 
 
+    /**
+     * @param serialNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
+     * @return true or false 을 리턴함.
+     * @author devGong
+     * (1) 미할당 센서 체크 여부 - sid and project value not exist
+     * (2) 미설치 센서 체크 여부 - sid or project value not exist
+     * (3) 미배치 센서 체크 여부 - 좌표값 (Px or Py) value not exist
+     * (4) 미설정 센서 체크 여부 - 초기 설정값 존재여부 체크 3.5 ver 처음 배치시 설정값 없다고 함.
+     */
     public boolean getCheckLiveOperation(String serialNumber) {
 
         Optional<SettingSensorListAllModel> installResult = settingSensorListAllRepository.findBySsn(serialNumber);
         Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
-
+        Optional<SettingLeaksetModel> settingResult = Optional.ofNullable(settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
         // setting_seq : sensorListALl 에서 Asid 와 Aproject  둘 중 하나라도 없으면  false Return
         if ((installResult.get().getAsid().equals("-")) && installResult.get().getAproject().equals("미배치")) {
             log.info("해당 센서의 SID And Project Value 존재하지 않음");
@@ -46,6 +56,10 @@ public class SettingPhaseService {
         } else if (assignResult.get().getPx().equals(" ") || assignResult.get().getPy().equals(" ")) {
 
             log.info("헤당 센서의 Px Or Py Value 존재여부 확인바람.");
+            return false;
+        } else if (StringUtils.hasText(String.valueOf(settingResult))) {
+            log.info("헤당 센서의 초기 설정값 존재여부 확인바람.");
+
             return false;
         }
 
@@ -123,10 +137,7 @@ public class SettingPhaseService {
                     .dbPort(factoryLeakProjectModel.getDbPORT());
         }
 
-
 //        log.info("테스트1 service,select -> 객체에 담음.: {}", settingResponseModelBuilder);
-
-
         return Optional.of(settingResponseModelBuilder.build());
     }
 }

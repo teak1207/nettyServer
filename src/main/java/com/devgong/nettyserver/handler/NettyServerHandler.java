@@ -172,7 +172,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 //                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
 
 
-                // memo : 여기서 에러
+
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
 
 
@@ -185,11 +185,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // preinstall_seq : reportResult 의 값에 따른 분기 처리 true(ACK) / false(NAK)
                 if (reportResult) {
-                    result[0] = PacketFlag.ACK.getFlag();
-                    ctx.write(Unpooled.copiedBuffer(result));
-                    ctx.flush();
-                    mBuf.release();
-                    log.info("[REPORT][SUCCESS] Report Response Success");
 
                     //preinstall_seq : sensor_list_all 의 값을 find
                     PreInstallSensorListAllModel sensorListAllModel = preinstallSensorListService.FindDataBySerialNumber(request.getSensorId());
@@ -203,6 +198,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         log.info("[PREINSTALL REPORT][TIME] secDiffTime : {}", secDiffTime);
 
                     }
+
+
+                    result[0] = PacketFlag.ACK.getFlag();
+                    ctx.write(Unpooled.copiedBuffer(result));
+                    ctx.flush();
+                    mBuf.release();
+                    log.info("[REPORT][SUCCESS] Report Response Success");
+
 
                 } else {
                     result[0] = PacketFlag.NAK.getFlag();
@@ -250,7 +253,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     // setting_seq  : settingDeviceInfos 존재 && freset 값이 1이 아니면 if문 실행.
                     if (settingDeviceInfos.isPresent()) {
                         SettingResponseModel deviceInfo = settingDeviceInfos.get();
-                        //&& Integer.parseInt(settingDeviceInfos.get().getFReset()) != 1
 
                         SettingResponse response = new SettingResponse(
                                 deviceInfo.getTime1(),
@@ -316,7 +318,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
 
                 // report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
-                PreInstallSensorListAllModel reportFindResult = reportSensorListService.findDataExistence(request.getSensorId());
+                Optional<PreInstallSensorListAllModel> reportFindResult = reportSensorListService.findDataExistence(request.getSensorId());
 
                 byte[] response = new byte[45];
 
@@ -327,7 +329,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                     // report_seq : 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                     // report_seq : ACK or NAK
-                    if (reportSensorListService.insertUniqueInformation(reportFindResult.getAsid(), reportFindResult.getAproject(), reportFindResult.getSsn(), request)) {
+                    if (reportSensorListService.insertUniqueInformation(reportFindResult.get().getAsid(), reportFindResult.get().getAproject(), reportFindResult.get().getSsn(), request)) {
                         response[0] = PacketFlag.ACK.getFlag();
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();

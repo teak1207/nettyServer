@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author devGong
  * @version 1.0
@@ -36,24 +38,24 @@ public class ReportSensorListService {
 
     //report_seq : sensor_list_all 에서 serialNumber에 맞는 값을 탐색.
 //    public PreInstallSensorListAllModel findDataExistence(String serialNumber) {
-    public PreInstallSensorListAllModel findDataExistence(String serialNumber) {
+    public Optional<PreInstallSensorListAllModel> findDataExistence(String serialNumber) throws NullPointerException {
 
-        PreInstallSensorListAllModel dataSensorListAllModel = null;
+        Optional<PreInstallSensorListAllModel> dataSensorListAllModel = null;
 
-        dataSensorListAllModel = dataSensorListAllRepository.findPreInstallSensorListAllModelBySsn(serialNumber);
+        dataSensorListAllModel = Optional.ofNullable(dataSensorListAllRepository.findPreInstallSensorListAllModelBySsn(serialNumber));
 
-        if (dataSensorListAllModel.getRegdate() == null || dataSensorListAllModel.getRegdate().equals("")) {
+        if (dataSensorListAllModel.get().getRegdate() == null || dataSensorListAllModel.get().getRegdate().equals("")) {
 
             log.info("[REPORT][CAUTION]: regdate 값이 없습니다");
-        } else if (dataSensorListAllModel.getSsn() == null || dataSensorListAllModel.getSsn().equals("")) {
+        } else if (dataSensorListAllModel.get().getSsn() == null || dataSensorListAllModel.get().getSsn().equals("")) {
             log.info("[REPORT][CAUTION]: serialNum 값이 없습니다");
-        } else if (dataSensorListAllModel.getAsid() == null || dataSensorListAllModel.getAsid().equals("")) {
+        } else if (dataSensorListAllModel.get().getAsid() == null || dataSensorListAllModel.get().getAsid().equals("")) {
             log.info("[REPORT][CAUTION]: sid 값이 없습니다");
-        } else if (dataSensorListAllModel.getAproject() == null || dataSensorListAllModel.getAproject().equals("")) {
+        } else if (dataSensorListAllModel.get().getAproject() == null || dataSensorListAllModel.get().getAproject().equals("")) {
             log.info("[REPORT][CAUTION]: aProject 값이 없습니다");
-        } else if (dataSensorListAllModel.getMphone() == null || dataSensorListAllModel.getMphone().equals("")) {
+        } else if (dataSensorListAllModel.get().getMphone() == null || dataSensorListAllModel.get().getMphone().equals("")) {
             log.info("[REPORT][CAUTION]: phoneNumber 값이 없습니다");
-        } else if (dataSensorListAllModel.getFreset() == null || dataSensorListAllModel.getFreset().equals("")) {
+        } else if (dataSensorListAllModel.get().getFreset() == null || dataSensorListAllModel.get().getFreset().equals("")) {
             log.info("[REPORT][CAUTION]: F-Reset 값이 없습니다");
         }
 //        log.info("dataSensorListAllModel : {}", dataSensorListAllModel);
@@ -85,9 +87,8 @@ public class ReportSensorListService {
      * @param request      - 프로토콜 데이터 항목을 담음.
      * @return 테이블에 insert 성공여부를 boolean 을 리턴함.
      * @author devGong
-
+     * <p>
      * (1) settingResponse 객체를 앞서 참조한 값으로 초기화 후, 리턴.
-
      */
     public boolean insertUniqueInformation(String sid, String project, String serialNumber, Packet<ReportRequest> request) {
 
@@ -124,7 +125,7 @@ public class ReportSensorListService {
 
         if (dataInsertModel != null) {
 
-//            log.info("dataInsertModel check final : {} ", dataInsertModel);
+//            log.info("dataInsertModel : {} ", dataInsertModel);
             //report_seq : dataSensorReportRepositoryImpl 에 save 구현.
             dataSensorReportRepository.save(dataInsertModel, sid, project, serialNumber);
             log.info("[INSERT][SUCCESS]: SENSOR_REPORT_(SID)_(SN) 테이블을 확인해주세요");
