@@ -57,13 +57,15 @@ public class SettingPhaseService {
 
             log.info("헤당 센서의 Px Or Py Value 존재여부 확인바람.");
             return false;
-        } else if (StringUtils.hasText(String.valueOf(settingResult))) {
-            log.info("헤당 센서의 초기 설정값 존재여부 확인바람.");
-
-            log.info("문제 : {} ", settingResult);
-
-            return false;
         }
+
+//        else if (StringUtils.hasText(String.valueOf(settingResult))) {
+//            log.info("헤당 센서의 초기 설정값 존재여부 확인바람.");
+//
+//            log.info("문제 : {} ", settingResult);
+//
+//            return false;
+//        }
 
 
         return true;
