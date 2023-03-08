@@ -97,13 +97,17 @@ public class Packet<T extends Serializable<T>> {
 
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
-            log.info("accumulation : {}", b);
-            log.info("accumulation : {}", (char) b);
+            log.info("accumulation byte: {}", b);
+            log.info("accumulation char: {}", (char) b);
         }
 
         log.info("validateChecksum accumulation : {}", accumulation);
         log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
 
+        log.info("test ", String.format("%x%x", checksum[0], checksum[1]), 16);
+
+
+//        return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
     }
 
@@ -178,13 +182,13 @@ public class Packet<T extends Serializable<T>> {
         };
     }
 
-    public String byteArrayToHex(byte [] a){
+    public String byteArrayToHex(byte[] a) {
 
         StringBuilder sb = new StringBuilder();
 
-        for(final byte b : a)
+        for (final byte b : a)
 
-            sb.append(String.format("%02x ",b&0xff));
+            sb.append(String.format("%02x ", b & 0xff));
 
 
         return sb.toString();
