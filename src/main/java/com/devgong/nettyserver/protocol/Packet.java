@@ -97,12 +97,12 @@ public class Packet<T extends Serializable<T>> {
 
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
-//            log.info("accumulation : {}", b);
-//            log.info("accumulation : {}", (char) b);
+            log.info("accumulation : {}", b);
+            log.info("accumulation : {}", (char) b);
         }
 
-//        log.info("validateChecksum accumulation : {}", accumulation);
-//        log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
+        log.info("validateChecksum accumulation : {}", accumulation);
+        log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
 
         return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
     }
