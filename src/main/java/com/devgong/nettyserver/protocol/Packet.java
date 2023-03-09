@@ -107,7 +107,7 @@ public class Packet<T extends Serializable<T>> {
         log.info("test : {}",Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));
 
 //        return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
-        return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
+        return accumulation == Integer.parseInt(String.format("%02x%02x", checksum[0], checksum[1]), 16);
     }
 
     public static byte stringToByte(String input) {
