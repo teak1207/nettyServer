@@ -119,10 +119,10 @@ public class Packet<T extends Serializable<T>> {
         int accumulation = 0;   // 32의 차이가 이건가 싶어서 주석처리
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
-//            log.info("accumulation byte(char) : {}", (char) b & 0xff);
+            log.info("accumulation byte(char) : {}", (char) b & 0xff);
             log.info("accumulation byte : {}", accumulation);
         }
-//        log.info("accumulation : {}", accumulation);
+        log.info("accumulation final: {}", accumulation);
 
 
         String hex = Integer.toHexString(accumulation);
