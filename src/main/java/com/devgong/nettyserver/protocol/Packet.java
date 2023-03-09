@@ -104,7 +104,6 @@ public class Packet<T extends Serializable<T>> {
         log.info("validateChecksum accumulation : {}", accumulation);
         log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
 
-        log.info("test ", String.format("%x%x", checksum[0], checksum[1]), 16);
 
 
 //        return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
@@ -121,7 +120,7 @@ public class Packet<T extends Serializable<T>> {
         for (byte b : serializeExceptChecksum()) {
             accumulation += b & 0xff;
 //            log.info("accumulation byte(char) : {}", (char) b & 0xff);
-//            log.info("accumulation byte(char) : {}", accumulation);
+            log.info("accumulation byte : {}", accumulation);
         }
 //        log.info("accumulation : {}", accumulation);
 
