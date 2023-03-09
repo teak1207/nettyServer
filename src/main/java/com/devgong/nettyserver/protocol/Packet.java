@@ -99,11 +99,11 @@ public class Packet<T extends Serializable<T>> {
             accumulation += b & 0xff;
             log.info("accumulation byte: {}", b);
             log.info("accumulation char: {}", (char) b);
+            log.info("accumulation chk : {}", accumulation);
         }
 
         log.info("validateChecksum accumulation : {}", accumulation);
         log.info("validateChecksum accumulation contrast : {}", Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16));  //3263
-
 
 
 //        return accumulation == Integer.parseInt(String.format("%x%x", checksum[0], checksum[1]), 16);
