@@ -76,6 +76,8 @@ public class DataSequenceService {
             log.info("[REQUEST][SEQ]: 검사시작 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
             if (dataSequence.getValue().isDeprecated(now)) {
                 log.info("[REQUEST][SEQ]: Deprecated 되었음! => key: {}, value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
+                log.info("----------------------------------------");
+
                 dataSequenceManagingMap.remove(dataSequence.getKey());
             }
         }
