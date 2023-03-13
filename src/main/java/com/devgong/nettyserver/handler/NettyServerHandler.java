@@ -66,18 +66,17 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel dataFindResults;
 
 
-    public String byteArrayToHex(byte [] a){
+    public String byteArrayToHex(byte[] a) {
 
         StringBuilder sb = new StringBuilder();
 
-        for(final byte b : a)
+        for (final byte b : a)
 
-            sb.append(String.format("%02x ",b&0xff));
+            sb.append(String.format("%02x ", b & 0xff));
 
 
         return sb.toString();
     }
-
 
 
     @Override
@@ -170,7 +169,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 double afterTime = System.currentTimeMillis();
                 double secDiffTime = (afterTime - beforeTime) / 1000;
-                log.info("[PREINSTALL][TIME] secDiffTime : {}", secDiffTime);
+//                log.info("[PREINSTALL][TIME] secDiffTime : {}", secDiffTime);
 
 
                 // preinstall_seq :ACK or NAK + REPORT 전송
@@ -181,10 +180,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] bytes = new byte[mBuf.readableBytes()];
                 mBuf.duplicate().readBytes(bytes);
 
-                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
-                log.info("ACK/NAK FLAG : {}", (char) readFlag);
-                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
-
+//                log.info("ACK/NAK  Readable bytes length : {}", bytes.length);
+//                log.info("ACK/NAK FLAG : {}", (char) readFlag);
+//                log.info("테스트, preinstall byteCheck : {}",byteArrayToHex(bytes));
 
 
                 Packet<PreInstallReportRequest> request = new Packet<>(flag, bytes, PreInstallReportRequest.class);
@@ -209,7 +207,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                         double afterTime = System.currentTimeMillis();
                         double secDiffTime = (afterTime - beforeTime) / 1000;
-                        log.info("[PREINSTALL REPORT][TIME] secDiffTime : {}", secDiffTime);
+//                        log.info("[PREINSTALL REPORT][TIME] secDiffTime : {}", secDiffTime);
 
                     }
 
@@ -307,7 +305,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                         double afterTime = System.currentTimeMillis();
                         double secDiffTime = (afterTime - beforeTime) / 1000;
-                        log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
+//                        log.info("[SETTING][TIME] secDiffTime : {}", secDiffTime);
 
                         //setting_seq : Nak 인 경우, byte[45] 의 첫 index NAK(9) 만 담아서 보냄.
                     } else {
@@ -339,7 +337,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 if (Objects.isNull(reportFindResult)) {
                     log.info("[REPORT][FAIL] : 값이 존재하질 않습니다");
                 } else {
-                    log.info("reportFindResults:{}", reportFindResult);
+//                    log.info("reportFindResults:{}", reportFindResult);
 
                     // report_seq : 펌웨어 받은 값을 sensor_report_(sid)_(sn) 에 INSERT
                     // report_seq : ACK or NAK
@@ -353,7 +351,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                         double afterTime = System.currentTimeMillis();
                         double secDiffTime = (afterTime - beforeTime) / 1000;
-                        log.info("[REPORT][TIME] secDiffTime : {}", secDiffTime);
+//                        log.info("[REPORT][TIME] secDiffTime : {}", secDiffTime);
 
 
                     } else {
@@ -403,7 +401,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 double afterTime = System.currentTimeMillis();
                 double secDiffTime = (afterTime - beforeTime) / 1000;
-                log.info("[REQUEST][TIME] secDiffTime : {}", secDiffTime);
+//                log.info("[REQUEST][TIME] secDiffTime : {}", secDiffTime);
 
 
             } else if (PacketFlag.DATA.equals(flag)) {
@@ -440,7 +438,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 double afterTime = System.currentTimeMillis();
                 double secDiffTime = (afterTime - beforeTime) / 1000;
-                log.info("[DATA][TIME] secDiffTime : {}", secDiffTime);
+//                log.info("[DATA][TIME] secDiffTime : {}", secDiffTime);
 
             }
         } catch (Exception e) {
