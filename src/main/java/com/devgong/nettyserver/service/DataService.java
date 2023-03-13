@@ -34,8 +34,6 @@ public class DataService {
         //memo: 명확한 구분값으로 fname을 select 해옴.
         Pair<Integer, String> result = requestSendDataJdbcRepository.findCidAndFnameBySnAndSid(sensorListAllModel.getSsn(), sensorListAllModel.getAsid());
 
-//        log.info("fnameCheck : {}", result.getRight());
-
         Path path = Paths.get(result.getRight());
 
         //memo: Files.write(path, outputStream.toByteArray()) , 데이터를 순차적으로 누적 저장.

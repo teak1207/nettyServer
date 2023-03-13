@@ -66,7 +66,7 @@ public class DataSequenceService {
     }
 
     //check : 메뉴판 관리자, 매 분 정각마다 실행
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void refreshDataSource() {
         Set<Map.Entry<Integer, DataSequence>> dataSequences = dataSequenceManagingMap.entrySet();
         log.info("리프레시 시작");
