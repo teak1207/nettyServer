@@ -51,7 +51,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 //                DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
 //                dataLeakSendDataModel.setFname(rs.getString("fname"));
 //                return dataLeakSendDataModel.getFname();
-                return Pair.of(rs.getString("sn"), rs.getString("fname"));
+                return Pair.of(rs.getString("SN"), rs.getString("fname"));
             }
 
         } catch (Exception e) {
