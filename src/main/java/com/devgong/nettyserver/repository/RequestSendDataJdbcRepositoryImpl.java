@@ -23,7 +23,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 
 
     @Override
-    public Pair<Integer, String> findCidAndFnameBySnAndSid(String sn, String sid) {
+    public Pair<String, String> findSnAndFnameBySnAndSid(String sn, String sid) {
 
         String mixTableName1 = "`" + "leak_send_data_" + sid;
         String mixTableName2 = "_" + sn + "`";
@@ -51,7 +51,7 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 //                DataLeakSendDataModel dataLeakSendDataModel = new DataLeakSendDataModel();
 //                dataLeakSendDataModel.setFname(rs.getString("fname"));
 //                return dataLeakSendDataModel.getFname();
-                return Pair.of(rs.getInt("cid"), rs.getString("fname"));
+                return Pair.of(rs.getString("sn"), rs.getString("fname"));
             }
 
         } catch (Exception e) {
