@@ -66,6 +66,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel dataFindResults;
 
 
+/*
     public String byteArrayToHex(byte[] a) {
 
         StringBuilder sb = new StringBuilder();
@@ -77,6 +78,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
         return sb.toString();
     }
+*/
 
 
     @Override
@@ -380,7 +382,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // request_seq : requestSensorListService.saveData() 처리.
                 RequestLeakDataModel model = requestSensorListService.saveData(request, requestFindResults, frameCountArr);
-                dataSequenceService.enrollDataSequence(model.getCid(), Integer.parseInt(model.getFnum()), LocalDateTime.now());
+                dataSequenceService.enrollDataSequence(model.getSn(), Integer.parseInt(model.getFnum()), LocalDateTime.now());
 
                 if (requestFindResults == null) {
                     log.info("[REQUEST][FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
@@ -399,8 +401,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     }
                 }
 
-                double afterTime = System.currentTimeMillis();
-                double secDiffTime = (afterTime - beforeTime) / 1000;
+//                double afterTime = System.currentTimeMillis();
+//                double secDiffTime = (afterTime - beforeTime) / 1000;
 //                log.info("[REQUEST][TIME] secDiffTime : {}", secDiffTime);
 
 
@@ -408,15 +410,12 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 double beforeTime = System.currentTimeMillis();
 
-                log.info("Data flag : {}", flag);
                 byte[] response = new byte[45];
                 byte[] bytes = new byte[mBuf.readableBytes()];
-
 
                 mBuf.duplicate().readBytes(bytes);  // bytes 의 내용을 mBuf 에 담음.
 
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
-
 //                log.info("Data  길이 : {}", bytes.length);
 //                log.info("Data FLAG : {}", (char) readFlag);
                 // data_seq : request 참조 없음-> sensor_list_all 참조해옴.

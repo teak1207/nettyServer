@@ -31,7 +31,7 @@ import java.util.Date;
 public class RequestSensorListService {
     private final RequestSensorListAllRepository requestSensorListAllRepository;
     private final RequestSendDataRepository requestSendDataRepository;
-    private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
+//    private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
 
     //danger : 만약 저장경로를 바꾼다하면 이걸 바꿔야하나???
 //    static String defaultPath = "/home/scsol/public_html/leak_data_gong/";
@@ -74,9 +74,9 @@ public class RequestSensorListService {
                 convertSampleRate(request.getParameter().getSampleRate()));
 
         int frameCount = bytesToInt(frameCountArr);
-        log.info("fnum : {}", frameCount);
+//        log.info("fnum : {}", frameCount);
         String convertedFrameCount = Integer.toString(frameCount);
-        log.info("fnum : {}", convertedFrameCount);
+//        log.info("fnum : {}", convertedFrameCount);
 
         requestLeakDataModel.setPname(sensorListAll.getAproject());
         requestLeakDataModel.setDate((simpleDateFormat.format(now)));
@@ -98,7 +98,7 @@ public class RequestSensorListService {
     }
 
 
-    public boolean  confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
+    public boolean confirmPath(RequestListAllModel requestFindResults, NewPacket<ReqRequest> request) throws UnsupportedEncodingException {
 
         //request_seq : sensor_list_all 테이블에서 가져온 값 체크
         if (requestFindResults.getAsid().isBlank() && requestFindResults.getAproject().isBlank() && requestFindResults.getSsn().isBlank()) {

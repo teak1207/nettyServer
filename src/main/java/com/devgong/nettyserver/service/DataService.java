@@ -22,6 +22,17 @@ import java.time.LocalDateTime;
 @Slf4j
 public class DataService {
 
+
+    /*
+     * @author devgong
+     * Data process, 저장을 처리함.
+     * (1) String sn - 해당센서정보를 가져오기 위함.
+     * (2) String sid - data sequence 사용하기 위함.
+     * (3) byte[] request - 저장할 data []
+     * @version 1.0
+     */
+
+
     private final PreInstallSensorListAllRepository preInstallSensorListAllRepository;
     private final RequestSendDataJdbcRepository requestSendDataJdbcRepository;
     private final DataSequenceService dataSequenceService;
@@ -39,7 +50,7 @@ public class DataService {
         //memo: Files.write(path, outputStream.toByteArray()) , 데이터를 순차적으로 누적 저장.
         Files.write(path, request, StandardOpenOption.APPEND);
 
-        dataSequenceService.decrementDataSequence(result.getLeft(), sid, sn, LocalDateTime.now());
+        dataSequenceService.decrementDataSequence(String.valueOf(result.getLeft()), sid, sn, LocalDateTime.now());
 
     }
 

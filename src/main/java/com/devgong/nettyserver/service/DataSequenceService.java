@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 @RequiredArgsConstructor
 public class DataSequenceService {
     private final DataUpdateRepository dataUpdateRepository;
-    private final ConcurrentMap<Integer, DataSequence> dataSequenceManagingMap = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, DataSequence> dataSequenceManagingMap = new ConcurrentHashMap<>();
 
     @Getter
     @RequiredArgsConstructor
@@ -37,12 +37,12 @@ public class DataSequenceService {
         }
     }
 
-    public void enrollDataSequence(Integer cid, Integer fnum, LocalDateTime now) {
-        dataSequenceManagingMap.put(cid, new DataSequence(fnum, now));
-        log.info("[REQUEST] : 등록 {} - {} - {} ", cid, fnum, now);
+    public void enrollDataSequence(String serialNumber, Integer fnum, LocalDateTime now) {
+        dataSequenceManagingMap.put(serialNumber, new DataSequence(fnum, now));
+        log.info("[REQUEST][ENROLL] :  serialNumber : {} - FrameCount : {} - RealTime : {} ", serialNumber, fnum, now);
     }
 
-    public void decrementDataSequence(Integer cid, String sid, String sn, LocalDateTime now) {
+    public void decrementDataSequence(String cid, String sid, String sn, LocalDateTime now) {
         // TODO : decrement 하려고 했는데, 메뉴판에 등록되어있지 않은 경우 어떻게 처리할까?, Tube
 
         // memo : request에서 등록한 값을 담음.
@@ -57,7 +57,7 @@ public class DataSequenceService {
             log.info("[REQUEST][SEQ]: cid {} is removed", cid);
 
             //memo : leak_send_data 의 complete / completeTime 을 update.
-            dataUpdateRepository.updateCompleteTime(cid, sid, sn);
+            dataUpdateRepository.updateCompleteTime(Integer.valueOf(cid), sid, sn);
 
         } else {
             dataSequenceManagingMap.put(cid, afterSequence);
@@ -68,10 +68,10 @@ public class DataSequenceService {
     //check : 메뉴판 관리자, 매 분 정각마다 실행
     @Scheduled(cron = "0 * * * * *")
     public void refreshDataSource() {
-        Set<Map.Entry<Integer, DataSequence>> dataSequences = dataSequenceManagingMap.entrySet();
+        Set<Map.Entry<String, DataSequence>> dataSequences = dataSequenceManagingMap.entrySet();
         log.info("리프레시 시작");
         LocalDateTime now = LocalDateTime.now();
-        for (Map.Entry<Integer, DataSequence> dataSequence : dataSequences) {
+        for (Map.Entry<String, DataSequence> dataSequence : dataSequences) {
 
             log.info("[REQUEST][SEQ]: 검사시작 => key: {} , value: {}", dataSequence.getKey(), dataSequence.getValue().getSequence());
             if (dataSequence.getValue().isDeprecated(now)) {
