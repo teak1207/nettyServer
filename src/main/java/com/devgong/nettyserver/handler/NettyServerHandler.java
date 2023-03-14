@@ -380,8 +380,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 // request_seq : find 값을 객체에 초기화
                 requestFindResults = requestSensorListService.findDataExistence(request.getSensorId());
 
-                // request_seq : requestSensorListService.saveData() 처리.
-                RequestLeakDataModel model = requestSensorListService.saveData(request, requestFindResults, frameCountArr);
+                // request_seq : requestSensorListService.saveInitData()처리. Data 처리전에 메뉴판에 등록
+                RequestLeakDataModel model = requestSensorListService.saveInitData(request, requestFindResults, frameCountArr);
                 dataSequenceService.enrollDataSequence(model.getSn(), Integer.parseInt(model.getFnum()), LocalDateTime.now());
 
                 if (requestFindResults == null) {

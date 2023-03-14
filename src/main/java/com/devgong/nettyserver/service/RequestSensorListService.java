@@ -58,7 +58,7 @@ public class RequestSensorListService {
     }
 
 
-    public RequestLeakDataModel saveData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll, byte[] frameCountArr) throws UnsupportedEncodingException {
+    public RequestLeakDataModel saveInitData(NewPacket<ReqRequest> request, RequestListAllModel sensorListAll, byte[] frameCountArr) throws UnsupportedEncodingException {
 
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

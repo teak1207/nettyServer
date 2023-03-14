@@ -43,7 +43,7 @@ public class DataService {
         PreInstallSensorListAllModel sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(sn);
 
         //memo: 명확한 구분값으로 fname을 select 해옴.
-        Pair<String, String> result = requestSendDataJdbcRepository.findSnAndFnameBySnAndSid(sensorListAllModel.getSsn(), sensorListAllModel.getAsid());
+        Pair<Integer, String> result = requestSendDataJdbcRepository.findCidAndFnameBySnAndSid(sensorListAllModel.getSsn(), sensorListAllModel.getAsid());
 
         Path path = Paths.get(result.getRight());
 

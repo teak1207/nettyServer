@@ -4,7 +4,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public interface RequestSendDataJdbcRepository {
 
-    Pair<String, String> findSnAndFnameBySnAndSid(String sn, String sid);
+    //    Pair<String, String> findSnAndFnameBySnAndSid(String sn, String sid);
+    Pair<Integer, String> findCidAndFnameBySnAndSid(String sn, String sid);
 
 //    String getFnumOfReceivingSensorBySnAndSid(String fname, String sn, String sid);
 
