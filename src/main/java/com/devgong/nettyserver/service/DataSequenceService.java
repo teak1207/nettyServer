@@ -42,13 +42,13 @@ public class DataSequenceService {
         log.info("[REQUEST][ENROLL] :  serialNumber : {} - FrameCount : {} - RealTime : {} ", serialNumber, fnum, now);
     }
 
-    public void decrementDataSequence(String temp, String sid, String sn, LocalDateTime now, int cid) {
+    public void decrementDataSequence(String cid, String sid, String sn, LocalDateTime now, int temp) {
         // TODO : decrement 하려고 했는데, 메뉴판에 등록되어있지 않은 경우 어떻게 처리할까?, Tube
 
-        log.info("sidchk6 :  {}", temp);
+        log.info("sidchk6 :  {}", cid);
         log.info("sidchk6 :  {}", sid);
         log.info("sidchk6 :  {}", sn);
-        log.info("sidchk6 :  {}", cid);
+        log.info("sidchk6 :  {}", temp);
 
 
 
@@ -69,7 +69,7 @@ public class DataSequenceService {
             dataUpdateRepository.updateCompleteTime(Integer.valueOf(cid), sid, sn);
 
         } else {
-            dataSequenceManagingMap.put(temp, afterSequence);
+            dataSequenceManagingMap.put(cid, afterSequence);
             log.info("[DATA][SEQ]: {} is decremented {}", cid, afterSequence.getSequence());
         }
     }
