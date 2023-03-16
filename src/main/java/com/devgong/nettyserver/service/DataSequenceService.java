@@ -66,7 +66,7 @@ public class DataSequenceService {
             log.info("[REQUEST][SEQ]: cid {} is removed", cid);
 
             //memo : leak_send_data 의 complete / completeTime 을 update.
-            dataUpdateRepository.updateCompleteTime(Integer.valueOf(cid), sid, sn);
+            dataUpdateRepository.updateCompleteTime(Integer.valueOf(temp), sid, sn);
 
         } else {
             dataSequenceManagingMap.put(cid, afterSequence);
