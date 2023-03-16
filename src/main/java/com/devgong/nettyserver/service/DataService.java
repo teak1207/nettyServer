@@ -55,7 +55,7 @@ public class DataService {
         Files.write(path, request, StandardOpenOption.APPEND);
 
 //        dataSequenceService.decrementDataSequence(String.valueOf(result.getLeft()), sid, sn, LocalDateTime.now());
-        dataSequenceService.decrementDataSequence(sn, sid, sn, LocalDateTime.now());
+        dataSequenceService.decrementDataSequence(sn, sid, sn, LocalDateTime.now(), result.getKey());
 
     }
 
