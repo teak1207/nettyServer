@@ -50,7 +50,8 @@ public class DataService {
         //memo: Files.write(path, outputStream.toByteArray()) , 데이터를 순차적으로 누적 저장.
         Files.write(path, request, StandardOpenOption.APPEND);
 
-        dataSequenceService.decrementDataSequence(String.valueOf(result.getLeft()), sid, sn, LocalDateTime.now());
+//        dataSequenceService.decrementDataSequence(String.valueOf(result.getLeft()), sid, sn, LocalDateTime.now());
+        dataSequenceService.decrementDataSequence(sn, sid, sn, LocalDateTime.now());
 
     }
 
