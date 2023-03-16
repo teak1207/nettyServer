@@ -427,7 +427,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 // data_seq : 테이블에서 fNum 가져와서 그걸로 카운트 횟수를 처리하자.
                 dataService.saveData(request.getSensorId(), dataFindResults.getAsid(), request.getParameter().getData());
 
-                log.info("sidchk : {}  - {}", request.getSensorId(), dataFindResults.getAsid());
+                log.info("sidchk1 : {}  - {}", request.getSensorId(), dataFindResults.getAsid());
 
                 // data_seq : 정상적으로 저장 후, send_data 의 complete, complete_time UPDATE 진행.
 //                dataService.updateData(fname, dataFindResults.getAsid(), dataFindResults.getSsn());

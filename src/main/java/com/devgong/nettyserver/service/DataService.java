@@ -24,10 +24,10 @@ public class DataService {
 
 
     /*
-     * @author devgong
+     * @author devGong
      * Data process, 저장을 처리함.
-     * (1) String sn - 해당센서정보를 가져오기 위함.
-     * (2) String sid - data sequence 사용하기 위함.
+     * (1) String sn -  swflb-00221122-0910-0012
+     * (2) String sid - scLeak
      * (3) byte[] request - 저장할 data []
      * @version 1.0
      */
@@ -42,8 +42,12 @@ public class DataService {
 
         PreInstallSensorListAllModel sensorListAllModel = preInstallSensorListAllRepository.findPreInstallModelBySsn(sn);
 
+        log.info("sidchk2  : {}", sensorListAllModel);
+
+
         //memo: 명확한 구분값으로 fname을 select 해옴.
         Pair<Integer, String> result = requestSendDataJdbcRepository.findCidAndFnameBySnAndSid(sensorListAllModel.getSsn(), sensorListAllModel.getAsid());
+        log.info("sidchk3  : {}", result);
 
         Path path = Paths.get(result.getRight());
 
