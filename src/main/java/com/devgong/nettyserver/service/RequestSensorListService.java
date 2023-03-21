@@ -5,7 +5,6 @@ import com.devgong.nettyserver.domain.RequestLeakDataModel;
 import com.devgong.nettyserver.domain.RequestListAllModel;
 import com.devgong.nettyserver.protocol.NewPacket;
 import com.devgong.nettyserver.protocol.request.ReqRequest;
-import com.devgong.nettyserver.repository.RequestSendDataJdbcRepository;
 import com.devgong.nettyserver.repository.RequestSendDataRepository;
 import com.devgong.nettyserver.repository.RequestSensorListAllRepository;
 import lombok.RequiredArgsConstructor;

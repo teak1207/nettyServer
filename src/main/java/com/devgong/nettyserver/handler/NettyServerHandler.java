@@ -20,7 +20,12 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
+
+import org.slf4j.Logger;
+
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -65,6 +70,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
+    private final Logger LOGGER = LoggerFactory.getLogger(NettyServerHandler.class);
 
 /*
     public String byteArrayToHex(byte[] a) {
@@ -233,6 +239,14 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 // setting_seq : SETTING value (6) 인 경우 분기
             } else if (PacketFlag.SETTING.equals(flag)) {
 
+
+                LOGGER.trace("trace");
+                LOGGER.debug("debug");
+                LOGGER.info("info");
+                LOGGER.warn("warn");
+                LOGGER.error("error");
+
+
                 double beforeTime = System.currentTimeMillis();
 
                 byte[] bytes = new byte[mBuf.readableBytes()];
@@ -393,6 +407,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         ctx.flush();
                         mBuf.release();
 
+
                     } else {
                         response[0] = PacketFlag.NAK.getFlag();
                         ctx.write(Unpooled.copiedBuffer(response));
@@ -418,6 +433,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<DataRequest> request = new NewPacket<>(flag, bytes, DataRequest.class);
 //                log.info("Data  길이 : {}", bytes.length);
 //                log.info("Data FLAG : {}", (char) readFlag);
+
                 // data_seq : request 참조 없음-> sensor_list_all 참조해옴.
                 // data_seq : sensor_list_all 가져온값으로 leak_send_data_(sid)_(sn) 테이블명 변수 만듦.
                 dataFindResults = requestSensorListService.findDataExistence(request.getSensorId(), "-1", "0");
