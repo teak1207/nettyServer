@@ -3,7 +3,7 @@
     로그백 설정 부분
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender" >
 
-        <file> ./devgong/test.log</file>
+        <file> ./test.log</file>
 
         <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
