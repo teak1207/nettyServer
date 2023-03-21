@@ -45,20 +45,20 @@ public class DataSequenceService {
     public void decrementDataSequence(String cid, String sid, String sn, LocalDateTime now, int temp) {
         // TODO : decrement 하려고 했는데, 메뉴판에 등록되어있지 않은 경우 어떻게 처리할까?, Tube
 
-        log.info("sidchk6 :  {}", cid);
-        log.info("sidchk6 :  {}", sid);
-        log.info("sidchk6 :  {}", sn);
-        log.info("sidchk6 :  {}", temp);
+//        log.info("sidchk6 :  {}", cid);
+//        log.info("sidchk6 :  {}", sid);
+//        log.info("sidchk6 :  {}", sn);
+//        log.info("sidchk6 :  {}", temp);
 
 
 
         // memo : request에서 등록한 값을 담음.
         DataSequence beforeSequence = dataSequenceManagingMap.get(cid);
-        log.info("sidchk4  :{}" , beforeSequence);
+//        log.info("sidchk4  :{}" , beforeSequence);
 
         // memo : beforeSequence 의 sequence -1
         DataSequence afterSequence = beforeSequence.decrement(now);
-        log.info("sidchk5  :{}" , afterSequence);
+//        log.info("sidchk5  :{}" , afterSequence);
 
         //memo : 만약 sequence == 0 이라면
         if (afterSequence.sequence == 0) {
