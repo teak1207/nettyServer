@@ -2,9 +2,12 @@ package com.devgong.nettyserver.service;
 
 
 import com.devgong.nettyserver.domain.*;
+import com.devgong.nettyserver.handler.NettyServerHandler;
 import com.devgong.nettyserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -27,7 +30,7 @@ public class SettingPhaseService {
     private final SettingFactorySensorListRepository settingFactorySensorListRepository;
     private final SettingFactoryLeakprojectRepository settingFactoryLeakprojectRepository;
     private final SettingLeakProjectRepository settingLeakProjectRepository;
-
+    private final Logger LOGGER = LoggerFactory.getLogger(SettingPhaseService.class);
 
     /**
      * @param serialNumber - 디바이스에서 넘겨주는 고유 모뎀 번호
@@ -40,6 +43,10 @@ public class SettingPhaseService {
      */
     public boolean getCheckLiveOperation(String serialNumber) {
 
+
+
+        log.error("error4");
+        LOGGER.error("error5");
         Optional<SettingSensorListAllModel> installResult = settingSensorListAllRepository.findBySsn(serialNumber);
         Optional<SettingSensorListModel> assignResult = Optional.ofNullable(settingSensorListRepository.findBySidAndPnameAndSerialNumber(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
         Optional<SettingLeaksetModel> settingResult = Optional.ofNullable(settingLeaksetRepository.findTop1BySidAndPnameAndSnOrderByCidDesc(installResult.get().getAsid(), installResult.get().getAproject(), installResult.get().getSsn()));
