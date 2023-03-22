@@ -70,7 +70,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     RequestListAllModel requestFindResults;
     RequestListAllModel dataFindResults;
 
-    private final Logger LOGGER = LoggerFactory.getLogger(NettyServerHandler.class);
 
 /*
     public String byteArrayToHex(byte[] a) {
@@ -238,16 +237,6 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 // setting_seq : SETTING value (6) 인 경우 분기
             } else if (PacketFlag.SETTING.equals(flag)) {
-
-
-                LOGGER.trace("trace");
-                LOGGER.debug("debug");
-                LOGGER.info("info");
-                LOGGER.warn("warn");
-                LOGGER.error("error1");
-                LOGGER.error("error2");
-                LOGGER.error("error3");
-
 
                 double beforeTime = System.currentTimeMillis();
 
