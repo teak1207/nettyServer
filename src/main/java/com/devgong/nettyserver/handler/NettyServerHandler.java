@@ -244,7 +244,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 LOGGER.debug("debug");
                 LOGGER.info("info");
                 LOGGER.warn("warn");
-                LOGGER.error("error");
+                LOGGER.error("error1");
+                LOGGER.error("error2");
+                LOGGER.error("error3");
 
 
                 double beforeTime = System.currentTimeMillis();
