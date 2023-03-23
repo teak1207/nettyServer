@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -331,9 +332,9 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 mBuf.duplicate().readBytes(bytes);
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
-//                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-//                log.info("chk2 : {}", request.getParameterLength());
-//                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
+                String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
+                log.info("chk2 : {}", request.getParameterLength());
+                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
 
 
                 // report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
