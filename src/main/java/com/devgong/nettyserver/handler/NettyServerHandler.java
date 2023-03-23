@@ -246,6 +246,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<SettingRequest> request = new Packet<>(flag, bytes, SettingRequest.class);
 
+                log.info("chk2 : {}", request.getParameterLength());
+                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
+
+
                 byte[] nakResponse = new byte[45];
 
                 // setting_seq : << Setting process 진행 >>
@@ -333,8 +337,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 Packet<ReportRequest> request = new Packet<>(flag, bytes, ReportRequest.class);
                 String serialNumber = mBuf.readCharSequence(24, Charset.defaultCharset()).toString();
-                log.info("chk2 : {}", request.getParameterLength());
-                log.info("chk2 : {}", Long.toHexString(request.getParameterLength()));
+                log.info("chk3 : {}", request.getParameterLength());
+                log.info("chk3 : {}", Long.toHexString(request.getParameterLength()));
 
 
                 // report_seq : serialNumber 으로 sensor_list_all 에서 존재유무 후, findResult 담음
@@ -381,6 +385,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 NewPacket<ReqRequest> request = new NewPacket<>(flag, bytes, ReqRequest.class);
                 byte[] frameCountArr = new byte[2];
                 System.arraycopy(bytes, 44, frameCountArr, 0, 2);
+
+                log.info("chk4: {}", request.getParameterLength());
+                log.info("chk4 : {}", Long.toHexString(request.getParameterLength()));
+
 
                 byte[] response = new byte[45];
                 // request_seq : find 값을 객체에 초기화
