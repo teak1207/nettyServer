@@ -450,7 +450,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(String.valueOf(e));
         }
     }
 
