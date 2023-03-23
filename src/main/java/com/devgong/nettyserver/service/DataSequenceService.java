@@ -39,18 +39,11 @@ public class DataSequenceService {
 
     public void enrollDataSequence(String serialNumber, Integer fnum, LocalDateTime now) {
         dataSequenceManagingMap.put(serialNumber, new DataSequence(fnum, now));
-        log.info("[REQUEST][ENROLL] :  serialNumber : {} - FrameCount : {} - RealTime : {} ", serialNumber, fnum, now);
+//        log.info("[REQUEST][ENROLL] :  serialNumber : {} - FrameCount : {} - RealTime : {} ", serialNumber, fnum, now);
     }
 
     public void decrementDataSequence(String cid, String sid, String sn, LocalDateTime now, int temp) {
         // TODO : decrement 하려고 했는데, 메뉴판에 등록되어있지 않은 경우 어떻게 처리할까?, Tube
-
-//        log.info("sidchk6 :  {}", cid);
-//        log.info("sidchk6 :  {}", sid);
-//        log.info("sidchk6 :  {}", sn);
-//        log.info("sidchk6 :  {}", temp);
-
-
 
         // memo : request에서 등록한 값을 담음.
         DataSequence beforeSequence = dataSequenceManagingMap.get(cid);
@@ -63,7 +56,7 @@ public class DataSequenceService {
         //memo : 만약 sequence == 0 이라면
         if (afterSequence.sequence == 0) {
             dataSequenceManagingMap.remove(cid);
-            log.info("[REQUEST][SEQ]: cid {} is removed", cid);
+            log.info("[REQUEST][SEQ]: serialNumber ==> {} is removed", cid);
 
             //memo : leak_send_data 의 complete / completeTime 을 update.
             dataUpdateRepository.updateCompleteTime(Integer.valueOf(temp), sid, sn);

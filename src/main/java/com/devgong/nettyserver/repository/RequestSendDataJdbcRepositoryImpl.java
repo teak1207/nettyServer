@@ -30,11 +30,11 @@ public class RequestSendDataJdbcRepositoryImpl implements RequestSendDataJdbcRep
 
         String convertedTableName = mixTableName1 + mixTableName2;
 
-        log.info("mixTableName check : {}", convertedTableName);
+//        log.info("mixTableNameCheck : {}", convertedTableName);
 
         String sql = "select cid, fname from " + convertedTableName + " where sid=? and sn =? " + " order by cid desc limit 1";
 
-        log.info("sql check : {}", sql);
+//        log.info("sqlCheck : {}", sql);
 
         Connection conn = null;
         PreparedStatement pstmt = null;

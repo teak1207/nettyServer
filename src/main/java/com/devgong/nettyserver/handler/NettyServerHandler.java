@@ -169,7 +169,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
                 } else {
                     ctx.writeAndFlush(new NakPacket("0".repeat(24), LocalDateTime.now()).serialize());
-                    log.info("[CheckSum][FAIL] : Not Accurate");
+                    log.error("[CheckSum][FAIL] : Not Accurate");
 
                     mBuf.release();
                 }
@@ -223,7 +223,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                     ctx.write(Unpooled.copiedBuffer(result));
                     ctx.flush();
                     mBuf.release();
-                    log.info("[REPORT][SUCCESS] Report Response Success");
+//                    log.info("[REPORT][SUCCESS] Report Response Success");
 
 
                 } else {
@@ -342,7 +342,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 byte[] response = new byte[45];
 
                 if (Objects.isNull(reportFindResult)) {
-                    log.info("[REPORT][FAIL] : 값이 존재하질 않습니다");
+                    log.error("[REPORT][FAIL] : 값이 존재하질 않습니다");
                 } else {
 //                    log.info("reportFindResults:{}", reportFindResult);
 
@@ -353,7 +353,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
                         mBuf.release();
-                        log.info("[REPORT][PASS] Process Success");
+//                        log.info("[REPORT][PASS] Process Success");
 
 
                         double afterTime = System.currentTimeMillis();
@@ -366,7 +366,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                         ctx.write(Unpooled.copiedBuffer(response));
                         ctx.flush();
                         mBuf.release();
-                        log.info("[REPORT][FAIL] Process fail");
+                        log.error("[REPORT][FAIL] Process fail");
                     }
                 }
                 // request_seq : (device-> server) request
@@ -390,7 +390,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
                 dataSequenceService.enrollDataSequence(model.getSn(), Integer.parseInt(model.getFnum()), LocalDateTime.now());
 
                 if (requestFindResults == null) {
-                    log.info("[REQUEST][FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
+                    log.error("[REQUEST][FAIL] : SENSOR_LIST_ALL 테이블에 값이 존재하지 않습니다.");
                 } else {
                     if (requestSensorListService.confirmPath(requestFindResults, request)) {
                         response[0] = PacketFlag.ACK.getFlag();
